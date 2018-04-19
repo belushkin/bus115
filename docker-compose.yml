@@ -5,3 +5,18 @@ zf:
    - "8080:80"
   volumes:
    - .:/var/www
+  links:
+   - zf-db-mysql
+
+zf-db-mysql:
+  image: "mysql:5.6"
+  environment:
+    - MYSQL_ROOT_PASSWORD=rootpass
+    - MYSQL_DATABASE=zf
+    - MYSQL_USER=zf
+    - MYSQL_PASSWORD=zf
+  volumes:
+    - $VOLUME_DIR/volume/mysql:/var/lib/mysql
+    - $VOLUME_DIR/volume/logs/mysql:/var/log/mysql
+  ports:
+    - '3307:3306'
