@@ -16,7 +16,7 @@ zf-db-mysql:
     - MYSQL_USER=zf
     - MYSQL_PASSWORD=zf
   volumes:
-    - $VOLUME_DIR/volume/mysql:/var/lib/mysql
-    - $VOLUME_DIR/volume/logs/mysql:/var/log/mysql
+    - $VOLUME_DIR/data/volume/mysql:/var/lib/mysql
+    - $VOLUME_DIR/data/volume/logs/mysql:/var/log/mysql
   ports:
     - '3307:3306'

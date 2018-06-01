@@ -2,5 +2,6 @@
 vendor/
 config/development.config.php
 data/cache/*
+data/volume/*
 !data/cache/.gitkeep
 phpunit.xml
