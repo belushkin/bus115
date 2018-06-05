@@ -24,7 +24,6 @@ RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     docker-php-ext-install mysqli && \
     docker-php-ext-install mcrypt && \
     docker-php-ext-install mbstring && \
-    docker-php-ext-install zip && \
     a2enmod rewrite && \
     sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf && \
     mv /var/www/html /var/www/public && \
