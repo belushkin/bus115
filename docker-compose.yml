@@ -1,8 +1,8 @@
 zf:
   build: .
   dockerfile: Dockerfile
-  ports:
-   - "8080:80"
+#  ports:
+#   - "8080:80"
   volumes:
    - .:/var/www
   links:
@@ -18,5 +18,5 @@ zf-db-mysql:
   volumes:
     - $VOLUME_DIR/data/volume/mysql:/var/lib/mysql
     - $VOLUME_DIR/data/volume/logs/mysql:/var/log/mysql
-  ports:
-    - '3307:3306'
+#  ports:
+#    - '3307:3306'
