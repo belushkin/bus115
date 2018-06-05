@@ -42,4 +42,5 @@ RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
     rm -Rf /tmp/zlib-1.2.11 && \
     rm /tmp/zlib.tar.gz
 
+EXPOSE 80
 WORKDIR /var/www
