@@ -14,6 +14,10 @@ $app->get('/', function () use ($app) {
     ->bind('homepage')
 ;
 
+$app->get('/hello/{name}', function ($name) use ($app) {
+    return 'Hello '.$app->escape($name);
+});
+
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {
     if ($app['debug']) {
         return;
