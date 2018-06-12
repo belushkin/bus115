@@ -34,12 +34,39 @@ function ssh_to()
 function command_boot()
 {
     # Start the developer environment
-    docker-compose -f docker-compose.yml up	$@
+    docker-compose -f docker-compose.yml up &
+
+    echo -n "Waiting for the services to initialize.. "
+    while [[ ! $(docker ps | grep zf_zf_1) ]] ; do
+        echo -n "."
+        sleep 1
+    done
+    if [ "$PHP_XDEBUG" = "0" ]; then
+      echo "REMOVING XDEBUG"
+      echo "rm -f /usr/local/etc/php/conf.d/xdebug.ini" |  docker exec -i  zf_zf_1 /bin/bash
+    fi
+    echo ""
+    echo "composer install --prefer-source --no-interaction" |  docker exec -i  zf_zf_1 /bin/bash
+    echo ""
+}
+
+function command_rebuild(){
+	DOCKERS=`cat images_list.txt`
+	for DOCKER in $DOCKERS
+	do
+		echo "Building image $DOCKER"
+		docker build --no-cache -t "$DOCKER" .
+	done
+	docker-compose -f docker-compose.yml build
 }
 
 function command_shutdown()
 {
 	docker-compose -f docker-compose.yml down $@
+}
+
+function logs(){
+	tail -f  $VOLUME_DIR/volume/logs/*
 }
 
 while (( "$#" )); do
@@ -49,13 +76,20 @@ while (( "$#" )); do
 		command_boot $@
 		exit
 		;;
+	rebuild)
+		command_rebuild;
+		exit;
+		;;
 	down)
 		shift
 		command_shutdown $@
 		exit
 		;;
+	logs)
+		logs
+		exit
+		;;
     ssh|connect)
-
 		ssh_to $2
 		exit
 		;;

@@ -31,8 +31,15 @@ RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     mv /var/www/html /var/www/public && \
     pecl install mongodb && \
     pecl install memcached && \
-    pecl install redis && \
-    pecl install xdebug
+    pecl install redis
+
+RUN pecl install xdebug-2.5.0 \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.idekey=docker" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 ADD http://www.zlib.net/zlib-1.2.11.tar.gz /tmp/zlib.tar.gz
 RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \

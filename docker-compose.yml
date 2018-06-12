@@ -1,5 +1,7 @@
 zf:
   build: .
+  environment:
+   - PHP_XDEBUG
   dockerfile: Dockerfile
   ports:
    - "80:80"
