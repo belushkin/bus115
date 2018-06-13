@@ -1,25 +1,33 @@
-zf:
-  build: .
-  environment:
-   - PHP_XDEBUG
-  dockerfile: Dockerfile
-  ports:
-   - "80:80"
-   - "443:443"
-  volumes:
-   - .:/var/www
-  links:
-   - zf-db-mysql
+version: '2'
+services:
+  zf:
+    build: .
+    environment:
+     - PHP_XDEBUG
+    ports:
+     - "80:80"
+     - "443:443"
+    volumes:
+     - .:/var/www
+    links:
+     - zf-db-mysql
 
-zf-db-mysql:
-  image: "mysql:5.6"
-  environment:
-    - MYSQL_ROOT_PASSWORD=rootpass
-    - MYSQL_DATABASE=zf
-    - MYSQL_USER=zf
-    - MYSQL_PASSWORD=zf
-  volumes:
-    - $VOLUME_DIR/data/volume/mysql:/var/lib/mysql
-    - $VOLUME_DIR/data/volume/logs/mysql:/var/log/mysql
-  ports:
-    - '3306:3306'
+  zf-db-mysql:
+    image: "mysql:5.7"
+    environment:
+      - MYSQL_ROOT_PASSWORD=3"w/jLk%<%A`
+      - MYSQL_DATABASE=zf
+      - MYSQL_USER=zf
+      - MYSQL_PASSWORD=3"w/jLk%<%A`
+    volumes:
+      - $VOLUME_DIR/data/volume/mysql:/var/lib/mysql
+      - $VOLUME_DIR/data/volume/logs/mysql:/var/log/mysql
+    ports:
+      - '3306:3306'
+
+  zf-phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.7.0-1
+    ports:
+      - "8088:80"
+    environment:
+      - PMA_HOST=zf-db-mysql

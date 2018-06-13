@@ -8,6 +8,7 @@ if [ -z ${PROJECT_NAME+x} ]; then
 fi
 
 export ZF_DOCKER_DIR=`pwd`
+export VOLUME_DIR="$ZF_DOCKER_DIR"/data/volume
 
 MYSQL_ROOT_PASS=rootpass
 
