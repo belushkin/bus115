@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'dbname' => 'bus',
-    'user' => 'bus',
+    'dbname' => 'bus115',
+    'user' => 'bus115',
     'password' => '3"w/jLk%<%A`',
-    'host' => 'bus-db-mysql',
+    'host' => 'bus115-db-mysql',
     'driver' => 'pdo_mysql',
 ];
