@@ -1,5 +1,7 @@
 <?php
 
+namespace Bus115;
+
 use Silex\Application;
 use Silex\Provider\AssetServiceProvider;
 use Silex\Provider\TwigServiceProvider;

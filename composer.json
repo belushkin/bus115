@@ -19,9 +19,11 @@
         "symfony/validator": "~2.8|^3.0",
         "doctrine/migrations": "2.0.x-dev",
         "symfony/yaml": "^4.1",
-        "doctrine/orm": "^2.6"
+        "doctrine/orm": "^2.6",
+        "mockery/mockery": "0.9.*",
+        "hamcrest/hamcrest-php": "~1.2"
     },
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-4": { "Bus115\\": "src/" }
     }
 }
