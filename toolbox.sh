@@ -8,7 +8,7 @@ if [ -z ${PROJECT_NAME+x} ]; then
 fi
 
 export BUS115_DOCKER_DIR=`pwd`
-export VOLUME_DIR="$BUS115_DOCKER_DIR"/data/volume
+export VOLUME_DIR="$BUS115_DOCKER_DIR"
 
 MYSQL_ROOT_PASS=rootpass
 
