@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'dbname' => 'zf',
-    'user' => 'zf',
+    'dbname' => 'bus',
+    'user' => 'bus',
     'password' => '3"w/jLk%<%A`',
-    'host' => 'zf-db-mysql',
+    'host' => 'bus-db-mysql',
     'driver' => 'pdo_mysql',
 ];

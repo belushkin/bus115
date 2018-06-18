@@ -1,5 +1,6 @@
 .vagrant/
 .idea/*
+.idea/modules.xml
 vendor/
 config/development.config.php
 data/cache/*

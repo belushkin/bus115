@@ -4,15 +4,15 @@ if [ -z ${VOLUME_DIR+x} ]; then
 	export VOLUME_DIR=`pwd`
 fi
 if [ -z ${PROJECT_NAME+x} ]; then
-	export PROJECT_NAME=zf
+	export PROJECT_NAME=bus115
 fi
 
-export ZF_DOCKER_DIR=`pwd`
-export VOLUME_DIR="$ZF_DOCKER_DIR"/data/volume
+export BUS115_DOCKER_DIR=`pwd`
+export VOLUME_DIR="$BUS115_DOCKER_DIR"/data/volume
 
 MYSQL_ROOT_PASS=rootpass
 
-CONTAINER_TOOLBOX_ID=`docker ps --format '{{.ID}}\t{{.Names}}' | grep zf_zf_1 | cut -f1`
+CONTAINER_TOOLBOX_ID=`docker ps --format '{{.ID}}\t{{.Names}}' | grep bus115_bus115_1 | cut -f1`
 
 function ssh_to()
 {
@@ -38,16 +38,16 @@ function command_boot()
     docker-compose -f docker-compose.yml up &
 
     echo -n "Waiting for the services to initialize.. "
-    while [[ ! $(docker ps | grep zf_zf_1) ]] ; do
+    while [[ ! $(docker ps | grep bus115_bus115_1) ]] ; do
         echo -n "."
         sleep 1
     done
     if [ "$PHP_XDEBUG" = "0" ]; then
       echo "REMOVING XDEBUG"
-      echo "rm -f /usr/local/etc/php/conf.d/xdebug.ini" |  docker exec -i  zf_zf_1 /bin/bash
+      echo "rm -f /usr/local/etc/php/conf.d/xdebug.ini" |  docker exec -i  bus115_bus115_1 /bin/bash
     fi
     echo ""
-    echo "composer install --prefer-source --no-interaction" |  docker exec -i  zf_zf_1 /bin/bash
+    echo "composer install --prefer-source --no-interaction" |  docker exec -i  bus115_bus115_1 /bin/bash
     echo ""
 }
 

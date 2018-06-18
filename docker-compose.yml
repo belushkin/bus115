@@ -1,6 +1,6 @@
 version: '2'
 services:
-  zf:
+  bus115:
     build: .
     environment:
      - PHP_XDEBUG
@@ -10,14 +10,14 @@ services:
     volumes:
      - .:/var/www
     links:
-     - zf-db-mysql
+     - bus115-db-mysql
 
-  zf-db-mysql:
+  bus115-db-mysql:
     image: "mysql:5.7"
     environment:
       - MYSQL_ROOT_PASSWORD=3"w/jLk%<%A`
-      - MYSQL_DATABASE=zf
-      - MYSQL_USER=zf
+      - MYSQL_DATABASE=bus115
+      - MYSQL_USER=bus115
       - MYSQL_PASSWORD=3"w/jLk%<%A`
     volumes:
       - $VOLUME_DIR/data/volume/mysql:/var/lib/mysql
@@ -25,9 +25,9 @@ services:
     ports:
       - '3306:3306'
 
-  zf-phpmyadmin:
+  bus115-phpmyadmin:
     image: phpmyadmin/phpmyadmin:4.7.0-1
     ports:
       - "8088:80"
     environment:
-      - PMA_HOST=zf-db-mysql
+      - PMA_HOST=bus115-db-mysql
