@@ -17,7 +17,7 @@ class controllersTest extends WebTestCase
     public function createApplication()
     {
         $app = require __DIR__.'/../src/app.php';
-        require __DIR__.'/../config/dev.php';
+        require __DIR__ . '/../config/dev.php.dist';
         require __DIR__.'/../src/controllers.php';
         $app['session.test'] = true;
 

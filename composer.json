@@ -26,5 +26,16 @@
     },
     "autoload": {
         "psr-4": { "Bus115\\": "src/" }
+    },
+    "scripts": {
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "development-enable": [
+            "cp ./config/dev.php.dist ./config/dev.php"
+        ],
+        "development-disable": [
+            "rm ./config/dev.php"
+        ],
+        "test": "phpunit"
     }
 }

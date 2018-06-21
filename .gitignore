@@ -3,6 +3,7 @@
 .idea/modules.xml
 vendor/
 config/app.env
+config/dev.php
 data/cache/*
 data/volume/*
 !data/cache/.gitkeep

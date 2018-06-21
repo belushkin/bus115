@@ -45,9 +45,11 @@ function command_boot()
     if [[ $1 == "--on-production" ]]; then
       echo "REMOVING XDEBUG"
       echo "rm -f /usr/local/etc/php/conf.d/xdebug.ini" |  docker exec -i  bus115_bus115_1 /bin/bash
+      echo "composer development-disable" |  docker exec -i  bus115_bus115_1 /bin/bash
     fi
     echo ""
     echo "composer install --prefer-source --no-interaction" |  docker exec -i  bus115_bus115_1 /bin/bash
+    echo "composer development-enable" |  docker exec -i  bus115_bus115_1 /bin/bash
     echo ""
 }
 
