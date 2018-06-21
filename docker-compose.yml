@@ -2,8 +2,6 @@ version: '2'
 services:
   bus115:
     build: .
-    environment:
-     - PHP_XDEBUG
     ports:
      - "80:80"
      - "443:443"
@@ -14,11 +12,8 @@ services:
 
   bus115-db-mysql:
     image: "mysql:5.7"
-    environment:
-      - MYSQL_ROOT_PASSWORD=3"w/jLk%<%A`
-      - MYSQL_DATABASE=bus115
-      - MYSQL_USER=bus115
-      - MYSQL_PASSWORD=3"w/jLk%<%A`
+    env_file:
+     - ./config/app.env
     volumes:
       - $VOLUME_DIR/data/volume/mysql:/var/lib/mysql
       - $VOLUME_DIR/data/volume/logs/mysql:/var/log/mysql

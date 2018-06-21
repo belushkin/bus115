@@ -2,8 +2,9 @@
 .idea/*
 .idea/modules.xml
 vendor/
-config/development.config.php
+config/app.env
 data/cache/*
 data/volume/*
 !data/cache/.gitkeep
 phpunit.xml
+migrations-db.php

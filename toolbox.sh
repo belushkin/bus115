@@ -42,7 +42,7 @@ function command_boot()
         echo -n "."
         sleep 1
     done
-    if [ "$PHP_XDEBUG" = "0" ]; then
+    if [ ! -z $2 -a "$2" = "--on-production" ]; then
       echo "REMOVING XDEBUG"
       echo "rm -f /usr/local/etc/php/conf.d/xdebug.ini" |  docker exec -i  bus115_bus115_1 /bin/bash
     fi
