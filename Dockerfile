@@ -5,6 +5,8 @@ RUN apt-get update && \
         libmcrypt-dev \
         libxml2-dev \
         zlib1g-dev \
+        locales \
+        sudo \
         libldb-dev \
         libicu-dev \
         libmemcached-dev \
@@ -16,6 +18,10 @@ RUN apt-get update && \
         git \
         wget && \
     rm -rf /var/lib/apt/lists/* && \
+    locale-gen "en_US.UTF-8" && \
+    useradd --home /home/bus115 -m -N --uid 1000 bus115 && \
+    usermod -a -G www-data bus115 && \
+    usermod -a -G sudo bus115 && \
     wget https://getcomposer.org/download/1.2.4/composer.phar -O /usr/local/bin/composer && \
     chmod a+rx /usr/local/bin/composer
 

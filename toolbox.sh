@@ -32,6 +32,19 @@ function ssh_to()
 	fi
 }
 
+function execute_arbitraty(){
+
+	if [ -t 1 ] ; then
+		docker exec -u bus115 -t -i $CONTAINER_TOOLBOX_ID $@
+		RET=$?
+	else
+		echo "$Name Warning: running in a non-interactive environment. Some features may not work"
+		docker exec -u bus115 $CONTAINER_TOOLBOX_ID $@
+		RET=$?
+	fi
+	return $RET
+}
+
 function command_boot()
 {
     # Start the developer environment
@@ -42,15 +55,16 @@ function command_boot()
         echo -n "."
         sleep 1
     done
+    echo ""
+    echo "composer install --prefer-source --no-interaction" |  docker exec -i  bus115_bus115_1 /bin/bash
+    echo ""
     if [[ $1 == "--on-production" ]]; then
       echo "REMOVING XDEBUG"
       echo "rm -f /usr/local/etc/php/conf.d/xdebug.ini" |  docker exec -i  bus115_bus115_1 /bin/bash
-      echo "composer development-disable" |  docker exec -i  bus115_bus115_1 /bin/bash
+      echo "composer development-disable" |  docker exec -u bus115 -i  bus115_bus115_1 /bin/bash
+    else
+      echo "composer development-enable" |  docker exec -u bus115 -i  bus115_bus115_1 /bin/bash
     fi
-    echo ""
-    echo "composer install --prefer-source --no-interaction" |  docker exec -i  bus115_bus115_1 /bin/bash
-    echo "composer development-enable" |  docker exec -i  bus115_bus115_1 /bin/bash
-    echo ""
 }
 
 function command_rebuild(){
@@ -87,6 +101,11 @@ while (( "$#" )); do
 		shift
 		command_shutdown $@
 		exit
+		;;
+	exec)
+		shift
+		execute_arbitraty $@
+		exit $?
 		;;
 	logs)
 		logs
