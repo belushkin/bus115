@@ -56,7 +56,7 @@ function command_boot()
         sleep 1
     done
     echo ""
-    echo "composer install --prefer-source --no-interaction" |  docker exec -i  bus115_bus115_1 /bin/bash
+    echo "composer install --prefer-source --no-interaction" |  docker exec -u bus115 -i  bus115_bus115_1 /bin/bash
     echo ""
     if [[ $1 == "--on-production" ]]; then
       echo "REMOVING XDEBUG"
