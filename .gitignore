@@ -5,6 +5,7 @@ vendor/
 config/app.env
 config/dev.php
 data/cache/*
+public/apidoc/*
 data/volume/*
 !data/cache/.gitkeep
 phpunit.xml

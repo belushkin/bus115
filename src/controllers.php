@@ -10,6 +10,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Bus115\Entities\Product;
 
+/**
+ * @api {Get} /site/feature/config/:uuid/delete
+ * delete feature config
+ * @apiName Bus115
+ * @apiGroup Site
+ * @apiVersion 1.0.0
+ *
+ * @apiParam {String} uuid
+ *
+ */
 $app->get('/', function () use ($app, $entityManager) {
 
 //    $product = new Product();

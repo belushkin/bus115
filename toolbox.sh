@@ -77,6 +77,10 @@ function command_rebuild(){
 	docker-compose -f docker-compose.yml build
 }
 
+function rebuild_apidoc(){
+    echo "apidoc -i src/ -o public/apidoc/" |  docker exec -u bus115 -i  bus115_bus115_1 /bin/bash
+}
+
 function command_shutdown()
 {
 	docker-compose -f docker-compose.yml down $@
@@ -109,6 +113,10 @@ while (( "$#" )); do
 		;;
 	logs)
 		logs
+		exit
+		;;
+	apidoc)
+		rebuild_apidoc
 		exit
 		;;
     ssh|connect)
