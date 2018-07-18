@@ -81,6 +81,10 @@ function rebuild_apidoc(){
     echo "apidoc -i src/ -o public/apidoc/" |  docker exec -u bus115 -i  bus115_bus115_1 /bin/bash
 }
 
+function command_tests(){
+    echo "vendor/bin/phpunit ./tests/" |  docker exec -i  bus115_bus115_1 /bin/bash
+}
+
 function command_shutdown()
 {
 	docker-compose -f docker-compose.yml down $@
@@ -110,6 +114,10 @@ while (( "$#" )); do
 		shift
 		execute_arbitraty $@
 		exit $?
+		;;
+	tests)
+		command_tests
+		exit
 		;;
 	logs)
 		logs
