@@ -3,18 +3,33 @@
 // src/Security/User/UserProvider.php
 namespace Bus115\Security\User;
 
-use Bus115\Entities\User;
+use Bus115\Entity\User;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 class UserProvider implements UserProviderInterface
 {
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     public function loadUserByUsername($username)
     {
         return $this->fetchUser($username);
+    }
+
+    public function loadUserByApiKey($apiKey)
+    {
+        return $this->fetchUser($apiKey);
     }
 
     public function refreshUser(UserInterface $user)
@@ -25,7 +40,7 @@ class UserProvider implements UserProviderInterface
             );
         }
 
-        return $this->fetchUser($username);
+        return $this->fetchUser($user->getApiKey());
     }
 
     public function supportsClass($class)
@@ -33,18 +48,15 @@ class UserProvider implements UserProviderInterface
         return User::class === $class;
     }
 
-    private function fetchUser($username)
+    private function fetchUser($apiKey)
     {
         // make a call to your webservice here
-        $userData = 2;//...
-        // pretend it returns an array on success, false if there is no user
+        $userData = $this->em->getRepository('Bus115\Entity\User')->findOneBy(
+            array('apiKey' => $apiKey)
+        );
 
         if ($userData) {
-            $password = '...';
-
-            // ...
-
-            return new User($username, $password, $salt, $roles);
+            return $userData;
         }
 
         throw new UsernameNotFoundException(

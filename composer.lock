@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "52245b95fba3dfbe9a2134648773f41a",
-    "content-hash": "bbfce2692cffb9bb100b1577ff9ea78c",
+    "hash": "6b6873512779bd35212321b76d66d188",
+    "content-hash": "a9653a68e171fe08cc53c37c38fa811a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3651,43 +3651,44 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v3.4.12",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "fca490df65008eb680c5ee9c2d521191c9e54ed5"
+                "reference": "f2523bfd8dc5ff648aca55c0f2748674ca4661bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/fca490df65008eb680c5ee9c2d521191c9e54ed5",
-                "reference": "fca490df65008eb680c5ee9c2d521191c9e54ed5",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/f2523bfd8dc5ff648aca55c0f2748674ca4661bb",
+                "reference": "f2523bfd8dc5ff648aca55c0f2748674ca4661bb",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.5.9|>=7.0.8",
+                "php": "^7.1.3",
                 "symfony/polyfill-ctype": "~1.8",
                 "symfony/polyfill-mbstring": "~1.0",
-                "symfony/translation": "~2.8|~3.0|~4.0"
+                "symfony/translation": "~3.4|~4.0"
             },
             "conflict": {
                 "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0",
-                "symfony/dependency-injection": "<3.3",
-                "symfony/http-kernel": "<3.3.5",
+                "symfony/dependency-injection": "<3.4",
+                "symfony/http-kernel": "<3.4",
+                "symfony/intl": "<4.1",
                 "symfony/yaml": "<3.4"
             },
             "require-dev": {
                 "doctrine/annotations": "~1.0",
                 "doctrine/cache": "~1.0",
                 "egulias/email-validator": "^1.2.8|~2.0",
-                "symfony/cache": "~3.1|~4.0",
-                "symfony/config": "~2.8|~3.0|~4.0",
-                "symfony/dependency-injection": "~3.3|~4.0",
-                "symfony/expression-language": "~2.8|~3.0|~4.0",
-                "symfony/http-foundation": "~2.8|~3.0|~4.0",
-                "symfony/http-kernel": "^3.3.5|~4.0",
-                "symfony/intl": "^2.8.18|^3.2.5|~4.0",
-                "symfony/property-access": "~2.8|~3.0|~4.0",
-                "symfony/var-dumper": "~3.3|~4.0",
+                "symfony/cache": "~3.4|~4.0",
+                "symfony/config": "~3.4|~4.0",
+                "symfony/dependency-injection": "~3.4|~4.0",
+                "symfony/expression-language": "~3.4|~4.0",
+                "symfony/http-foundation": "~4.1",
+                "symfony/http-kernel": "~3.4|~4.0",
+                "symfony/intl": "~4.1",
+                "symfony/property-access": "~3.4|~4.0",
+                "symfony/var-dumper": "~3.4|~4.0",
                 "symfony/yaml": "~3.4|~4.0"
             },
             "suggest": {
@@ -3705,7 +3706,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.4-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -3732,7 +3733,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "time": "2018-06-19 20:52:10"
+            "time": "2018-06-19 21:38:16"
         },
         {
             "name": "symfony/var-dumper",

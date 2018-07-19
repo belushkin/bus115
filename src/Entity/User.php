@@ -1,14 +1,14 @@
 <?php
 // src/Entities/User.php
 
-namespace Bus115\Entities;
+namespace Bus115\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="app_users")
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Bus115\Repository\UserRepository")
  */
 class User implements UserInterface, \Serializable
 {

@@ -7,22 +7,53 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Bus115\Entities\Product;
 
+$app->get('/', function () use ($app, $entityManager) {
+    return $app['twig']->render('index.html.twig', array());
+})
+    ->bind('homepage')
+;
+
 /**
- * @api {Get} /site/feature/config/:uuid/delete
- * delete feature config
- * @apiName Bus115
- * @apiGroup Site
- * @apiVersion 1.0.0
+ * @api {Get} /api/v1/getstops
+ * Get Stops near Point
+ * @apiName Get Stops near Point
+ * @apiDescription Returns a list of stops in the vicinity of a given point
  *
- * @apiParam {String} uuid
+ * @apiGroup Stops
+ * @apiVersion 1.0.0
+ * @apiSampleRequest getstops
+ *
+ * @apiParam {Number} lat Mandatory Latitude
+ * @apiParam {Number} lng Mandatory Longitude
+ *
+ * @apiPermission admin
+ *
+ * @apiHeader {String} X-AUTH-TOKEN Users unique access-token.
+ *
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "X-AUTH-TOKEN": "23234defdewfewf"
+ *     }
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -H "X-AUTH-TOKEN: 23234defdewfewf" -i http://0.0.0.0/api/v1/getstops/4711/4567
+ *
+ * @apiSuccess {Array[]}  stop      Array of stops.
+ * @apiSuccess {Number}   stop.lat   Stop Latitude.
+ * @apiSuccess {Number}   stop.lng   Stop Longitude.
+ * @apiSuccess {String}   stop.title Stop title.
  *
  */
-$app->get('/', function () use ($app, $entityManager) {
+$app->get('/api/v1/getstops', function (Request $request) use ($app, $entityManager) {
+    $lat = $request->get('lat');
+    $lng = $request->get('lng');
+    //$errors = $app['validator']->validate($lat, new Assert\Type('int'));
 
-//    $product = new Product();
+    //    $product = new Product();
 //    $product->setName('ssss');
 //
 //    $entityManager->persist($product);
@@ -30,13 +61,7 @@ $app->get('/', function () use ($app, $entityManager) {
 //
 //    echo "Created Product with ID " . $product->getId() . "\n";
 
-    return $app['twig']->render('index.html.twig', array());
-})
-    ->bind('homepage')
-;
-
-$app->get('/hello/{name}', function ($name) use ($app) {
-    return 'Hello '.$app->escape($name);
+    return 'Latitude' . $app->escape($lat) . 'Longitude' . $app->escape($lng);
 });
 
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {

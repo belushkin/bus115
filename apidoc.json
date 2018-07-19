@@ -1,8 +1,8 @@
 {
-  "name": "bus115",
-  "version": "0.3.0",
-  "description": "bus115 project",
-  "title": "bus115 title",
-  "url": "http://172.27.0.4/api/1",
-  "sampleUrl": "/api/1"
+  "name": "Public transport API application",
+  "version": "1.0.0",
+  "description": "Project for displaying next transport is coming",
+  "title": "API documentation for bus115 project",
+  "url": "http://0.0.0.0",
+  "sampleUrl": "/api/v1/"
 }

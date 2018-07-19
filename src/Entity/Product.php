@@ -1,7 +1,7 @@
 <?php
 // src/Entities/Product.php
 
-namespace Bus115\Entities;
+namespace Bus115\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
