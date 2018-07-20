@@ -8,10 +8,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
+use GuzzleHttp\Client;
 
-use Bus115\Entities\Product;
-
-$app->get('/', function () use ($app, $entityManager) {
+$app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
 })
     ->bind('homepage')
@@ -48,20 +47,36 @@ $app->get('/', function () use ($app, $entityManager) {
  * @apiSuccess {String}   stop.title Stop title.
  *
  */
-$app->get('/api/v1/getstops', function (Request $request) use ($app, $entityManager) {
+$app->get('/api/v1/getstops', function (Request $request) use ($app) {
+
     $lat = $request->get('lat');
     $lng = $request->get('lng');
-    //$errors = $app['validator']->validate($lat, new Assert\Type('int'));
 
-    //    $product = new Product();
-//    $product->setName('ssss');
-//
-//    $entityManager->persist($product);
-//    $entityManager->flush();
-//
-//    echo "Created Product with ID " . $product->getId() . "\n";
+    $errors = $app['validator']->validate($lat, new Assert\Type('numeric'));
+    if (count($errors) > 0) {
+        $errorsString = (string) $errors;
+        return new Response($errorsString);
+    }
+    $errors = $app['validator']->validate($lng, new Assert\Type('numeric'));
+    if (count($errors) > 0) {
+        $errorsString = (string) $errors;
+        return new Response($errorsString);
+    }
 
-    return 'Latitude' . $app->escape($lat) . 'Longitude' . $app->escape($lng);
+    $client = new Client();
+    $response = $client->request('GET', $app['eway']['url'], [
+        'query' => [
+            'login'     => $app['eway']['login'],
+            'password'  => $app['eway']['pass'],
+            'function'  => 'stops.GetStopsNearPoint',
+            'city'      => 'kyiv',
+            'lat'       => $lat,
+            'lng'       => $lng,
+        ]
+    ]);
+
+    $body = \GuzzleHttp\json_decode($response->getBody());
+    return new Response(\GuzzleHttp\json_encode($body));
 });
 
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {

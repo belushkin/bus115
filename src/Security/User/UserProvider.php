@@ -60,7 +60,7 @@ class UserProvider implements UserProviderInterface
         }
 
         throw new UsernameNotFoundException(
-            sprintf('Username "%s" does not exist.', $username)
+            sprintf('APIKEY "%s" does not exist.', $apiKey)
         );
     }
 }

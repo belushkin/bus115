@@ -3,6 +3,7 @@
 .idea/modules.xml
 vendor/
 config/app.env
+config/eway.php
 config/dev.php
 data/cache/*
 public/apidoc/*

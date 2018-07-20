@@ -22,11 +22,14 @@ $app->register(new HttpFragmentServiceProvider());
 $app->register(new DoctrineServiceProvider());
 $app->register(new ValidatorServiceProvider());
 
+$app['em'] = $entityManager;
+$app['eway'] = include ROOT_FOLDER . "/config/eway.php";
+
 $app->register(new SecurityServiceProvider(), array(
     'security.firewalls' => array(
         'api' => array(
             'pattern'       => '^/api',
-            'security'      => true,//(ENV == 'development') ? false : true,
+            'security'      => (ENV == 'development') ? false : true,
             'logout'        => true,
             'guard'         => array(
                 'authenticators'  => array(

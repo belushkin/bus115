@@ -43,9 +43,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             return;
         }
 
-        var_dump($apiKey);
-        var_dump($userProvider->loadUserByApiKey($apiKey));
-
         // if a User object, checkCredentials() is called
         return $userProvider->loadUserByApiKey($apiKey);
     }
