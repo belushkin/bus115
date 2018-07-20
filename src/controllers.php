@@ -69,7 +69,7 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
             'login'     => $app['eway']['login'],
             'password'  => $app['eway']['pass'],
             'function'  => 'stops.GetStopsNearPoint',
-            'city'      => 'kyiv',
+            'city'      => $app['eway']['city'],
             'lat'       => $lat,
             'lng'       => $lng,
         ]
