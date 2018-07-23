@@ -23,7 +23,18 @@ $app->register(new DoctrineServiceProvider());
 $app->register(new ValidatorServiceProvider());
 
 $app['em'] = $entityManager;
-$app['eway'] = include ROOT_FOLDER . "/config/eway.php";
+
+$eway = ROOT_FOLDER . "/config/eway.php";
+if (file_exists($eway)) {
+    $app['eway'] = include ROOT_FOLDER . "/config/eway.php";
+} else {
+    $app['eway'] = [
+        'login' => 'login',
+        'pass'  => 'pass',
+        'city'  => 'city',
+        'url'   => 'url'
+    ];
+}
 
 $app->register(new SecurityServiceProvider(), array(
     'security.firewalls' => array(
