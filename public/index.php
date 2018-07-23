@@ -1,6 +1,6 @@
 <?php
 
-define("ROOT_FOLDER", __DIR__ . '/..');
+require __DIR__. '/../config/constants.php';
 
 if (file_exists(ROOT_FOLDER . '/config/dev.php')) {
     define("ENV", "development");

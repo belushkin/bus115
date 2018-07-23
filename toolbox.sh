@@ -35,11 +35,11 @@ function ssh_to()
 function execute_arbitraty(){
 
 	if [ -t 1 ] ; then
-		docker exec -u bus115 -t -i $CONTAINER_TOOLBOX_ID $@
+		docker exec -t -i $CONTAINER_TOOLBOX_ID $@
 		RET=$?
 	else
 		echo "$Name Warning: running in a non-interactive environment. Some features may not work"
-		docker exec -u bus115 $CONTAINER_TOOLBOX_ID $@
+		docker exec $CONTAINER_TOOLBOX_ID $@
 		RET=$?
 	fi
 	return $RET
