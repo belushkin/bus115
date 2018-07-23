@@ -42,12 +42,15 @@ RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     docker-php-ext-install zip && \
     a2enmod rewrite && \
     sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf && \
+    sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/default-ssl.conf && \
     mv /var/www/html /var/www/public && \
     pecl install mongodb && \
     pecl install memcached && \
     pecl install redis
 
-RUN npm install apidoc -g
+RUN npm install apidoc -g && \
+    a2ensite /etc/apache2/sites-available/default-ssl.conf && \
+    service apache2 reload
 
 RUN pecl install xdebug-2.5.0 \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
