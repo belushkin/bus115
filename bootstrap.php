@@ -8,7 +8,17 @@ use Doctrine\ORM\EntityManager;
 $paths = [__DIR__.'/src/Entities'];
 $isDevMode = isset($app['debug']) ? $app['debug'] : true;
 
-$dbParams = include 'migrations-db.php';
+if (file_exists('migrations-db.php')) {
+    $dbParams = include 'migrations-db.php';
+} else {
+    $dbParams = [
+        'dbname' => 'dbname',
+        'user' => 'user',
+        'password' => 'password',
+        'host' => 'host',
+        'driver' => 'pdo_mysql',
+    ];
+}
 
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
 $entityManager = EntityManager::create($dbParams, $config);
