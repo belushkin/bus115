@@ -39,7 +39,7 @@ $app->get('/', function () use ($app) {
  *     }
  *
  * @apiExample {curl} Example usage:
- *     curl -H "X-AUTH-TOKEN: 23234defdewfewf" -i http://0.0.0.0/api/v1/getstops/4711/4567
+ *     curl -H "X-AUTH-TOKEN: 23234defdewfewf" -i http://0.0.0.0/api/v1/getstops?lat=4711&lng=4567
  *
  * @apiSuccess {Array[]}  stop      Array of stops.
  * @apiSuccess {Number}   stop.lat   Stop Latitude.

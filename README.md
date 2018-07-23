@@ -17,7 +17,7 @@ vendor/bin/doctrine orm:schema-tool:update --force --dump-sql
 ```
 ###CLI mode
 ```bash
-./toolbox.sh exec php console.php GET /
+./toolbox.sh exec php console.php GET "/api/v1/getstops?lat=4711&lng=4567"
 ```
 ###APIDOC
 ```bash
