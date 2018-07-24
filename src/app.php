@@ -32,7 +32,8 @@ if (file_exists($eway)) {
         'login' => 'login',
         'pass'  => 'pass',
         'city'  => 'city',
-        'url'   => 'url'
+        'url'   => 'url',
+        'token' => 'token'
     ];
 }
 

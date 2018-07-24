@@ -8,7 +8,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use GuzzleHttp\Client;
+
+$app->before(function (Request $request) {
+    if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+    }
+});
 
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
@@ -37,7 +45,7 @@ $app->get('/', function () use ($app) {
  *     }
  *
  * @apiExample {curl} Example usage:
- *     curl -H "X-AUTH-TOKEN: 23234defdewfewf" -i http://0.0.0.0/api/v1/getstops?lat=4711&lng=4567
+ *     curl -H "X-AUTH-TOKEN: 23234defdewfewf" -i http://0.0.0.0:8080/api/v1/getstops?lat=4711&lng=4567
  *
  * @apiSuccess {Array[]}  stop      Array of stops.
  * @apiSuccess {Number}   stop.lat   Stop Latitude.
@@ -77,10 +85,60 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
     return new Response(\GuzzleHttp\json_encode($body));
 });
 
-
+/**
+ * @api {GET} /api/v1/webhook
+ * Webhook verification
+ * @apiName Webhook verification
+ * @apiDescription To ensure your webhook is authentic and working
+ *
+ * @apiGroup Facebook
+ * @apiVersion 1.0.0
+ * @apiSampleRequest webhook
+ *
+ * @apiParam {String} hub_verify_token Mandatory Facebook verify token.
+ * This is a random string of your choosing, hardcoded into your webhook.
+ * @apiParam {String} hub_challenge Mandatory Facebook sends this parameter in request and it must be returned back
+ * @apiParam {String} mode Mandatory Facebook mode parameter
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -X GET "http://0.0.0.0:8080/api/v1/webhook?hub_verify_token=<YOUR_VERIFY_TOKEN>&hub_challenge=CHALLENGE_ACCEPTED&hub_mode=subscribe"
+ *
+ */
 $app->get('/api/v1/webhook', function (Request $request) use ($app) {
+    $verifyToken    = $request->get('hub_verify_token');
+    $hubChallenge   = $request->get('hub_challenge');
+    $mode           = $request->get('mode');
 
-    return new Response(\GuzzleHttp\json_encode($body));
+    if ($verifyToken && $mode) {
+        if ($verifyToken === $app['eway']['token'] && $mode == 'subscribe') {
+            return new Response($hubChallenge);
+        }
+    }
+    $app->abort(403, "Invalid Verify Token");
+});
+
+/**
+ * @api {POST} /api/v1/webhook
+ * Webhook endpoint
+ * @apiName Webhook endpoint
+ * @apiDescription Endpoint that accepts POST requests, checks the request is a webhook event, then parses the message.
+ *
+ * @apiGroup Facebook
+ * @apiVersion 1.0.0
+ * @apiSampleRequest webhook
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -H "Content-Type: application/json" -X POST "http://0.0.0.0:8080/api/v1/webhook" -d '{"object": "page", "entry": [{"messaging": [{"message": "TEST_MESSAGE"}]}]}'
+ *
+ */
+$app->post('/api/v1/webhook', function (Request $request) use ($app) {
+    $object = $request->request->get('object');
+    $entry  = $request->request->get('entry');
+    if ($object == 'page' && is_array($entry)) {
+        $webhookEvent = $entry[0]['messaging'][0];
+        return new Response('EVENT_RECEIVED');
+    }
+    $app->abort(404, "Not Found");
 });
 
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {

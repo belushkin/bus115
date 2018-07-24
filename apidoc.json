@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Project for displaying next transport is coming",
   "title": "API documentation for bus115 project",
-  "url": "http://0.0.0.0",
+  "url": "http://0.0.0.0:8080",
   "sampleUrl": "/api/v1/"
 }
