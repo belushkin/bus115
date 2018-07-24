@@ -12,9 +12,7 @@ use GuzzleHttp\Client;
 
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
-})
-    ->bind('homepage')
-;
+})->bind('homepage');
 
 /**
  * @api {Get} /api/v1/getstops
@@ -76,6 +74,12 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
     ]);
 
     $body = \GuzzleHttp\json_decode($response->getBody());
+    return new Response(\GuzzleHttp\json_encode($body));
+});
+
+
+$app->get('/api/v1/webhook', function (Request $request) use ($app) {
+
     return new Response(\GuzzleHttp\json_encode($body));
 });
 

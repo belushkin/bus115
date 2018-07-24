@@ -42,7 +42,6 @@ RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     docker-php-ext-install zip && \
     a2enmod rewrite && \
     sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf && \
-    sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/default-ssl.conf && \
     mv /var/www/html /var/www/public && \
     pecl install mongodb && \
     pecl install memcached && \
