@@ -39,6 +39,10 @@ if (file_exists($eway)) {
 
 $app->register(new SecurityServiceProvider(), array(
     'security.firewalls' => array(
+        'webhook' => array(
+            'pattern'       => 'webhook',
+            'anonymous'      => true,
+        ),
         'api' => array(
             'pattern'       => '^/api',
             'security'      => (ENV == 'development') ? false : true,
