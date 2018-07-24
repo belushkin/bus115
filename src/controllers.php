@@ -98,7 +98,7 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
  * @apiParam {String} hub_verify_token Mandatory Facebook verify token.
  * This is a random string of your choosing, hardcoded into your webhook.
  * @apiParam {String} hub_challenge Mandatory Facebook sends this parameter in request and it must be returned back
- * @apiParam {String} mode Mandatory Facebook mode parameter
+ * @apiParam {String} hub_mode Mandatory Facebook mode parameter
  *
  * @apiExample {curl} Example usage:
  *     curl -X GET "http://0.0.0.0:8080/api/v1/webhook?hub_verify_token=<YOUR_VERIFY_TOKEN>&hub_challenge=CHALLENGE_ACCEPTED&hub_mode=subscribe"
@@ -107,7 +107,7 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
 $app->get('/api/v1/webhook', function (Request $request) use ($app) {
     $verifyToken    = $request->get('hub_verify_token');
     $hubChallenge   = $request->get('hub_challenge');
-    $mode           = $request->get('mode');
+    $mode           = $request->get('hub_mode');
 
     if ($verifyToken && $mode) {
         if ($verifyToken === $app['eway']['token'] && $mode == 'subscribe') {
