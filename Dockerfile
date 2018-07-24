@@ -48,9 +48,7 @@ RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     pecl install memcached && \
     pecl install redis
 
-RUN npm install apidoc -g && \
-    a2ensite /etc/apache2/sites-available/default-ssl.conf && \
-    service apache2 reload
+RUN npm install apidoc -g &&
 
 RUN pecl install xdebug-2.5.0 \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
@@ -68,5 +66,5 @@ RUN tar zxpf /tmp/zlib.tar.gz -C /tmp && \
     rm -Rf /tmp/zlib-1.2.11 && \
     rm /tmp/zlib.tar.gz
 
-EXPOSE 80 443
+EXPOSE 8080
 WORKDIR /var/www

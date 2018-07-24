@@ -24,6 +24,15 @@ vendor/bin/doctrine orm:schema-tool:update --force --dump-sql
 ./toolbox.sh apidoc
 ```
 
+### SSL CERTIFICATE
+```bash
+~/workspace $ sudo http-server ssl -p 80
+~/workspace $ sudo letsencrypt certonly --webroot -w ssl/ -d bus115.kiev.ua
+~/workspace/haproxy $ docker build -t haproxy .
+~/workspace/haproxy/private $ sudo cat /etc/letsencrypt/live/bus115.kiev.ua-0001/fullchain.pem /etc/letsencrypt/live/bus115.kiev.ua-0001/privkey.pem > bus115.kiev.ua.pem
+~/workspace/haproxy $ docker run --net=host -it haproxy
+```
+
 ##Contributors @belushkin
 
 ##License MIT License
