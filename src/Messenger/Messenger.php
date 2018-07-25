@@ -67,7 +67,23 @@ class Messenger
     // Handles messaging_postbacks events
     public function handlePostback($senderPsid, $receivedPostback)
     {
+        $response = [];
 
+        // Get the payload for the postback
+        $payload = $receivedPostback['payload'];
+
+        // Set the response based on the postback payload
+        if ($payload === 'yes') {
+            $response = [
+                'text' => "Thanks!"
+            ];
+        } else if ($payload === 'no') {
+            $response = [
+                'text' => "Oops, try sending another image."
+            ];
+        }
+        // Sends the response message
+        $this->callSendAPI($senderPsid, $response);
     }
 
     // Sends response messages via the Send API
