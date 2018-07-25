@@ -81,6 +81,15 @@ class Messenger
             $response = [
                 'text' => "Oops, try sending another image."
             ];
+        } else if ($payload === 'first hand shake') {
+            $response = [
+                "greeting" => [
+                    [
+                        "locale"    => "default",
+                        "text"      => "Привіт {{user_first_name}}!"
+                    ]
+                ]
+            ];
         }
         // Sends the response message
         $this->callSendAPI($senderPsid, $response);
