@@ -83,12 +83,7 @@ class Messenger
             ];
         } else if ($payload === 'first hand shake') {
             $response = [
-                "greeting" => [
-                    [
-                        "locale"    => "default",
-                        "text"      => "Привіт {{user_first_name}}!"
-                    ]
-                ]
+                'text' => "Вітаю! Чого чекаємо?"
             ];
         }
         // Sends the response message
