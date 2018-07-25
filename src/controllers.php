@@ -137,7 +137,7 @@ $app->post('/api/v1/webhook', function (Request $request) use ($app) {
     if ($object == 'page') {
         $webhookEvent   = $entry[0]['messaging'][0];
         $senderPsid     = $webhookEvent['sender']['id'];
-        $app['monolog']->info($senderPsid);
+        $app['monolog']->info(sprintf('Sender Psid: %s', $senderPsid));
         return new Response('EVENT_RECEIVED');
     }
     $app->abort(404, "Not Found");
