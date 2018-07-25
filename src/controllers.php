@@ -138,6 +138,15 @@ $app->post('/api/v1/webhook', function (Request $request) use ($app) {
         $webhookEvent   = $entry[0]['messaging'][0];
         $senderPsid     = $webhookEvent['sender']['id'];
         $app['monolog']->info(sprintf('Sender Psid: %s', $senderPsid));
+
+        // Check if the event is a message or postback and
+        // pass the event to the appropriate handler function
+        if (isset($webhookEvent['message'])) {
+            $app['app.messenger']->handleMessage($senderPsid, $webhookEvent['message']);
+        } else if ($webhookEvent['postback']) {
+            $app['app.messenger']->handlePostback($senderPsid, $webhookEvent['postback']);
+        }
+
         return new Response('EVENT_RECEIVED');
     }
     $app->abort(404, "Not Found");

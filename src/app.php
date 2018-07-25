@@ -18,6 +18,7 @@ use Monolog\Logger;
 
 use Bus115\Security\TokenAuthenticator;
 use Bus115\Security\User\UserProvider;
+use Bus115\Messenger\Messenger;
 
 $app = new Application();
 $app->register(new ServiceControllerServiceProvider());
@@ -95,6 +96,10 @@ $app['twig'] = $app->extend('twig', function ($twig, $app) {
 
 $app['app.token_authenticator'] = function ($app) {
     return new TokenAuthenticator();
+};
+
+$app['app.messenger'] = function ($app) {
+    return new Messenger($app);
 };
 
 return $app;
