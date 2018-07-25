@@ -157,6 +157,8 @@ $app->error(function (\Exception $e, Request $request, $code) use ($app) {
         return;
     }
 
+    $app['monolog']->error(sprintf('Exception %s, %s', $e->getCode(), $e->getMessage()));
+
     // 404.html, or 40x.html, or 4xx.html, or error.html
     $templates = array(
         'errors/'.$code.'.html.twig',

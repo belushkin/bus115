@@ -3,7 +3,6 @@
 // src/Messenger/Messenger.php
 namespace Bus115\Messenger;
 
-use GuzzleHttp\Client;
 use Silex\Application;
 
 class Messenger
@@ -27,6 +26,38 @@ class Messenger
             $response = [
               'text' => "You sent the message: '{$receivedMessage['text']}'. Now send me an image!"
             ];
+        } else if (isset($receivedMessage['attachments'])) {
+            $urls = [];
+            foreach ($receivedMessage['attachments'] as $attachment) {
+                $urls[] = $attachment['payload']['url'];
+                $response = [
+                    'attachment' => [
+                        'type' => 'template',
+                        'payload' => [
+                            'template_type' => 'generic',
+                            'elements' => [
+                                [
+                                    'title' => 'Is this the right picture?',
+                                    'subtitle' => 'Tap a button to answer.',
+                                    'image_url' => current($urls),
+                                    'buttons' => [
+                                        [
+                                            'type' => 'postback',
+                                            'title' => 'Yes!',
+                                            'payload' => 'yes'
+                                        ],
+                                        [
+                                            'type' => 'postback',
+                                            'title' => 'No!',
+                                            'payload' => 'no'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
         }
 
         // Sends the response message
@@ -53,8 +84,11 @@ class Messenger
 
         $ch = curl_init($url);
 
-        $this->app['monolog']->info(sprintf('Send message: %s', $requestBody['message']['text']));
-
+        if ($requestBody['message']['text']) {
+            $this->app['monolog']->info(sprintf('Sent message back: %s', $response['text']));
+        } else {
+            $this->app['monolog']->info(sprintf('Sent attachment back'));
+        }
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, \GuzzleHttp\json_encode($requestBody));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));

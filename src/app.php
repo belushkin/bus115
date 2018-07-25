@@ -86,6 +86,10 @@ $app->extend('monolog', function ($monolog, $app) {
     $monolog->pushHandler(new StreamHandler(__DIR__.'/../data/logs/info.log', Logger::INFO));
     return $monolog;
 });
+$app->extend('monolog', function ($monolog, $app) {
+    $monolog->pushHandler(new StreamHandler(__DIR__.'/../data/logs/error.log', Logger::ERROR));
+    return $monolog;
+});
 
 
 $app['twig'] = $app->extend('twig', function ($twig, $app) {
