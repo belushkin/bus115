@@ -34,11 +34,12 @@ if (file_exists($eway)) {
     $app['eway'] = include ROOT_FOLDER . "/config/eway.php";
 } else {
     $app['eway'] = [
-        'login' => 'login',
-        'pass'  => 'pass',
-        'city'  => 'city',
-        'url'   => 'url',
-        'token' => 'token'
+        'login'             => 'login',
+        'pass'              => 'pass',
+        'city'              => 'city',
+        'url'               => 'url',
+        'token'             => 'token',
+        'page_access_token' => 'page_access_token'
     ];
 }
 
