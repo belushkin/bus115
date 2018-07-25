@@ -83,7 +83,13 @@ class Messenger
             ];
         } else if ($payload === 'first hand shake') {
             $response = [
-                'text' => "Вітаю! Чого чекаємо?"
+                'text' => "Вітаю! Скажіть де Ви?",
+                'quick_replies' => [
+                    [
+                        'content_type' => 'location',
+
+                    ]
+                ]
             ];
         }
         // Sends the response message
