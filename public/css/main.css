@@ -7,3 +7,10 @@
     margin-left: -150px; /*half the image width*/
     margin-top: -150px; /*half the image height*/
 }
+
+.container {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
