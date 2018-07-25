@@ -91,7 +91,7 @@ function command_shutdown()
 }
 
 function logs(){
-	tail -f  $VOLUME_DIR/volume/logs/*
+	tail -f  $VOLUME_DIR/data/logs/*
 }
 
 while (( "$#" )); do
