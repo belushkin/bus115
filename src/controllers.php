@@ -132,10 +132,15 @@ $app->get('/api/v1/webhook', function (Request $request) use ($app) {
  *
  */
 $app->post('/api/v1/webhook', function (Request $request) use ($app) {
-    $object = $request->request->get('object');
-    $entry  = $request->request->get('entry');
-    if ($object == 'page' && is_array($entry)) {
-        $webhookEvent = $entry[0]['messaging'][0];
+    $object     = $request->request->get('object');
+    $entries    = $request->request->get('entry');
+    if ($object == 'page' && is_array($entries)) {
+        foreach ($entries as $entry) {
+            $app['monolog']->info(var_export($entry));
+            $webhookEvent   = $entry['messaging'][0];
+            $senderPsid     = $webhookEvent['sender']['id'];
+        }
+
         return new Response('EVENT_RECEIVED');
     }
     $app->abort(404, "Not Found");

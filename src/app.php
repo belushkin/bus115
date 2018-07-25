@@ -10,6 +10,11 @@ use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
+use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\WebProfilerServiceProvider;
+
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 use Bus115\Security\TokenAuthenticator;
 use Bus115\Security\User\UserProvider;
@@ -60,6 +65,27 @@ $app->register(new SecurityServiceProvider(), array(
         ),
     ),
 ));
+
+$app['twig.path'] = array(__DIR__.'/../templates');
+$app['twig.options'] = array('cache' => __DIR__.'/../data/cache/twig');
+if (ENV == 'development') {
+    $app['debug'] = true;
+    $app->register(new WebProfilerServiceProvider(), array(
+        'profiler.cache_dir' => __DIR__.'/../data/cache/profiler',
+    ));
+} else {
+    $app['debug'] = false;
+}
+
+$app->register(new MonologServiceProvider(), array(
+    'monolog.logfile' => __DIR__.'/../data/logs/app.log',
+));
+$app->extend('monolog', function ($monolog, $app) {
+    $monolog->pushHandler(new StreamHandler(__DIR__.'/../data/logs/info.log', Logger::INFO));
+    return $monolog;
+});
+
+
 $app['twig'] = $app->extend('twig', function ($twig, $app) {
     // add custom globals, filters, tags, ...
 
