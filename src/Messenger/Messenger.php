@@ -121,7 +121,7 @@ class Messenger
                 $elements[] = [
                     'title' => $stop->title,
                     'subtitle' => 'Оберіть зупинку',
-                    'image_url' => '',
+                    'image_url' => 'https://bus115.kiev.ua/',
                     'buttons' => [
                         [
                             'type' => 'postback',
