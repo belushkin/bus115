@@ -21,7 +21,16 @@ class Messenger
         $response = [];
 
         // Check if the message contains text
-        if (isset($receivedMessage['text'])) {
+        if (isset($receivedMessage['text']) && $receivedMessage['text'] == 'location') {
+            $response = [
+                'quick_replies' => [
+                    [
+                        'content_type' => 'location',
+
+                    ]
+                ]
+            ];
+        } else if (isset($receivedMessage['text'])) {
             // Create the payload for a basic text message
             $response = [
               'text' => "You sent the message: '{$receivedMessage['text']}'. Now send me an image!"
