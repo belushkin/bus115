@@ -101,7 +101,7 @@ class Messenger
         if ($requestBody['message']['text']) {
             $this->app['monolog']->info(sprintf('Sent message back: %s', $response['text']));
         } else {
-            $this->app['monolog']->info(sprintf('Sent attachment back'));
+            $this->app['monolog']->info(sprintf('Sent attachment back, %s', \GuzzleHttp\json_encode($requestBody)));
         }
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, \GuzzleHttp\json_encode($requestBody));
