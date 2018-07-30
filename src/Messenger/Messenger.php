@@ -47,6 +47,7 @@ class Messenger
             }
         }
 
+        $this->app['monolog']->info(sprintf('Response: %s', var_export($response, true)));
         // Sends the response message
         $this->callSendAPI($senderPsid, $response);
     }
