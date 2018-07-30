@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use GuzzleHttp\Client;
 
 $app->before(function (Request $request) {
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
@@ -69,20 +68,8 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
         return new Response($errorsString);
     }
 
-    $client = new Client();
-    $response = $client->request('GET', $app['eway']['url'], [
-        'query' => [
-            'login'     => $app['eway']['login'],
-            'password'  => $app['eway']['pass'],
-            'function'  => 'stops.GetStopsNearPoint',
-            'city'      => $app['eway']['city'],
-            'lat'       => $lat,
-            'lng'       => $lng,
-        ]
-    ]);
-
-    $body = \GuzzleHttp\json_decode($response->getBody());
-    return new Response(\GuzzleHttp\json_encode($body));
+    $response = $app['app.eway']->getStopsNearPoint($lat, $lng);
+    return new Response(\GuzzleHttp\json_encode($response));
 });
 
 /**

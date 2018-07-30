@@ -29,34 +29,11 @@ class Messenger
         } else if (isset($receivedMessage['attachments'])) {
             $urls = [];
             foreach ($receivedMessage['attachments'] as $attachment) {
-                $urls[] = $attachment['payload']['url'];
-                $response = [
-                    'attachment' => [
-                        'type' => 'template',
-                        'payload' => [
-                            'template_type' => 'generic',
-                            'elements' => [
-                                [
-                                    'title' => 'Is this the right picture?',
-                                    'subtitle' => 'Tap a button to answer.',
-                                    'image_url' => current($urls),
-                                    'buttons' => [
-                                        [
-                                            'type' => 'postback',
-                                            'title' => 'Yes!',
-                                            'payload' => 'yes'
-                                        ],
-                                        [
-                                            'type' => 'postback',
-                                            'title' => 'No!',
-                                            'payload' => 'no'
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ];
+                if ($attachment['type'] == 'location') {
+                    $response = $this->handleLocationMessage($attachment);
+                } else {
+                    $response = $this->handleImageMessage($attachment);
+                }
             }
         }
 
@@ -119,6 +96,80 @@ class Messenger
         curl_setopt($ch, CURLOPT_POSTFIELDS, \GuzzleHttp\json_encode($requestBody));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_exec($ch);
+    }
+
+    private function handleLocationMessage(Array $attachment = [])
+    {
+        $lat        = $attachment['payload']['coordinates']['lat'];
+        $lng        = $attachment['payload']['coordinates']['long'];
+
+        $body       = $this->app['app.eway']->getStopsNearPoint($lat, $lng);
+        $elements   = [];
+        if (isset($body->stop) && is_array($body->stop)) {
+            foreach ($body->stop as $stop) {
+                $elements[] = [
+                    'title' => $stop['title'],
+                    'subtitle' => 'Оберіть зупинку',
+                    'image_url' => '',
+                    'buttons' => [
+                        [
+                            'type' => 'postback',
+                            'title' => 'Ця зупинка',
+                            'payload' => 'yes',
+                            "messenger_extensions" => true,
+                            "webview_height_ratio" => "tall",
+                        ]
+                    ]
+                ];
+            }
+        }
+
+        $response = [
+            'attachment' => [
+                'type' => 'template',
+                'payload' => [
+                    'template_type' => 'list',
+                    "top_element_style" => "compact",
+                    'elements' => $elements
+                ]
+            ]
+        ];
+        return $response;
+    }
+
+    private function handleImageMessage(Array $attachment = [])
+    {
+        $response   = [];
+        $urls[]     = $attachment['payload']['url'];
+
+        $response = [
+            'attachment' => [
+                'type' => 'template',
+                'payload' => [
+                    'template_type' => 'generic',
+                    'elements' => [
+                        [
+                            'title' => 'Is this the right picture?',
+                            'subtitle' => 'Tap a button to answer.',
+                            'image_url' => current($urls),
+                            'buttons' => [
+                                [
+                                    'type' => 'postback',
+                                    'title' => 'Yes!',
+                                    'payload' => 'yes'
+                                ],
+                                [
+                                    'type' => 'postback',
+                                    'title' => 'No!',
+                                    'payload' => 'no'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        return $response;
     }
 
 }

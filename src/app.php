@@ -19,6 +19,7 @@ use Monolog\Logger;
 use Bus115\Security\TokenAuthenticator;
 use Bus115\Security\User\UserProvider;
 use Bus115\Messenger\Messenger;
+use Bus115\Eway\Eway;
 
 $app = new Application();
 $app->register(new ServiceControllerServiceProvider());
@@ -72,9 +73,6 @@ $app['twig.path'] = array(__DIR__.'/../templates');
 $app['twig.options'] = array('cache' => __DIR__.'/../data/cache/twig');
 if (ENV == 'development') {
     $app['debug'] = true;
-    $app->register(new WebProfilerServiceProvider(), array(
-        'profiler.cache_dir' => __DIR__.'/../data/cache/profiler',
-    ));
 } else {
     $app['debug'] = false;
 }
@@ -104,6 +102,10 @@ $app['app.token_authenticator'] = function ($app) {
 
 $app['app.messenger'] = function ($app) {
     return new Messenger($app);
+};
+
+$app['app.eway'] = function ($app) {
+    return new Eway($app);
 };
 
 return $app;

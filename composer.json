@@ -14,7 +14,7 @@
         "symfony/process": "~2.8|^3.0",
         "symfony/security": "^4.1",
         "symfony/translation": "~2.8|^3.0",
-        "symfony/twig-bridge": "~2.8|^3.0",
+        "symfony/twig-bridge": "~3.2",
         "symfony/validator": "^4.1",
         "doctrine/migrations": "2.0.x-dev",
         "symfony/yaml": "^4.1",
