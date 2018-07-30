@@ -108,7 +108,7 @@ class Messenger
         if (isset($body->stop) && is_array($body->stop)) {
             foreach ($body->stop as $stop) {
                 $elements[] = [
-                    'title' => $stop['title'],
+                    'title' => $stop->title,
                     'subtitle' => 'Оберіть зупинку',
                     'image_url' => '',
                     'buttons' => [
