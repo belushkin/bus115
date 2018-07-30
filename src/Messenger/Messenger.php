@@ -117,21 +117,23 @@ class Messenger
         $body       = $this->app['app.eway']->getStopsNearPoint($lat, $lng);
         $elements   = [];
         if (isset($body->stop) && is_array($body->stop)) {
+            $i = 0;
             foreach ($body->stop as $stop) {
                 $elements[] = [
                     'title' => $stop->title,
-                    'subtitle' => 'Оберіть зупинку',
-                    'image_url' => 'https://bus115.kiev.ua/',
+                    'image_url' => 'https://bus115.kiev.ua/images/bus115.png',
                     'buttons' => [
                         [
                             'type' => 'postback',
-                            'title' => 'Ця зупинка',
-                            'payload' => 'yes',
-                            "messenger_extensions" => true,
-                            "webview_height_ratio" => "tall",
+                            'title' => $stop->title,
+                            'payload' => $stop->id
                         ]
                     ]
                 ];
+                $i++;
+                if ($i == 3) {
+                    break;
+                }
             }
         }
 
