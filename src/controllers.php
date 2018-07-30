@@ -129,8 +129,10 @@ $app->post('/api/v1/webhook', function (Request $request) use ($app) {
         // Check if the event is a message or postback and
         // pass the event to the appropriate handler function
         if (isset($webhookEvent['message'])) {
+            $this->app['monolog']->info(sprintf('Handle Message'));
             $app['app.messenger']->handleMessage($senderPsid, $webhookEvent['message']);
         } else if ($webhookEvent['postback']) {
+            $this->app['monolog']->info(sprintf('Handle Postback'));
             $app['app.messenger']->handlePostback($senderPsid, $webhookEvent['postback']);
         }
 
