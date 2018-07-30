@@ -23,6 +23,7 @@ class Messenger
         // Check if the message contains text
         if (isset($receivedMessage['text']) && $receivedMessage['text'] == 'location') {
             $response = [
+                'text' => "Скажіть де Ви!",
                 'quick_replies' => [
                     [
                         'content_type' => 'location',
