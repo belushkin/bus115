@@ -111,38 +111,6 @@ class Messenger
         curl_exec($ch);
     }
 
-    private function handleStopInfo($id = 0)
-    {
-        $body       = $this->app['app.eway']->handleStopInfo($id);
-        $elements   = [];
-        if (isset($body->routes) && is_array($body->routes)) {
-            foreach ($body->routes as $route) {
-                $elements[] = [
-                    'title'     => $route->transportName,
-                    'subtitle'  => $route->directionTitle,
-                    'image_url' => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
-                    'buttons' => [
-                        [
-                            'type' => 'postback',
-                            'title' => 'Дивитися',
-                            'payload' => $route->id
-                        ]
-                    ]
-                ];
-            }
-        }
-        $response = [
-            'attachment' => [
-                'type' => 'template',
-                'payload' => [
-                    'template_type' => 'generic',
-                    'elements' => $elements
-                ]
-            ]
-        ];
-        return $response;
-    }
-
     private function handleLocationMessage(Array $attachment = [])
     {
         $lat        = $attachment['payload']['coordinates']['lat'];
@@ -158,7 +126,7 @@ class Messenger
                     'buttons' => [
                         [
                             'type' => 'postback',
-                            'title' => 'Вибрати',
+                            'title' => 'Вибрати зупинку: ' . $stop->title,
                             'payload' => $stop->id
                         ]
                     ]
@@ -171,7 +139,38 @@ class Messenger
                 'type' => 'template',
                 'payload' => [
                     'template_type' => 'generic',
-//                    "top_element_style" => "compact",
+                    'elements' => $elements
+                ]
+            ]
+        ];
+        return $response;
+    }
+
+    private function handleStopInfo($id = 0)
+    {
+        $body       = $this->app['app.eway']->handleStopInfo($id);
+        $elements   = [];
+        if (isset($body->routes) && is_array($body->routes)) {
+            foreach ($body->routes as $route) {
+                $elements[] = [
+                    'title'     => $route->transportName . ' №' . $route->title,
+                    'subtitle'  => 'В напрямку:' . $route->directionTitle,
+                    'image_url' => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
+                    'buttons' => [
+                        [
+                            'type' => 'postback',
+                            'title' => 'Оновити час прибуття',
+                            'payload' => $route->id
+                        ]
+                    ]
+                ];
+            }
+        }
+        $response = [
+            'attachment' => [
+                'type' => 'template',
+                'payload' => [
+                    'template_type' => 'generic',
                     'elements' => $elements
                 ]
             ]
