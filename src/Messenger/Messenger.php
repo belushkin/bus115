@@ -117,7 +117,7 @@ class Messenger
         $body       = $this->app['app.eway']->getStopsNearPoint($lat, $lng);
         $elements   = [];
         if (isset($body->stop) && is_array($body->stop)) {
-            $i = 0;
+//            $i = 0;
             foreach ($body->stop as $stop) {
                 $elements[] = [
                     'title' => $stop->title,
@@ -130,10 +130,10 @@ class Messenger
                         ]
                     ]
                 ];
-                $i++;
-                if ($i == 3) {
-                    break;
-                }
+//                $i++;
+//                if ($i == 3) {
+//                    break;
+//                }
             }
         }
 
@@ -141,8 +141,8 @@ class Messenger
             'attachment' => [
                 'type' => 'template',
                 'payload' => [
-                    'template_type' => 'list',
-                    "top_element_style" => "compact",
+                    'template_type' => 'generic',
+//                    "top_element_style" => "compact",
                     'elements' => $elements
                 ]
             ]
