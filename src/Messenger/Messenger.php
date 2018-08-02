@@ -69,6 +69,8 @@ class Messenger
             $response = [
                 'text' => "Oops, try sending another image."
             ];
+        } else if (intval($payload) != 0) {
+            $response = $this->handleStopInfo($payload);
         } else if ($payload === 'first hand shake') {
             $response = [
                 'text' => "Вітаю! Скажіть де Ви?",
@@ -109,6 +111,38 @@ class Messenger
         curl_exec($ch);
     }
 
+    private function handleStopInfo($id = 0)
+    {
+        $body       = $this->app['app.eway']->handleStopInfo($id);
+        $elements   = [];
+        if (isset($body->routes) && is_array($body->routes)) {
+            foreach ($body->routes as $route) {
+                $elements[] = [
+                    'title'     => $route->transportName,
+                    'subtitle'  => $route->directionTitle,
+                    'image_url' => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
+                    'buttons' => [
+                        [
+                            'type' => 'postback',
+                            'title' => 'Дивитися',
+                            'payload' => $route->id
+                        ]
+                    ]
+                ];
+            }
+        }
+        $response = [
+            'attachment' => [
+                'type' => 'template',
+                'payload' => [
+                    'template_type' => 'generic',
+                    'elements' => $elements
+                ]
+            ]
+        ];
+        return $response;
+    }
+
     private function handleLocationMessage(Array $attachment = [])
     {
         $lat        = $attachment['payload']['coordinates']['lat'];
@@ -117,23 +151,18 @@ class Messenger
         $body       = $this->app['app.eway']->getStopsNearPoint($lat, $lng);
         $elements   = [];
         if (isset($body->stop) && is_array($body->stop)) {
-//            $i = 0;
             foreach ($body->stop as $stop) {
                 $elements[] = [
                     'title' => $stop->title,
-                    'image_url' => 'https://bus115.kiev.ua/images/bus115.png',
+                    'image_url' => 'https://bus115.kiev.ua/images/stop.jpg',
                     'buttons' => [
                         [
                             'type' => 'postback',
-                            'title' => $stop->title,
+                            'title' => 'Вибрати',
                             'payload' => $stop->id
                         ]
                     ]
                 ];
-//                $i++;
-//                if ($i == 3) {
-//                    break;
-//                }
             }
         }
 

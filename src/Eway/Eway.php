@@ -32,4 +32,20 @@ class Eway
 
         return \GuzzleHttp\json_decode($response->getBody());
     }
+
+    public function handleStopInfo($id)
+    {
+        $client = new Client();
+        $response = $client->request('GET', $this->app['eway']['url'], [
+            'query' => [
+                'login'     => $this->app['eway']['login'],
+                'password'  => $this->app['eway']['pass'],
+                'function'  => 'stops.GetStopInfo',
+                'city'      => $this->app['eway']['city'],
+                'id'        => $id,
+                'v'         => '1.2'
+            ]
+        ]);
+        return \GuzzleHttp\json_decode($response->getBody());
+    }
 }
