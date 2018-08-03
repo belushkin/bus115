@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title 'Bus115' %} - Kyiv public transport API application</title>
+    <title>{% block title 'Bus115' %} - Розклад Громадського транспорту Києва</title>
 
     <link rel=icon href=/favicon.ico>
     <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css" />
@@ -20,6 +20,7 @@
     </script>
 </head>
 <body>
+{% block facebook %}{% endblock %}
 {% block content %}{% endblock %}
 </body>
 </html>

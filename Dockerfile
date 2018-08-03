@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:7.2-apache
 
 RUN apt-get update && \
     apt-get install -y \
@@ -14,6 +14,13 @@ RUN apt-get update && \
         libmemcached-dev \
         libcurl4-openssl-dev \
         libssl-dev \
+        libfreetype6-dev \
+        libicu-dev \
+        libjpeg-dev \
+        libmemcachedutil2 \
+        libpng-dev \
+        libpq-dev \
+        libxml2-dev \
         curl \
         ssmtp \
         mysql-client \
@@ -35,21 +42,34 @@ RUN apt-get update && \
 
 RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-install gd && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mysqli && \
-    docker-php-ext-install mcrypt && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install zip && \
+    docker-php-ext-install opcache && \
     a2enmod rewrite && \
     sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf && \
     mv /var/www/html /var/www/public && \
     pecl install mongodb && \
     pecl install memcached && \
-    pecl install redis
+    pecl install redis && \
+    pecl install mcrypt-1.0.1 && \
+    version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") && \
+    curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version && \
+    tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp && \
+    mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so && \
+    rm -f /tmp/blackfire-probe.tar.gz
 
 RUN npm install apidoc -g
 
-RUN pecl install xdebug-2.5.0 \
+COPY conf.d/blackfire.ini /usr/local/etc/php/conf.d/blackfire.ini
+
+# Add some custom config
+COPY conf.d/php.ini ${PHP_INI_DIR}/conf.d/php.ini
+
+RUN pecl install xdebug-2.6.0 \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/xdebug.ini \

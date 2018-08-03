@@ -21,9 +21,9 @@ class Messenger
         $response = [];
 
         // Check if the message contains text
-        if (isset($receivedMessage['text']) && $receivedMessage['text'] == 'location') {
+        if (isset($receivedMessage['text']) && strtolower($receivedMessage['text']) == 'location') {
             $response = [
-                'text' => "Скажіть де Ви!",
+                'text' => "Скажіть, де Ви!",
                 'quick_replies' => [
                     [
                         'content_type' => 'location',
@@ -34,15 +34,13 @@ class Messenger
         } else if (isset($receivedMessage['text'])) {
             // Create the payload for a basic text message
             $response = [
-              'text' => "You sent the message: '{$receivedMessage['text']}'. Now send me an image!"
+              'text' => "You sent the message: '{$receivedMessage['text']}'"
             ];
         } else if (isset($receivedMessage['attachments'])) {
             $urls = [];
             foreach ($receivedMessage['attachments'] as $attachment) {
                 if ($attachment['type'] == 'location') {
                     $response = $this->handleLocationMessage($attachment);
-                } else {
-                    $response = $this->handleImageMessage($attachment);
                 }
             }
         }
@@ -61,16 +59,10 @@ class Messenger
         $payload = $receivedPostback['payload'];
 
         // Set the response based on the postback payload
-        if ($payload === 'yes') {
-            $response = [
-                'text' => "Thanks!"
-            ];
-        } else if ($payload === 'no') {
-            $response = [
-                'text' => "Oops, try sending another image."
-            ];
-        } else if (intval($payload) != 0) {
+        if (intval($payload) != 0 && !strpos('|', $payload)) { // just show stop info
             $response = $this->handleStopInfo($payload);
+        } else if (intval($payload) != 0 && strpos('|', $payload)) { // show specific arrival time for the transport
+            $response = $this->handleTransportInfo($payload);
         } else if ($payload === 'first hand shake') {
             $response = [
                 'text' => "Вітаю! Скажіть де Ви?",
@@ -160,7 +152,7 @@ class Messenger
                         [
                             'type' => 'postback',
                             'title' => 'Оновити час прибуття',
-                            'payload' => $route->id
+                            'payload' => $id . '|'. $route->id
                         ]
                     ]
                 ];
@@ -178,38 +170,32 @@ class Messenger
         return $response;
     }
 
-    private function handleImageMessage(Array $attachment = [])
+    private function handleTransportInfo($payload = '')
     {
-        $response   = [];
-        $urls[]     = $attachment['payload']['url'];
+        $params = explode('|', $payload);
+        if (intval($params[0]) == 0) { // stop id
+            return [];
+        }
 
         $response = [
-            'attachment' => [
-                'type' => 'template',
-                'payload' => [
-                    'template_type' => 'generic',
-                    'elements' => [
-                        [
-                            'title' => 'Is this the right picture?',
-                            'subtitle' => 'Tap a button to answer.',
-                            'image_url' => current($urls),
-                            'buttons' => [
-                                [
-                                    'type' => 'postback',
-                                    'title' => 'Yes!',
-                                    'payload' => 'yes'
-                                ],
-                                [
-                                    'type' => 'postback',
-                                    'title' => 'No!',
-                                    'payload' => 'no'
-                                ]
-                            ]
-                        ]
-                    ]
+            'text' => "Час прибуття невідомий, оновіть своє місцезнаходження.",
+            'quick_replies' => [
+                [
+                    'content_type' => 'location',
+
                 ]
             ]
         ];
+        $body       = $this->app['app.eway']->handleStopInfo($params[0]);
+        if (isset($body->routes) && is_array($body->routes)) {
+            foreach ($body->routes as $route) {
+                if ($route->id == $params[1]) {
+                    $response = [
+                        'text' => "Буде через " . $route->timeLeft . 'хвилин'
+                    ];
+                }
+            }
+        }
         return $response;
     }
 
