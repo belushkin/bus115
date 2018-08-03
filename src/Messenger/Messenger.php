@@ -173,7 +173,7 @@ class Messenger
 
     private function handleTransportInfo($payload = '')
     {
-        $params = explode('|', $payload);
+        $params = explode('_', $payload);
         if (intval($params[0]) == 0) { // stop id
             return [];
         }
