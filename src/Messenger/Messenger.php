@@ -60,9 +60,9 @@ class Messenger
         $this->app['monolog']->info(sprintf('Payload: %s', $payload));
 
         // Set the response based on the postback payload
-        if (intval($payload) != 0 && !strpos('|', $payload)) { // just show stop info
+        if (intval($payload) != 0 && strpos('_', $payload) === false) { // just show stop info
             $response = $this->handleStopInfo($payload);
-        } else if (intval($payload) != 0 && strpos('|', $payload)) { // show specific arrival time for the transport
+        } else if (strpos('_', $payload)) { // show specific arrival time for the transport
             $response = $this->handleTransportInfo($payload);
         } else if ($payload === 'first hand shake') {
             $response = [
@@ -153,7 +153,7 @@ class Messenger
                         [
                             'type' => 'postback',
                             'title' => 'Оновити час прибуття',
-                            'payload' => $id . '|'. $route->id
+                            'payload' => $id . '_'. $route->id
                         ]
                     ]
                 ];
