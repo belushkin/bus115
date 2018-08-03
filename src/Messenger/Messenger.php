@@ -191,8 +191,11 @@ class Messenger
         if (isset($body->routes) && is_array($body->routes)) {
             foreach ($body->routes as $route) {
                 if ($route->id == $params[1]) {
+                    $string = $route->transportName . ' №' . $route->title . ', ';
+                    $string .= 'в напрямку:' . $route->directionTitle . ', ';
+                    $string .= "буде через " . $route->timeLeft . ' хвилин';
                     $response = [
-                        'text' => "Буде через " . $route->timeLeft . 'хвилин'
+                        'text' => $string
                     ];
                 }
             }
