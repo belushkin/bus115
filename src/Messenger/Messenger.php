@@ -57,6 +57,7 @@ class Messenger
 
         // Get the payload for the postback
         $payload = $receivedPostback['payload'];
+        $this->app['monolog']->info(sprintf('Payload: %s', $payload));
 
         // Set the response based on the postback payload
         if (intval($payload) != 0 && !strpos('|', $payload)) { // just show stop info
