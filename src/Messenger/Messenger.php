@@ -130,8 +130,10 @@ class Messenger
         $body       = $this->app['app.eway']->handleStopInfo($id);
         $elements   = [];
         if (isset($body->routes) && is_array($body->routes)) {
+            $i = 1;
+            $j = 0;
             foreach ($body->routes as $route) {
-                $elements[] = [
+                $elements[$j][] = [
                     'title'     => $route->transportName . ' №' . $route->title,
                     'subtitle'  => 'В напрямку:' . $route->directionTitle,
                     'image_url' => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
@@ -143,6 +145,10 @@ class Messenger
                         ]
                     ]
                 ];
+                $i++;
+                if ($i == 10) {
+                    $j++;
+                }
             }
         }
         $response = [
