@@ -18,28 +18,28 @@ class Messenger
     // Handles messages events
     public function handleMessage($senderPsid, $receivedMessage)
     {
-        $response = [];
+        $responses = [];
 
         if (isset($receivedMessage['text'])) {
-            $response = $this->handleSimpleTextMessage($receivedMessage['text']);
+            $responses = $this->handleSimpleTextMessage($receivedMessage['text']);
         } else if (isset($receivedMessage['attachments'])) {
-            $urls = [];
             foreach ($receivedMessage['attachments'] as $attachment) {
                 if ($attachment['type'] == 'location') {
-                    $response = $this->handleLocationMessage($attachment);
+                    $responses = $this->handleLocationMessage($attachment);
                 }
             }
         }
 
-        $this->app['monolog']->info(sprintf('Response: %s', var_export($response, true)));
-        // Sends the response message
-        $this->callSendAPI($senderPsid, $response);
+        foreach ($responses as $response) {
+            $this->app['monolog']->info(sprintf('Handle Message'));
+            $this->callSendAPI($senderPsid, $response);
+        }
     }
 
     // Handles messaging_postbacks events
     public function handlePostback($senderPsid, $receivedPostback)
     {
-        $response = [];
+        $responses = [];
 
         // Get the payload for the postback
         $payload = $receivedPostback['payload'];
@@ -47,11 +47,11 @@ class Messenger
 
         // Set the response based on the postback payload
         if (intval($payload) != 0 && strpos($payload, '_') === false) { // just show stop info
-            $response = $this->handleStopInfo($payload);
+            $responses = $this->handleStopInfo($payload);
         } else if (strpos($payload, '_')) { // show specific arrival time for the transport
-            $response = $this->handleTransportInfo($payload);
+            $responses = $this->handleTransportInfo($payload);
         } else if ($payload === 'first hand shake') {
-            $response = [
+            $responses[] = [
                 'text' => "Вітаю! Скажіть де Ви?",
                 'quick_replies' => [
                     [
@@ -61,8 +61,11 @@ class Messenger
                 ]
             ];
         }
-        // Sends the response message
-        $this->callSendAPI($senderPsid, $response);
+
+        foreach ($responses as $response) {
+            $this->app['monolog']->info(sprintf('Handle Postback'));
+            $this->callSendAPI($senderPsid, $response);
+        }
     }
 
     // Sends response messages via the Send API
@@ -96,8 +99,10 @@ class Messenger
         $lng        = $attachment['payload']['coordinates']['long'];
 
         $body       = $this->app['app.eway']->getStopsNearPoint($lat, $lng);
-        $elements   = [];
-        if (isset($body->stop) && is_array($body->stop)) {
+        if (isset($body->stop) && is_array($body->stop) && !empty($body->stop)) {
+            $elements   = [];
+            $responses  = [];
+            $i = 0;
             foreach ($body->stop as $stop) {
                 $elements[] = [
                     'title' => $stop->title,
@@ -110,9 +115,61 @@ class Messenger
                         ]
                     ]
                 ];
+                $i++;
+                if ($i % 10 == 0) {
+                    $responses[] = $this->generateGenericResponse($elements);
+                    $elements = [];
+                }
             }
+            $responses[] = $this->generateGenericResponse($elements);
+            return $responses;
         }
 
+        $responses[] = [
+            'text' => "Нажаль, нічого не знайдено.",
+            'quick_replies' => [
+                [
+                    'content_type' => 'location',
+
+                ]
+            ]
+        ];
+
+        return $responses;
+    }
+
+    private function handleStopInfo($id = 0)
+    {
+        $routes     = $this->callStopInfo($id);
+        $elements   = [];
+        $responses  = [];
+
+        $i = 0;
+        foreach ($routes as $route) {
+            $elements[] = [
+                'title'     => $route->transportName . ' №' . $route->title,
+                'subtitle'  => 'В напрямку:' . $route->directionTitle,
+                'image_url' => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
+                'buttons' => [
+                    [
+                        'type' => 'postback',
+                        'title' => 'Оновити час прибуття',
+                        'payload' => $id . '_'. $route->id
+                    ]
+                ]
+            ];
+            $i++;
+            if ($i % 10 == 0) {
+                $responses[] = $this->generateGenericResponse($elements);
+                $elements = [];
+            }
+        }
+        $responses[] = $this->generateGenericResponse($elements);
+        return $responses;
+    }
+
+    private function generateGenericResponse($elements = [])
+    {
         $response = [
             'attachment' => [
                 'type' => 'template',
@@ -125,42 +182,13 @@ class Messenger
         return $response;
     }
 
-    private function handleStopInfo($id = 0)
+    private function callStopInfo($id)
     {
-        $body       = $this->app['app.eway']->handleStopInfo($id);
-        $elements   = [];
-        if (isset($body->routes) && is_array($body->routes)) {
-            $i = 1;
-            $j = 0;
-            foreach ($body->routes as $route) {
-                $elements[$j][] = [
-                    'title'     => $route->transportName . ' №' . $route->title,
-                    'subtitle'  => 'В напрямку:' . $route->directionTitle,
-                    'image_url' => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
-                    'buttons' => [
-                        [
-                            'type' => 'postback',
-                            'title' => 'Оновити час прибуття',
-                            'payload' => $id . '_'. $route->id
-                        ]
-                    ]
-                ];
-                $i++;
-                if ($i == 10) {
-                    $j++;
-                }
-            }
+        $body = $this->app['app.eway']->handleStopInfo($id);
+        if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
+            return $body->routes;
         }
-        $response = [
-            'attachment' => [
-                'type' => 'template',
-                'payload' => [
-                    'template_type' => 'generic',
-                    'elements' => $elements
-                ]
-            ]
-        ];
-        return $response;
+        return [];
     }
 
     private function handleTransportInfo($payload = '')
@@ -170,7 +198,7 @@ class Messenger
             return [];
         }
 
-        $response = [
+        $responses[] = [
             'text' => "Час прибуття невідомий, оновіть своє місцезнаходження.",
             'quick_replies' => [
                 [
@@ -184,15 +212,16 @@ class Messenger
             foreach ($body->routes as $route) {
                 if ($route->id == $params[1]) {
                     $string = $route->transportName . ' №' . $route->title . ', ';
-                    $string .= 'в напрямку:' . $route->directionTitle . ', ';
+                    $string .= 'в напрямку: ' . $route->directionTitle . ', ';
                     $string .= "буде через " . $route->timeLeft . ' хвилин';
-                    $response = [
+                    $responses[] = [
                         'text' => $string
                     ];
+                    return $responses;
                 }
             }
         }
-        return $response;
+        return $responses;
     }
 
     private function handleSimpleTextMessage($term = '')
@@ -200,7 +229,9 @@ class Messenger
         if (!empty($term)) {
             $body       = $this->app['app.eway']->getPlacesByName($term);
             if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
+                $i = 0;
                 $elements   = [];
+                $responses  = [];
                 foreach ($body->item as $item) {
                     $elements[] = [
                         'title'     => $item->title,
@@ -214,21 +245,18 @@ class Messenger
                             ]
                         ]
                     ];
+                    $i++;
+                    if ($i % 10 == 0) {
+                        $responses[] = $this->generateGenericResponse($elements);
+                        $elements = [];
+                    }
                 }
-                $response = [
-                    'attachment' => [
-                        'type' => 'template',
-                        'payload' => [
-                            'template_type' => 'generic',
-                            'elements' => $elements
-                        ]
-                    ]
-                ];
-                return $response;
+                $responses[] = $this->generateGenericResponse($elements);
+                return $responses;
             }
         }
 
-        $response = [
+        $responses[] = [
             'text' => "Нажаль, по запросу: ".htmlspecialchars(stripslashes($term))." нічого не знайдено.",
             'quick_replies' => [
                 [
@@ -238,7 +266,7 @@ class Messenger
             ]
         ];
 
-        return $response;
+        return $responses;
     }
 
 }
