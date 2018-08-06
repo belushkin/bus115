@@ -33,6 +33,22 @@ class Eway
         return \GuzzleHttp\json_decode($response->getBody());
     }
 
+    public function getPlacesByName($term)
+    {
+        $client = new Client();
+        $response = $client->request('GET', $this->app['eway']['url'], [
+            'query' => [
+                'login'     => $this->app['eway']['login'],
+                'password'  => $this->app['eway']['pass'],
+                'function'  => 'cities.GetPlacesByName',
+                'city'      => $this->app['eway']['city'],
+                'term'      => $term,
+            ]
+        ]);
+
+        return \GuzzleHttp\json_decode($response->getBody());
+    }
+
     public function handleStopInfo($id)
     {
         $client = new Client();

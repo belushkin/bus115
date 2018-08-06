@@ -20,22 +20,8 @@ class Messenger
     {
         $response = [];
 
-        // Check if the message contains text
-        if (isset($receivedMessage['text']) && strtolower($receivedMessage['text']) == 'location') {
-            $response = [
-                'text' => "Скажіть, де Ви!",
-                'quick_replies' => [
-                    [
-                        'content_type' => 'location',
-
-                    ]
-                ]
-            ];
-        } else if (isset($receivedMessage['text'])) {
-            // Create the payload for a basic text message
-            $response = [
-              'text' => "You sent the message: '{$receivedMessage['text']}'"
-            ];
+        if (isset($receivedMessage['text'])) {
+            $response = $this->handleSimpleTextMessage($receivedMessage['text']);
         } else if (isset($receivedMessage['attachments'])) {
             $urls = [];
             foreach ($receivedMessage['attachments'] as $attachment) {
@@ -119,7 +105,7 @@ class Messenger
                     'buttons' => [
                         [
                             'type' => 'postback',
-                            'title' => 'Вибрати зупинку: ' . $stop->title,
+                            'title' => 'Вибрати цю зупинку',
                             'payload' => $stop->id
                         ]
                     ]
@@ -200,6 +186,52 @@ class Messenger
                 }
             }
         }
+        return $response;
+    }
+
+    private function handleSimpleTextMessage($term = '')
+    {
+        if (!empty($term)) {
+            $body       = $this->app['app.eway']->getPlacesByName($term);
+            if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
+                $elements   = [];
+                foreach ($body->item as $item) {
+                    $elements[] = [
+                        'title'     => $item->title,
+                        'subtitle'  => 'В напрямку:',
+                        'image_url' => "https://bus115.kiev.ua/images/stop.jpg",
+                        'buttons' => [
+                            [
+                                'type' => 'postback',
+                                'title' => 'Вибрати цю зупинку',
+                                'payload' => $item->id
+                            ]
+                        ]
+                    ];
+                }
+                $response = [
+                    'attachment' => [
+                        'type' => 'template',
+                        'payload' => [
+                            'template_type' => 'generic',
+                            'elements' => $elements
+                        ]
+                    ]
+                ];
+                return $response;
+            }
+        }
+
+        $response = [
+            'text' => "Нажаль, по запросу: ".htmlspecialchars(stripslashes($term))." нічого не знайдено.",
+            'quick_replies' => [
+                [
+                    'content_type' => 'location',
+
+                ]
+            ]
+        ];
+
         return $response;
     }
 
