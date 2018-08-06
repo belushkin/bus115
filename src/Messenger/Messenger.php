@@ -198,15 +198,6 @@ class Messenger
             return [];
         }
 
-        $responses[] = [
-            'text' => "Час прибуття невідомий, оновіть своє місцезнаходження.",
-            'quick_replies' => [
-                [
-                    'content_type' => 'location',
-
-                ]
-            ]
-        ];
         $body       = $this->app['app.eway']->handleStopInfo($params[0]);
         if (isset($body->routes) && is_array($body->routes)) {
             foreach ($body->routes as $route) {
@@ -221,6 +212,15 @@ class Messenger
                 }
             }
         }
+        $responses[] = [
+            'text' => "Час прибуття невідомий, оновіть своє місцезнаходження.",
+            'quick_replies' => [
+                [
+                    'content_type' => 'location',
+
+                ]
+            ]
+        ];
         return $responses;
     }
 
