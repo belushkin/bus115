@@ -64,7 +64,8 @@ class Stops implements AttachmentInterface
     private function callStopTransport($id)
     {
         $body = $this->app['app.eway']->handleStopInfo($id);
-        $this->app['monolog']->info(var_export($body, true));
+        $this->app['monolog']->info(var_export($body->transports, true));
+        $this->app['monolog']->info(var_export($body->transports->transport, true));
         if (isset($body->transports) && isset($body->transports->transport)) {
             return $body->transports->transport;
         }
