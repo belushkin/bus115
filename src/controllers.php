@@ -133,7 +133,7 @@ $app->post('/api/v1/webhook', function (Request $request) use ($app) {
             $app['app.messenger']->handleMessage($senderPsid, $webhookEvent['message']);
         } else if ($webhookEvent['postback']) {
             $app['monolog']->info(sprintf('Handle Postback'));
-            $app['app.messenger']->handlePostback($senderPsid, $webhookEvent['postback']);
+            $app['app.postback']->handle($senderPsid, $webhookEvent['postback']);
         }
 
         return new Response('EVENT_RECEIVED');
