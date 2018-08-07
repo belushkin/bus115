@@ -25,10 +25,9 @@ class Stops implements AttachmentInterface
             $responses  = [];
             $i = 0;
             foreach ($body->stop as $stop) {
-                $stopTransport = $this->callStopTransport($stop->id);
                 $elements[] = [
                     'title' => $stop->title,
-                    'subtitle' => ($stopTransport) ? $stopTransport->name : '-',
+                    'subtitle' => 'В напрямку ' . $this->getStopDirection($stop->id),
                     'image_url' => 'https://bus115.kiev.ua/images/stop.jpg',
                     'buttons' => [
                         [
@@ -61,15 +60,12 @@ class Stops implements AttachmentInterface
         return $responses;
     }
 
-    private function callStopTransport($id)
+    private function getStopDirection($id)
     {
         $body = $this->app['app.eway']->handleStopInfo($id);
-        $this->app['monolog']->info(var_export($body->transports, true));
-        $this->app['monolog']->info(var_export($body->transports->transport, true));
-        if (isset($body->transports) && isset($body->transports->transport)) {
-            return $body->transports->transport;
+        if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
+            return $body->routes[0]['directionTitle'];
         }
-        return null;
+        return '-';
     }
-
 }

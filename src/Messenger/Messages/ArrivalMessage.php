@@ -28,7 +28,7 @@ class ArrivalMessage implements MessageInterface
                 if ($route->id == $params[1]) {
                     $string = $route->transportName . ' №' . $route->title . ', ';
                     $string .= 'в напрямку: ' . $route->directionTitle . ', ';
-                    $string .= "буде через " . $route->timeLeft . ' хвилин';
+                    $string .= "буде через " . $route->timeLeftFormatted;
                     $responses[] = [
                         'text' => $string
                     ];
