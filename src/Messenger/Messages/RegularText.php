@@ -17,8 +17,8 @@ class RegularText implements MessageInterface
     public function text($term = '')
     {
         $term = htmlspecialchars(addslashes(trim($term)));
+        $this->app['monolog']->info(sprintf('User entered Term: %s', $term));
         if (!empty($term) && strlen($term) > 5) {
-            $this->app['monolog']->info(sprintf('User entered Term: %s', $term));
             $body       = $this->app['app.eway']->getPlacesByName($term);
             if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
                 $i = 0;
