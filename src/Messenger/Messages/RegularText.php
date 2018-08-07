@@ -16,7 +16,7 @@ class RegularText implements MessageInterface
 
     public function text($term = '')
     {
-        if (!empty($term)) {
+        if (!empty($term) && strlen(trim($term)) > 5) {
             $body       = $this->app['app.eway']->getPlacesByName($term);
             if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
                 $i = 0;
@@ -47,7 +47,7 @@ class RegularText implements MessageInterface
         }
 
         $responses[] = [
-            'text' => "Нажаль, по запросу: ".htmlspecialchars(stripslashes($term))." нічого не знайдено.",
+            'text' => "Нажаль, по запросу: ".htmlspecialchars(stripslashes($term))." нічого не знайдено. Спробуйте вказати строку більше 5 символів",
             'quick_replies' => [
                 [
                     'content_type' => 'location',
