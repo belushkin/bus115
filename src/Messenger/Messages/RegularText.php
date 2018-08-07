@@ -16,7 +16,9 @@ class RegularText implements MessageInterface
 
     public function text($term = '')
     {
-        if (!empty($term) && strlen(trim($term)) > 5) {
+        $term = htmlspecialchars(addslashes(trim($term)));
+        if (!empty($term) && strlen($term) > 5) {
+            $this->app['monolog']->info(sprintf('User entered Term: %s', $term));
             $body       = $this->app['app.eway']->getPlacesByName($term);
             if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
                 $i = 0;
@@ -25,7 +27,7 @@ class RegularText implements MessageInterface
                 foreach ($body->item as $item) {
                     $elements[] = [
                         'title'     => $item->title,
-                        'subtitle'  => 'В напрямку:',
+                        'subtitle'  => 'В напрямку ' . $this->getStopDirection($item->id),
                         'image_url' => "https://bus115.kiev.ua/images/stop.jpg",
                         'buttons' => [
                             [
@@ -47,7 +49,7 @@ class RegularText implements MessageInterface
         }
 
         $responses[] = [
-            'text' => "Нажаль, по запросу: ".htmlspecialchars(stripslashes($term))." нічого не знайдено. Спробуйте вказати строку більше 5 символів",
+            'text' => "Нажаль, по запросу: {$term} нічого не знайдено. Спробуйте вказати строку більше 5 символів",
             'quick_replies' => [
                 [
                     'content_type' => 'location',
@@ -59,4 +61,12 @@ class RegularText implements MessageInterface
         return $responses;
     }
 
+    private function getStopDirection($id)
+    {
+        $body = $this->app['app.eway']->handleStopInfo($id);
+        if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
+            return $body->routes[0]->directionTitle;
+        }
+        return '-';
+    }
 }
