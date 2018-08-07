@@ -24,7 +24,7 @@ class Postback implements MessageInterface
         $this->app['monolog']->info(sprintf('Postback\'s payload: %s', $payload));
 
         if (intval($payload) != 0 && strpos($payload, '_') === false) { // show list of stops
-            $responses = $this->app['app.stops']->text($payload);
+            $responses = $this->app['app.transports']->text($payload);
         } else if (strpos($payload, '_')) { // show specific arrival time for the transport
             $responses = $this->app['app.arrival_message']->text($payload);
         } else if ($payload === 'first hand shake') {
