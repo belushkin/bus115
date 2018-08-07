@@ -25,8 +25,10 @@ class Stops implements AttachmentInterface
             $responses  = [];
             $i = 0;
             foreach ($body->stop as $stop) {
+                $stopTransport = $this->callStopTransport($stop->id);
                 $elements[] = [
                     'title' => $stop->title,
+                    'subtitle' => ($stopTransport) ? $stopTransport->name : '-',
                     'image_url' => 'https://bus115.kiev.ua/images/stop.jpg',
                     'buttons' => [
                         [
@@ -57,6 +59,15 @@ class Stops implements AttachmentInterface
         ];
 
         return $responses;
+    }
+
+    private function callStopTransport($id)
+    {
+        $body = $this->app['app.eway']->handleStopInfo($id);
+        if (isset($body->transport)) {
+            return $body->transport;
+        }
+        return null;
     }
 
 }
