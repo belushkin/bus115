@@ -64,7 +64,7 @@ class Stops implements AttachmentInterface
     {
         $body = $this->app['app.eway']->handleStopInfo($id);
         if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
-            return $body->routes[0]->directionTitle;
+            return $body->routes[0]->directionTitle . ', (' . $body->routes[0]->transportName . ')';
         }
         return '-';
     }
