@@ -31,8 +31,13 @@ class Messenger implements MessageInterface
             }
         }
 
+        $i = 0;
         foreach ($responses as $response) {
             $this->app['app.api']->callSendAPI($senderPsid, $response);
+            $i++;
+            if ($i > 2) {
+                break;
+            }
         }
     }
 

@@ -31,8 +31,13 @@ class Postback implements MessageInterface
             $responses = $this->app['app.first_hand_shake']->text();
         }
 
+        $i = 0;
         foreach ($responses as $response) {
             $this->app['app.api']->callSendAPI($senderPsid, $response);
+            $i++;
+            if ($i > 2) {
+                break;
+            }
         }
     }
 
