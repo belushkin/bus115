@@ -121,13 +121,11 @@ $app->get('/api/v1/webhook', function (Request $request) use ($app) {
 $app->post('/api/v1/webhook', function (Request $request) use ($app) {
     $object     = $request->request->get('object');
     $entry      = $request->request->get('entry');
-    $nlp        = $request->request->get('nlp');
     if ($object == 'page') {
         $webhookEvent   = $entry[0]['messaging'][0];
         $senderPsid     = $webhookEvent['sender']['id'];
         $app['monolog']->info(sprintf('Sender Psid: %s', $senderPsid));
-        $app['monolog']->info(sprintf('NLP1: %s', var_export($nlp, true)));
-        $app['monolog']->info(sprintf('NLP2: %s', var_export($webhookEvent['message'], true)));
+        $app['monolog']->info(sprintf('NLP2: %s', var_export($webhookEvent['message']['nlp'], true)));
 
         // Check if the event is a message or postback and
         // pass the event to the appropriate handler function
