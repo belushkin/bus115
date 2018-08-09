@@ -131,10 +131,10 @@ $app->post('/api/v1/webhook', function (Request $request) use ($app) {
         // pass the event to the appropriate handler function
         if (isset($webhookEvent['message'])) {
             $app['monolog']->info(sprintf('Handle Message'));
-            $app['app.messenger']->handle($senderPsid, $webhookEvent['message'], $nlp);
+            $app['app.messenger']->handle($senderPsid, $webhookEvent['message'], $webhookEvent['message']['nlp']);
         } else if ($webhookEvent['postback']) {
             $app['monolog']->info(sprintf('Handle Postback'));
-            $app['app.postback']->handle($senderPsid, $webhookEvent['postback'], $nlp);
+            $app['app.postback']->handle($senderPsid, $webhookEvent['postback'], []);
         }
 
         return new Response('EVENT_RECEIVED');
