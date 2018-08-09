@@ -15,7 +15,7 @@ class Messenger implements MessageInterface
         $this->app = $app;
     }
 
-    public function handle($senderPsid, $receivedMessage)
+    public function handle($senderPsid, $receivedMessage, $nlp)
     {
         $responses = [];
 

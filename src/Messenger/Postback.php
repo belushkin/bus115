@@ -15,7 +15,7 @@ class Postback implements MessageInterface
         $this->app = $app;
     }
 
-    public function handle($senderPsid, $receivedPostback)
+    public function handle($senderPsid, $receivedPostback, $nlp)
     {
         $responses = [];
 
