@@ -24,6 +24,7 @@ use Bus115\Messenger\Response;
 use Bus115\Messenger\Messages\ArrivalMessage;
 use Bus115\Messenger\Messages\FirstHandShake;
 use Bus115\Messenger\Messages\RegularText;
+use Bus115\Messenger\Messages\Joke;
 use Bus115\Messenger\Stops\Stops;
 use Bus115\Messenger\Transports\Transports;
 use Bus115\Eway\Eway;
@@ -129,6 +130,10 @@ $app['app.first_hand_shake'] = function ($app) {
 
 $app['app.regular_text'] = function ($app) {
     return new RegularText($app);
+};
+
+$app['app.joke'] = function ($app) {
+    return new Joke($app);
 };
 
 $app['app.stops'] = function ($app) {
