@@ -25,7 +25,7 @@ class Joke implements MessageInterface
     public function text($term = '')
     {
         $responses[] = [
-            'text' => rand(0, count($this->jokes)),
+            'text' => $this->jokes[rand(0, count($this->jokes)-1)],
             'quick_replies' => [
                 [
                     'content_type' => 'location',
