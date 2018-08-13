@@ -19,20 +19,21 @@ class Messenger implements MessageInterface
 
     public function handle($senderPsid, $receivedMessage, $nlp)
     {
-        $responses = [];
+        $responses  = [];
+        $intents    = (isset($nlp['entities']['intent'])) ? $nlp['entities']['intent'] : [];
 
-        $isNlp      = (isset($nlp['entities']['intent'])) ? true : false;
-        $intent     = ($isNlp) ? $nlp['entities']['intent']['value'] : false;
-        $confidence = ($isNlp) ? $nlp['entities']['intent']['confidence'] : false;
-
-        $this->app['monolog']->info(var_export($nlp, true));
-        $this->app['monolog']->info(var_export($nlp['entities']['intent'], true));
+//        $this->app['monolog']->info(var_export($nlp, true));
+//        $this->app['monolog']->info(var_export($nlp['entities']['intent'], true));
 
         if (isset($receivedMessage['text'])) {
-            if ($isNlp && $intent == 'joke' && $confidence > self::NLP_THRESHOLD) {
-                $responses = $this->app['app.joke']->text($receivedMessage['text']);
-            } else {
+            if (empty($intents)) {
                 $responses = $this->app['app.regular_text']->text($receivedMessage['text']);
+            } else {
+                foreach ($intents as $intent) {
+                    if ($intent['value'] == 'joke' && $intent['confidence'] > self::NLP_THRESHOLD) {
+                        $responses = $this->app['app.joke']->text($receivedMessage['text']);
+                    }
+                }
             }
         } else if (isset($receivedMessage['attachments'])) {
             foreach ($receivedMessage['attachments'] as $attachment) {
