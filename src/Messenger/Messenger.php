@@ -25,7 +25,8 @@ class Messenger implements MessageInterface
         $intent     = ($isNlp) ? $nlp['entities']['intent']['value'] : false;
         $confidence = ($isNlp) ? $nlp['entities']['intent']['confidence'] : false;
 
-        $this->app['monolog']->info(sprintf('Handle Message'));
+        $this->app['monolog']->info(var_export($nlp, true));
+        $this->app['monolog']->info(var_export($nlp['entities']['intent'], true));
 
         if (isset($receivedMessage['text'])) {
             if ($isNlp && $intent == 'joke' && $confidence > self::NLP_THRESHOLD) {
