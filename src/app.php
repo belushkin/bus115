@@ -11,10 +11,14 @@ use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\FormServiceProvider;
+use Silex\Provider\TranslationServiceProvider;
+use Silex\Provider\LocaleServiceProvider;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+use Bus115\Upload\Manager;
 use Bus115\Security\TokenAuthenticator;
 use Bus115\Security\User\UserProvider;
 use Bus115\Messenger\Messenger;
@@ -41,6 +45,11 @@ $app->register(new TwigServiceProvider());
 $app->register(new HttpFragmentServiceProvider());
 $app->register(new DoctrineServiceProvider());
 $app->register(new ValidatorServiceProvider());
+$app->register(new FormServiceProvider());
+$app->register(new LocaleServiceProvider());
+$app->register(new TranslationServiceProvider(), array(
+    'locale_fallbacks' => array('en'),
+));
 
 $app['em'] = $entityManager;
 
@@ -175,6 +184,10 @@ $app['app.messenger_response'] = function ($app) {
 
 $app['app.eway'] = function ($app) {
     return new Eway($app);
+};
+
+$app['app.upload_manager'] = function ($app) {
+    return new Manager($app);
 };
 
 return $app;
