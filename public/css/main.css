@@ -8,9 +8,27 @@
     margin-top: -150px; /*half the image height*/
 }
 
-.container {
+.container_center {
     position: absolute;
     top: 70%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+}
+
+/*Upload zone*/
+.upload-drop-zone {
+    height: 200px;
+    border-width: 2px;
+    margin-bottom: 20px;
+}
+.upload-drop-zone {
+    color: #ccc;
+    border-style: dashed;
+    border-color: #ccc;
+    line-height: 200px;
+    text-align: center
+}
+.upload-drop-zone.drop {
+    color: #222;
+    border-color: #222;
 }

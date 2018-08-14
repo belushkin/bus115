@@ -17,9 +17,30 @@ $app->before(function (Request $request) {
     }
 });
 
+$app->after(function (Request $request, Response $response) {
+    $response->headers->set('Access-Control-Allow-Origin', '*');
+});
+
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
 })->bind('homepage');
+
+$app->get('/upload_stop', function (Request $request) use ($app) {
+    return $app['twig']->render('upload_stop.html.twig', array());
+});
+
+$app->post('/upload_stop', function (Request $request) use ($app) {
+    $file           = $request->files->get('file');
+    $description    = $request->request->get('arr');
+    $uploadmanager  = $app['app.upload_manager'];
+
+    if (!empty($file)) {
+        $uploadmanager->manage($file, $description, 'stop');
+        return new Response();
+    } else {
+        return new Response("An error ocurred. Did you really send a file?");
+    }
+});
 
 /**
  * @api {Get} /api/v1/getstops

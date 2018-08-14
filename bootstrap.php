@@ -5,11 +5,13 @@ require 'vendor/autoload.php';
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-$paths = [__DIR__.'/src/Entities'];
+$paths = [__DIR__.'/src/Entity'];
 $isDevMode = isset($app['debug']) ? $app['debug'] : true;
 
 if (file_exists('migrations-db.php')) {
     $dbParams = include 'migrations-db.php';
+} else if (file_exists(ROOT_FOLDER . '/migrations-db.php')) {
+    $dbParams = include ROOT_FOLDER . '/migrations-db.php';
 } else {
     $dbParams = [
         'dbname' => 'dbname',
