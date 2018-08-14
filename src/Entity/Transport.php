@@ -52,6 +52,11 @@ class Transport
         return $this->direction;
     }
 
+    public function setDescription($description)
+    {
+        return $this->description = $description;
+    }
+
     public function getType()
     {
         return $this->type;

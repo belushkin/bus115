@@ -47,6 +47,11 @@ class Stop
         return $this->description;
     }
 
+    public function setDescription($description)
+    {
+        return $this->description = $description;
+    }
+
     public function getDirection()
     {
         return $this->direction;

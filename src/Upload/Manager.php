@@ -2,10 +2,8 @@
 
 namespace Bus115\Upload;
 
+use Bus115\Entity\Image;
 use Silex\Application;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class Manager
 {
@@ -17,24 +15,16 @@ class Manager
         $this->app = $app;
     }
 
-    public function getForm()
+    public function manage($file, $description, $type = 'stop')
     {
-//        return $this->app['form.factory']->createBuilder(FormType::class, $data)
-//            ->add('name')
-//            ->add('email')
-//            ->add('billing_plan', ChoiceType::class, array(
-//                'choices' => array('free' => 1, 'small business' => 2, 'corporate' => 3),
-//                'expanded' => true,
-//            ))
-//            ->add('submit', SubmitType::class, [
-//                'label' => 'Save',
-//            ])
-//            ->getForm();
+        $path = ($type == 'stop') ? __DIR__.'/../../public/upload/stops/' : __DIR__.'/../../public/upload/transports/';
 
-        return $this->app['form.factory']
-            ->createBuilder(FormType::class, [])
-            ->add('FileUpload', 'file')
-            ->getForm();
+        $image = new Image();
+        $image->setDescription($description);
+        $this->app['em']->persist($image);
+        $this->app['em']->flush();
+
+        $file->move($path, $image->getId() . '.' . $file->getClientOriginalExtension());
+        return true;
     }
-
 }

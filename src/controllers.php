@@ -30,58 +30,17 @@ $app->get('/upload_stop', function (Request $request) use ($app) {
 });
 
 $app->post('/upload_stop', function (Request $request) use ($app) {
-    $files = $request->files->get('file');
-    print_r($request->files);
-    print_r($_POST);
-    //var_dump($files);
-    exit();
-//    if ($file !== null) {
-//
-//        $path = __DIR__.'/../public/upload/';
-//        $file->move($path, $file->getClientOriginalName());
-//        $response = "file uploaded successfully: " . $file->getClientOriginalName();
-//        $response .= '<br>size: ' . filesize($path . '/' . $file->getClientOriginalName()) / 1024 . ' kb';
-//
-//        return new Response($response);
-//    } else {
-//        return new Response("An error ocurred. Did you really send a file?");
-//    }
+    $file           = $request->files->get('file');
+    $description    = $request->request->get('arr');
+    $uploadmanager  = $app['app.upload_manager'];
+
+    if (!empty($file)) {
+        $uploadmanager->manage($file, $description, 'stop');
+        return new Response();
+    } else {
+        return new Response("An error ocurred. Did you really send a file?");
+    }
 });
-
-
-//$app->match('/addphoto', function (Request $request) use ($app) {
-//    $uploadmanager = $app['app.upload_manager'];
-//    $form = $uploadmanager->getForm();
-//
-////    $request = $app['request'];
-////    $message = 'Upload a file';
-////
-////    if ($request->isMethod('POST')) {
-////
-////        $form->bind($request);
-////
-////        if ($form->isValid()) {
-////            $files = $request->files->get($form->getName());
-////            $path = __DIR__.'/../public/upload/';
-////
-////            $filename = $files['FileUpload']->getClientOriginalName();
-////            $files['FileUpload']->move($path,$filename);
-////            $message = 'File was successfully uploaded!';
-////        }
-////    }
-////
-////    $response =  $app['twig']->render(
-////        'upload.html.twig',
-////        array(
-////            'message' => $message,
-////            'form' => $form->createView()
-////        )
-////    );
-////
-////    return $response;
-//
-//    //return $app['twig']->render('index.html.twig', array());
-//})->method('POST');
 
 /**
  * @api {Get} /api/v1/getstops

@@ -31,8 +31,19 @@ class Image
         return $this->description;
     }
 
+    public function setDescription($description)
+    {
+        return $this->description = $description;
+    }
+
     public function getId()
     {
         return $this->id;
     }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
 }
