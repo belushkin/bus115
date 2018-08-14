@@ -22,13 +22,14 @@ class Messenger implements MessageInterface
         $responses  = [];
         $intents    = (isset($nlp['entities']['intent']))   ? $nlp['entities']['intent']    : [];
         $address    = (isset($nlp['entities']['address']))  ? $nlp['entities']['address']   : [];
+        $location   = (isset($nlp['entities']['location'])) ? $nlp['entities']['location']  : [];
 
 //        $this->app['monolog']->info(var_export($nlp, true));
 //        $this->app['monolog']->info(var_export($nlp['entities']['intent'], true));
 
         if (isset($receivedMessage['text'])) {
             $text = htmlspecialchars(addslashes(trim($receivedMessage['text'])));
-            if (empty($intents) && empty($address)) {
+            if (empty($intents) && empty($address) && empty($location)) {
                 if ($text == 'help') {
                     $responses = $this->app['app.help']->text($text);
                 } else {
@@ -42,18 +43,24 @@ class Messenger implements MessageInterface
                         $responses = $this->app['app.location']->text($text);
                     } else if ($intent['value'] == 'first_hand_shake' && $intent['confidence'] > self::NLP_THRESHOLD) {
                         $responses = $this->app['app.first_hand_shake']->text($text);
-                    } else if ($intent['value'] == 'location' && $intent['confidence'] > self::NLP_THRESHOLD) {
-                        $responses = $this->app['app.regular_text']->text(
-                            $this->app['app.trim_helper']->trim($text)
-                        );
                     } else {
                         $responses = $this->app['app.fallback']->text($text);
                     }
                 }
             } else if (!empty($address)) {
                 foreach ($address as $item) {
-                    $responses = $this->app['app.regular_text']->text($item['value']['value']);
+                    $responses = $this->app['app.regular_text']->text(
+                        $this->app['app.trim_helper']->trim($item['value']['value'])
+                    );
                 }
+            }  else if (!empty($location)) {
+                foreach ($location as $item) {
+                    $responses = $this->app['app.regular_text']->text(
+                        $this->app['app.trim_helper']->trim($item['value']['value'])
+                    );
+                }
+            } else {
+                $responses = $this->app['app.fallback']->text($text);
             }
         } else if (isset($receivedMessage['attachments'])) {
             foreach ($receivedMessage['attachments'] as $attachment) {
