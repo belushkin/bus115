@@ -1,0 +1,17 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <h2>Silex Form Upload Test</h2>
+    <form method="post" action="/files" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Example file input</label>
+            <input type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+        <input type="hidden" name="MAX_FILE_SIZE" value="500">
+        <input type="file" name="file" />
+        <input type="submit" value="Submit"/>
+    </form>
+{% endblock %}
+
+
+
