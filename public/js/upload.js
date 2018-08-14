@@ -20,7 +20,7 @@
         var request = new XMLHttpRequest();
         formData.set('file', file);
         formData.set('arr', [document.getElementById('formGroupInput').value]);
-        request.open("POST", '/upload_stop');
+        request.open("POST", document.getElementById('js-upload-form').action);
         request.send(formData);
     };
 

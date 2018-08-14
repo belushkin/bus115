@@ -29,6 +29,10 @@ $app->get('/upload_stop', function (Request $request) use ($app) {
     return $app['twig']->render('upload_stop.html.twig', array());
 });
 
+$app->get('/upload_transport', function (Request $request) use ($app) {
+    return $app['twig']->render('upload_transport.html.twig', array());
+});
+
 $app->post('/upload_stop', function (Request $request) use ($app) {
     $file           = $request->files->get('file');
     $description    = $request->request->get('arr');
@@ -36,6 +40,19 @@ $app->post('/upload_stop', function (Request $request) use ($app) {
 
     if (!empty($file)) {
         $uploadmanager->manage($file, $description, 'stop');
+        return new Response();
+    } else {
+        return new Response("An error ocurred. Did you really send a file?");
+    }
+});
+
+$app->post('/upload_transport', function (Request $request) use ($app) {
+    $file           = $request->files->get('file');
+    $description    = $request->request->get('arr');
+    $uploadmanager  = $app['app.upload_manager'];
+
+    if (!empty($file)) {
+        $uploadmanager->manage($file, $description, 'transport');
         return new Response();
     } else {
         return new Response("An error ocurred. Did you really send a file?");

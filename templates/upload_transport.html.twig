@@ -3,13 +3,13 @@
 {% block content %}
     <div class="container">
         <div class="card">
-            <div class="card-header"><strong>Завантажити фото зупинок</strong></div>
+            <div class="card-header"><strong>Завантажити фото транспорту</strong></div>
             <div class="card-body">
-                <h4>Оберіть файли фотографій ЗУПИНОК з компьютера</h4>
-                <form action="/upload_stop" method="post" enctype="multipart/form-data" id="js-upload-form">
+                <h4>Оберіть файли фотографій ТРАНСПОРТУ з компьютера</h4>
+                <form action="/upload_transport" method="post" enctype="multipart/form-data" id="js-upload-form">
                     <div class="form-group">
-                        <label for="formGroupInput">Зупинка, де зроблено фото</label>
-                        <input type="text" class="form-control" id="formGroupInput" placeholder="Вулиця Тампере, в напрямку моста Патона">
+                        <label for="formGroupInput">Фотографія транспорту</label>
+                        <input type="text" class="form-control" id="formGroupInput" placeholder="Автобус 115">
                     </div>
                     <div class="form-group custom-file">
                         <label for="js-upload-files" class="custom-file-label">Оберіть файли, можна багато, але опис лише один</label>
