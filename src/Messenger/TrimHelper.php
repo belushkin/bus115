@@ -15,6 +15,6 @@ class TrimHelper
     public function trim($text)
     {
         $text = htmlspecialchars(addslashes(trim(mb_strtolower($text))));
-        return str_replace($this->search, '', $text);
+        return trim(str_replace($this->search, '', $text));
     }
 }
