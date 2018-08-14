@@ -14,6 +14,6 @@ class TrimHelper
 
     public function trim($text)
     {
-        return str_replace($this->search, '', strtolower($text));
+        return str_replace($this->search, '', $text);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-// src/Messenger/Messenger.php
 namespace Bus115\Messenger;
 
 use Silex\Application;
@@ -20,7 +19,7 @@ class Postback implements MessageInterface
         $responses = [];
 
         // Get the payload for the postback
-        $payload = $receivedPostback['payload'];
+        $payload = htmlspecialchars(addslashes(trim(mb_strtolower($receivedPostback['payload']))));
         $this->app['monolog']->info(sprintf('Postback\'s payload: %s', $payload));
 
         if (intval($payload) != 0 && strpos($payload, '_') === false) { // show list of stops

@@ -28,7 +28,7 @@ class Messenger implements MessageInterface
 //        $this->app['monolog']->info(var_export($nlp['entities']['intent'], true));
 
         if (isset($receivedMessage['text'])) {
-            $text = htmlspecialchars(addslashes(trim($receivedMessage['text'])));
+            $text = htmlspecialchars(addslashes(trim(mb_strtolower($receivedMessage['text']))));
             if (empty($intents) && empty($address) && empty($location)) {
                 if ($text == 'help') {
                     $responses = $this->app['app.help']->text($text);
