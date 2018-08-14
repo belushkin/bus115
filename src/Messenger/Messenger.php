@@ -55,6 +55,7 @@ class Messenger implements MessageInterface
                 }
             }  else if (!empty($location)) {
                 foreach ($location as $item) {
+                    $this->app['monolog']->info(var_export($item, true));
                     $responses = $this->app['app.regular_text']->text(
                         $this->app['app.trim_helper']->trim($item['value']['value'])
                     );
