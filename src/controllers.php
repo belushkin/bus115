@@ -30,7 +30,7 @@ $app->get('/upload_stop', function (Request $request) use ($app) {
 });
 
 $app->post('/upload_stop', function (Request $request) use ($app) {
-    $files = $request->files->get('files');
+    $files = $request->files->get('file');
     print_r($request->files);
     print_r($_POST);
     //var_dump($files);
