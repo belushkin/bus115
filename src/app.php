@@ -21,10 +21,15 @@ use Bus115\Messenger\Messenger;
 use Bus115\Messenger\Postback;
 use Bus115\Messenger\API;
 use Bus115\Messenger\Response;
+use Bus115\Messenger\TrimHelper;
+use Bus115\Messenger\Messages\Image;
 use Bus115\Messenger\Messages\ArrivalMessage;
 use Bus115\Messenger\Messages\FirstHandShake;
 use Bus115\Messenger\Messages\RegularText;
 use Bus115\Messenger\Messages\Joke;
+use Bus115\Messenger\Messages\Help;
+use Bus115\Messenger\Messages\Location;
+use Bus115\Messenger\Messages\FallBack;
 use Bus115\Messenger\Stops\Stops;
 use Bus115\Messenger\Transports\Transports;
 use Bus115\Eway\Eway;
@@ -134,6 +139,26 @@ $app['app.regular_text'] = function ($app) {
 
 $app['app.joke'] = function ($app) {
     return new Joke($app);
+};
+
+$app['app.help'] = function ($app) {
+    return new Help($app);
+};
+
+$app['app.fallback'] = function ($app) {
+    return new FallBack($app);
+};
+
+$app['app.image'] = function ($app) {
+    return new Image($app);
+};
+
+$app['app.location'] = function ($app) {
+    return new Location($app);
+};
+
+$app['app.trim_helper'] = function ($app) {
+    return new TrimHelper();
 };
 
 $app['app.stops'] = function ($app) {

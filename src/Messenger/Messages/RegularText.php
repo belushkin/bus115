@@ -16,9 +16,8 @@ class RegularText implements MessageInterface
 
     public function text($term = '')
     {
-        $term = htmlspecialchars(addslashes(trim($term)));
         $this->app['monolog']->info(sprintf('User entered Term: %s', $term));
-        if (!empty($term) && strlen($term) > 5) {
+        if (!empty($term) && strlen($term) >= 4) {
             $body       = $this->app['app.eway']->getPlacesByName($term);
             if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
                 $i = 0;
@@ -49,7 +48,7 @@ class RegularText implements MessageInterface
         }
 
         $responses[] = [
-            'text' => "Нажаль, по запросу: {$term} нічого не знайдено. Спробуйте вказати строку більше 5 символів",
+            'text' => "Нажаль, я не розумію, скажи help і я тобі підкажу, також я не шукаю адреси меньше 4 символів",
             'quick_replies' => [
                 [
                     'content_type' => 'location',

@@ -4,7 +4,7 @@ namespace Bus115\Messenger\Messages;
 
 use Silex\Application;
 
-class Location implements MessageInterface
+class Help implements MessageInterface
 {
 
     private $app;
@@ -17,7 +17,7 @@ class Location implements MessageInterface
     public function text($term = '')
     {
         $responses[] = [
-            'text' => 'Вкажи свою адресу використовуючи мобільний додаток, або просто скажи мені де ти знаходишся',
+            'text' => 'Напиши просто назву вулиці, або провулку, або площі, або на пиши "де я" і я зрозумію, що ти хочеш.',
             'quick_replies' => [
                 [
                     'content_type' => 'location',
