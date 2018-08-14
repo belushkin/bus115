@@ -2,6 +2,8 @@
 
 namespace Bus115\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Table(name="images")
  * @ORM\Entity(repositoryClass="Bus115\Repository\ImageRepository")

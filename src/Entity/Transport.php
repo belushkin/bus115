@@ -2,8 +2,10 @@
 
 namespace Bus115\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * @ORM\Table(name="stops")
+ * @ORM\Table(name="transports")
  * @ORM\Entity(repositoryClass="Bus115\Repository\TransportRepository")
  */
 class Transport
@@ -32,7 +34,7 @@ class Transport
     private $description;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('tram', 'bus', 'metro', 'marshrutka')")
+     * @ORM\Column(type="string")
      */
     private $type;
 
