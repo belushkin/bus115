@@ -34,7 +34,7 @@ class Postback implements MessageInterface
         foreach ($responses as $response) {
             $this->app['app.api']->callSendAPI($senderPsid, $response);
             $i++;
-            if ($i > 1) {
+            if ($i > 2) {
                 break;
             }
         }
