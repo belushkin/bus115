@@ -21,10 +21,11 @@ class Manager
 
         $image = new Image();
         $image->setDescription($description);
+        $image->setUuid(\Ramsey\Uuid\Uuid::uuid4()->toString());
         $this->app['em']->persist($image);
         $this->app['em']->flush();
 
-        $file->move($path, $image->getId() . '.' . $file->getClientOriginalExtension());
+        $file->move($path, $image->getUuid() . '.' . $file->getClientOriginalExtension());
         return true;
     }
 }

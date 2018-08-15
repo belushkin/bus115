@@ -111,6 +111,61 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
 });
 
 /**
+ * @api {Post} /api/v1/converter
+ * Move uploaded image to Stop or to Transport
+ * @apiName Move uploaded image
+ * @apiDescription Move uploaded image to Stop or to Transport
+ *
+ * @apiGroup Tools
+ * @apiVersion 1.0.0
+ * @apiSampleRequest converter
+ *
+ * @apiParam {Number} image_id Mandatory Uploaded image id
+ * @apiParam {Number} eway_id Mandatory Eway Id
+ * @apiParam {String} type Mandatory Stop or Transport
+ *
+ * @apiPermission admin
+ *
+ * @apiHeader {String} X-AUTH-TOKEN Users unique access-token.
+ *
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "X-AUTH-TOKEN": "23234defdewfewf"
+ *     }
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -H "X-AUTH-TOKEN: 23234defdewfewf" -i http://0.0.0.0:8080/api/v1/converter?image_id=12&eway_id=333&type=stop
+ *
+ * @apiSuccess {Array[]}  entity                Array of entities.
+ * @apiSuccess {Number}   entity.uuid           Entity uuid.
+ * @apiSuccess {Number}   entity.description    Entity description.
+ *
+ */
+$app->post('/api/v1/converter', function (Request $request) use ($app) {
+
+
+});
+
+$app->get('/uploaded_images', function (Request $request) use ($app) {
+    $verifyToken    = $request->get('verify_token');
+    $type           = $request->get('type');
+
+//    echo "<pre>";
+//    print_r($files);
+//    exit();
+
+    //if ($verifyToken == $app['eway']['page_access_token'] && in_array($type, ['stops','transports'])) {
+        return $app['twig']->render('uploaded_images.html.twig', array(
+            'images' => $app['app.upload_lister']->manage(
+                __DIR__.'/../public/upload/'.$type.'/',
+                $type
+            )
+        ));
+    //}
+    //$app->abort(403, "Invalid Verify Token or Type");
+});
+
+/**
  * @api {GET} /api/v1/webhook
  * Webhook verification
  * @apiName Webhook verification

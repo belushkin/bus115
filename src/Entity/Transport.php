@@ -5,28 +5,33 @@ namespace Bus115\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="transports")
+ * @ORM\Table(name="transports", indexes={@ORM\Index(name="eway_id", columns={"eway_id"})})
  * @ORM\Entity(repositoryClass="Bus115\Repository\TransportRepository")
  */
 class Transport
 {
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $eway_id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
-    private $direction;
+    private $uuid;
+
+    /**
+     * @ORM\Column(type="string", length=50, unique=false)
+     */
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255, unique=false)
@@ -34,12 +39,23 @@ class Transport
     private $description;
 
     /**
+     * @ORM\Column(type="string", length=255, unique=false)
+     */
+    private $direction;
+
+    /**
      * @ORM\Column(type="string")
      */
     private $type;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date_created;
+
     public function __construct()
     {
+        $this->date_created = new \DateTime();
     }
 
     public function getDescription()
@@ -72,4 +88,13 @@ class Transport
         return $this->eway_id;
     }
 
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+    }
 }

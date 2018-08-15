@@ -1,0 +1,23 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <div class="container">
+        <div class="card-columns">
+            {% for image in images %}
+                <div class="card">
+                    <img class="card-img-top" src="/upload/stops/{{ image.name|e }}" alt="{{ image.description|e }}">
+                    <div class="card-body">
+                        <h5 class="card-title">Фото зупинки</h5>
+                        <p class="card-text">{{ image.description|e }}</p>
+                        <a href="#" class="btn btn-primary">Прийняти</a>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Створено: {{ image.date|e }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div> <!-- /container -->
+    <script src="{{ asset('js/upload.js') }}"></script>
+{% endblock %}

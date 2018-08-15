@@ -19,6 +19,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 use Bus115\Upload\Manager;
+use Bus115\Upload\Lister;
 use Bus115\Security\TokenAuthenticator;
 use Bus115\Security\User\UserProvider;
 use Bus115\Messenger\Messenger;
@@ -188,6 +189,10 @@ $app['app.eway'] = function ($app) {
 
 $app['app.upload_manager'] = function ($app) {
     return new Manager($app);
+};
+
+$app['app.upload_lister'] = function ($app) {
+    return new Lister($app);
 };
 
 return $app;
