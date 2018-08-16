@@ -142,12 +142,14 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
  *
  */
 $app->post('/api/v1/converter', function (Request $request) use ($app) {
-
-
+    $imageId    = $request->request->get('imageId');
+    print_r($_POST);
+    print_r($imageId);
+    return new Response('EVENT_RECEIVED');
 });
 
 $app->get('/uploaded_images', function (Request $request) use ($app) {
-    $verifyToken    = $request->get('verify_token');
+    $verifyToken    = 'ssss';//$request->get('verify_token');
     $type           = $request->get('type');
 
 //    echo "<pre>";
@@ -159,7 +161,9 @@ $app->get('/uploaded_images', function (Request $request) use ($app) {
             'images' => $app['app.upload_lister']->manage(
                 __DIR__.'/../public/upload/'.$type.'/',
                 $type
-            )
+            ),
+            'verify_token' => $verifyToken,
+            'type' => $type,
         ));
     //}
     //$app->abort(403, "Invalid Verify Token or Type");
