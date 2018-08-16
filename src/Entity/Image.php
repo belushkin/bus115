@@ -11,19 +11,30 @@ use Doctrine\ORM\Mapping as ORM;
 class Image
 {
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="string", length=50, unique=true)
+     */
+    private $uuid;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date_created;
+
     public function __construct()
     {
+        $this->date_created = new \DateTime();
     }
 
     public function getDescription()
@@ -44,6 +55,21 @@ class Image
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+    }
+
+    public function getDateCreated()
+    {
+        return $this->date_created;
     }
 
 }

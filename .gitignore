@@ -8,6 +8,8 @@ config/dev.php
 data/cache/*
 public/apidoc/*
 public/upload/*
+public/images/stops/*
+public/images/transports/*
 data/volume/*
 !data/cache/.gitkeep
 phpunit.xml

@@ -1,0 +1,58 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <div class="container border">
+        <a href="/">Головна</a>
+        {% if type == constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') %}
+            <h2 class="mt-2 text-center">Завантажені фотографії транспорту</h2>
+        {% else %}
+            <h2 class="mt-2 text-center">Завантажені фотографії зупинок</h2>
+        {% endif %}
+        <select id="control_type" class="form-control mt-2">
+            <option {% if type == constant('Bus115\\Upload\\Manager::TYPE_STOP') %} selected {% endif %} value="{{ constant('Bus115\\Upload\\Manager::TYPE_STOP') }}">Зупинки</option>
+            <option {% if type == constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') %} selected {% endif %} value="{{ constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') }}">Транспорт</option>
+        </select>
+        <div class="card-columns mt-3">
+            {% for image in images %}
+                <div class="card" id="{{ image.uuid|e }}">
+                    {% if type == constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') %}
+                        <img class="card-img-top" src="/upload/{{ constant('Bus115\\Upload\\Manager::FOLDER_TRANSPORTS') }}/{{ image.name|e }}" alt="{{ image.description|e }}">
+                    {% else %}
+                        <img class="card-img-top" src="/upload/{{ constant('Bus115\\Upload\\Manager::FOLDER_STOPS') }}/{{ image.name|e }}" alt="{{ image.description|e }}">
+                    {% endif %}
+                    <div class="card-body">
+                        {% if type == constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') %}
+                            <h5 class="card-title">Фото транспорту</h5>
+                        {% else %}
+                            <h5 class="card-title">Фото зупинки</h5>
+                        {% endif %}
+                        <p class="card-text">{{ image.description|e }}</p>
+                        <form class="card-form" action="/api/v1/converter" method="post">
+                            <div class="form-group">
+                                <input class="form-control" type="number" id="{{ image.uuid|e }}_eway_id" placeholder="Eway Id" value="">
+                                {% if type == constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') %}
+                                    <select id="{{ image.uuid|e }}_list" class="form-control mt-2">
+                                        <option value="{{ constant('Bus115\\Entity\\Transport::TYPE_BUS') }}">Автобус</option>
+                                        <option value="{{ constant('Bus115\\Entity\\Transport::TYPE_MARSHRUTKA') }}">Маршрутка</option>
+                                        <option value="{{ constant('Bus115\\Entity\\Transport::TYPE_TROL') }}">Тролейбус</option>
+                                        <option value="{{ constant('Bus115\\Entity\\Transport::TYPE_TRAM') }}">Трамвай</option>
+                                    </select>
+                                {% endif %}
+                                <input type="hidden" id="{{ image.uuid|e }}_verify_token" value="{{ verify_token|e }}">
+                                <input type="hidden" id="{{ image.uuid|e }}_type" value="{{ type|e }}">
+                                <input type="hidden" id="{{ image.uuid|e }}_name" value="{{ image.name|e }}">
+                            </div>
+                        </form>
+                        <a href="javascript://" class="btn btn-primary accept">Прийняти</a>
+                        <a href="javascript://" class="btn btn-secondary float-right remove">Видалити</a>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Створено: {{ image.date|e }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div> <!-- /container -->
+    <script src="{{ asset('js/uploaded.js') }}"></script>
+{% endblock %}

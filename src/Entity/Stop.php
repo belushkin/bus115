@@ -5,41 +5,52 @@ namespace Bus115\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="stops")
+ * @ORM\Table(name="stops", indexes={@ORM\Index(name="eway_id", columns={"eway_id"})})
  * @ORM\Entity(repositoryClass="Bus115\Repository\StopRepository")
  */
 class Stop
 {
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"unsigned"=true})
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $eway_id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
-    private $direction;
+    private $uuid;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=50, unique=false, nullable=true)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
-    private $type;
+    private $direction;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date_created;
 
     public function __construct()
     {
+        $this->date_created = new \DateTime();
     }
 
     public function getDescription()
@@ -57,11 +68,6 @@ class Stop
         return $this->direction;
     }
 
-    public function getType()
-    {
-        return $this->type;
-    }
-
     public function getId()
     {
         return $this->id;
@@ -72,4 +78,18 @@ class Stop
         return $this->eway_id;
     }
 
+    public function setEwayId($ewayId)
+    {
+        $this->eway_id = $ewayId;
+    }
+
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+    }
 }
