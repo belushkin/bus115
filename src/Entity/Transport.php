@@ -29,17 +29,17 @@ class Transport
     private $uuid;
 
     /**
-     * @ORM\Column(type="string", length=50, unique=false)
+     * @ORM\Column(type="string", length=50, unique=false, nullable=true)
      */
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $direction;
 
@@ -52,6 +52,11 @@ class Transport
      * @ORM\Column(type="datetime")
      */
     private $date_created;
+
+    const TYPE_BUS = 'bus';
+    const TYPE_MARSHRUTKA = 'marshrutka';
+    const TYPE_TROL = 'trol';
+    const TYPE_TRAM = 'tram';
 
     public function __construct()
     {
@@ -76,6 +81,11 @@ class Transport
     public function getType()
     {
         return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     public function getId()

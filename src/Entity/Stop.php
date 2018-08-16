@@ -29,24 +29,19 @@ class Stop
     private $uuid;
 
     /**
-     * @ORM\Column(type="string", length=50, unique=false)
+     * @ORM\Column(type="string", length=50, unique=false, nullable=true)
      */
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $direction;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $type;
 
     /**
      * @ORM\Column(type="datetime")
@@ -71,11 +66,6 @@ class Stop
     public function getDirection()
     {
         return $this->direction;
-    }
-
-    public function getType()
-    {
-        return $this->type;
     }
 
     public function getId()

@@ -38,7 +38,7 @@ class Manager
         return true;
     }
 
-    public function move($type, $uuid, $ewayId, $name)
+    public function move($type, $uuid, $ewayId, $name, $transportType)
     {
         $image = $this->app['em']->getRepository('Bus115\Entity\Image')->findOneBy(
             array('uuid' => $uuid)
@@ -47,29 +47,25 @@ class Manager
             return false;
         }
         if ($type == self::TYPE_STOP) {
-            $pathFrom = __DIR__.'/../../public/upload/'.self::FOLDER_STOPS.'/'.$name;
-            $pathTo = __DIR__.'/../../public/images/'.self::FOLDER_STOPS.'/'.$name;
+            $folder = self::FOLDER_STOPS;
             $entity = new Stop();
-            $entity->setDescription($image->getDescription());
-            $entity->setUuid(\Ramsey\Uuid\Uuid::uuid4()->toString());
-            $entity->setEwayId($ewayId);
-            $this->app['em']->persist($entity);
-            $this->app['em']->flush();
-            rename ($pathFrom, $pathTo);
-            return true;
-        } else if($type == self::TYPE_TRANSPORT) {
-            $pathFrom = __DIR__.'/../../public/upload/'.self::FOLDER_TRANSPORTS.'/'.$name;
-            $pathTo = __DIR__.'/../../public/images/'.self::FOLDER_TRANSPORTS.'/'.$name;
+        } else {
+            $folder = self::FOLDER_TRANSPORTS;
             $entity = new Transport();
-            $entity->setDescription($image->getDescription());
-            $entity->setUuid(\Ramsey\Uuid\Uuid::uuid4()->toString());
-            $entity->setEwayId($ewayId);
-            $this->app['em']->persist($entity);
-            $this->app['em']->flush();
-            rename ($pathFrom, $pathTo);
-            return true;
+            $entity->setType($transportType);
         }
-        return false;
+        $pathFrom = ROOT_FOLDER .'/public/upload/'.$folder.'/'.$name;
+        $pathTo = ROOT_FOLDER .'/public/images/'.$folder.'/'.$name;
+        $entity->setDescription($image->getDescription());
+        $entity->setUuid(\Ramsey\Uuid\Uuid::uuid4()->toString());
+        $entity->setEwayId($ewayId);
+
+        $this->app['em']->persist($entity);
+        $this->app['em']->remove($image);
+        $this->app['em']->flush();
+
+        rename ($pathFrom, $pathTo);
+        return true;
     }
 
 }

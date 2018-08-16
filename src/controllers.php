@@ -148,6 +148,7 @@ $app->post('/api/v1/converter', function (Request $request) use ($app) {
     $ewayId         = intval($request->request->get('ewayId'));
     $type           = $request->request->get('type');
     $verifyToken    = $request->request->get('verifyToken');
+    $transportType  = $request->request->get('transportType');
 
     $errors = $app['validator']->validate($uuid, new Assert\Uuid());
     if (count($errors) > 0) {
@@ -155,21 +156,21 @@ $app->post('/api/v1/converter', function (Request $request) use ($app) {
         return false;
     }
 
-    // $verifyToken == $app['eway']['page_access_token'] &&
     $uploadManager  = $app['app.upload_manager'];
-    if (in_array($type, [Manager::TYPE_STOP, Manager::TYPE_TRANSPORT])) {
-        $uploadManager->move($type, $uuid, $ewayId, $name);
-        return new Response('EVENT_RECEIVED');
+    if ($verifyToken == $app['eway']['token'] && in_array($type, [Manager::TYPE_STOP, Manager::TYPE_TRANSPORT])) {
+        if ($uploadManager->move($type, $uuid, $ewayId, $name, $transportType)) {
+            return new Response('EVENT_RECEIVED');
+        }
+        return new Response('EVENT_REJECTED');
     }
     $app->abort(403, "Invalid Verify Token or Type");
 });
 
 $app->get('/uploaded_images', function (Request $request) use ($app) {
-    $verifyToken    = 'ssss';//$request->get('verify_token');
+    $verifyToken    = $request->get('verifyToken');
     $type           = $request->get('type');
 
-    // $verifyToken == $app['eway']['page_access_token'] &&
-    if (in_array($type, [Manager::TYPE_STOP, Manager::TYPE_TRANSPORT])) {
+    if ($verifyToken == $app['eway']['token'] && in_array($type, [Manager::TYPE_STOP, Manager::TYPE_TRANSPORT])) {
         $folder = ($type == Manager::TYPE_STOP) ? Manager::FOLDER_STOPS : Manager::FOLDER_TRANSPORTS;
         return $app['twig']->render('uploaded_images.html.twig', array(
             'images' => $app['app.upload_lister']->manage(
@@ -180,7 +181,7 @@ $app->get('/uploaded_images', function (Request $request) use ($app) {
             'type' => $type,
         ));
     }
-    //$app->abort(403, "Invalid Verify Token or Type");
+    $app->abort(403, "Invalid Verify Token or Type");
 });
 
 /**

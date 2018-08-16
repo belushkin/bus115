@@ -18,7 +18,7 @@ class Image
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $description;
 
