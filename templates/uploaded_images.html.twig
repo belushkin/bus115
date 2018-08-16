@@ -16,6 +16,7 @@
                                 <input class="form-control" type="number" id="{{ image.uuid|e }}_eway_id" placeholder="Eway Id" value="">
                                 <input type="hidden" id="{{ image.uuid|e }}_verify_token" value="{{ verify_token|e }}">
                                 <input type="hidden" id="{{ image.uuid|e }}_type" value="{{ type|e }}">
+                                <input type="hidden" id="{{ image.uuid|e }}_name" value="{{ image.name|e }}">
                             </div>
                         </form>
                         <a href="javascript://" class="btn btn-primary accept">Прийняти</a>

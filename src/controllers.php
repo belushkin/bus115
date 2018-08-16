@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Bus115\Upload\Manager;
 
 $app->before(function (Request $request) {
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
@@ -120,7 +121,7 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
  * @apiVersion 1.0.0
  * @apiSampleRequest converter
  *
- * @apiParam {Number} image_id Mandatory Uploaded image id
+ * @apiParam {Number} image_uuid Mandatory Uploaded image uuid
  * @apiParam {Number} eway_id Mandatory Eway Id
  * @apiParam {String} type Mandatory Stop or Transport
  *
@@ -142,30 +143,43 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
  *
  */
 $app->post('/api/v1/converter', function (Request $request) use ($app) {
-    $imageId    = $request->request->get('imageId');
-    print_r($_POST);
-    print_r($imageId);
-    return new Response('EVENT_RECEIVED');
+    $uuid           = $request->request->get('imageUuid');
+    $name           = $request->request->get('imageName');
+    $ewayId         = intval($request->request->get('ewayId'));
+    $type           = $request->request->get('type');
+    $verifyToken    = $request->request->get('verifyToken');
+
+    $errors = $app['validator']->validate($uuid, new Assert\Uuid());
+    if (count($errors) > 0) {
+        $app->abort(403, "Invalid Image uuid");
+        return false;
+    }
+
+    // $verifyToken == $app['eway']['page_access_token'] &&
+    $uploadManager  = $app['app.upload_manager'];
+    if (in_array($type, [Manager::TYPE_STOP, Manager::TYPE_TRANSPORT])) {
+        $uploadManager->move($type, $uuid, $ewayId, $name);
+        return new Response('EVENT_RECEIVED');
+    }
+    $app->abort(403, "Invalid Verify Token or Type");
 });
 
 $app->get('/uploaded_images', function (Request $request) use ($app) {
     $verifyToken    = 'ssss';//$request->get('verify_token');
     $type           = $request->get('type');
 
-//    echo "<pre>";
-//    print_r($files);
-//    exit();
-
-    //if ($verifyToken == $app['eway']['page_access_token'] && in_array($type, ['stops','transports'])) {
+    // $verifyToken == $app['eway']['page_access_token'] &&
+    if (in_array($type, [Manager::TYPE_STOP, Manager::TYPE_TRANSPORT])) {
+        $folder = ($type == Manager::TYPE_STOP) ? Manager::FOLDER_STOPS : Manager::FOLDER_TRANSPORTS;
         return $app['twig']->render('uploaded_images.html.twig', array(
             'images' => $app['app.upload_lister']->manage(
-                __DIR__.'/../public/upload/'.$type.'/',
+                __DIR__.'/../public/upload/'.$folder.'/',
                 $type
             ),
             'verify_token' => $verifyToken,
             'type' => $type,
         ));
-    //}
+    }
     //$app->abort(403, "Invalid Verify Token or Type");
 });
 

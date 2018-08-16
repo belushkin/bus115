@@ -88,6 +88,11 @@ class Transport
         return $this->eway_id;
     }
 
+    public function setEwayId($ewayId)
+    {
+        $this->eway_id = $ewayId;
+    }
+
     public function getUuid()
     {
         return $this->uuid;
