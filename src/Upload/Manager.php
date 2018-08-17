@@ -43,7 +43,7 @@ class Manager
         $this->app['em']->flush();
 
         if (in_array($file->guessClientExtension(), $this->allowedExtensions) && $this->filesize($file->getSize()) < self::ALLOWED_FILESIZE_MB) {
-            $file->move($path, $image->getUuid() . '.' . $file->getClientOriginalExtension());
+            $file->move($path, $image->getUuid() . '.' . strtolower($file->getClientOriginalExtension()));
             return true;
         }
         return false;

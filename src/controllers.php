@@ -192,7 +192,7 @@ $app->get('/uploaded_images', function (Request $request) use ($app) {
                 __DIR__.'/../public/upload/'.$folder.'/',
                 $type
             ),
-            'verify_token' => $verifyToken,
+            'verifyToken' => $verifyToken,
             'type' => $type,
         ));
     }

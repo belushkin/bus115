@@ -2,14 +2,14 @@
 
 {% block content %}
     <div class="container border">
-        <a href="/?verifyToken={{ verify_token }}">Головна</a>
+        <a href="/?verifyToken={{ verifyToken }}">Головна</a>
         {% if type == constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') %}
             <h2 class="mt-2 text-center">Завантажені фотографії транспорту</h2>
         {% else %}
             <h2 class="mt-2 text-center">Завантажені фотографії зупинок</h2>
         {% endif %}
         <select id="control_type" class="form-control mt-2">
-            <option {% if type == constant('Bus115\\Upload\\Manager::TYPE_STOP') %} selected {% endif %} value="{{ constant('Bus115\\Upload\\Manager::TYPE_STOP') }}">Зупинки</option>
+            <option {% if type == constant('Bus115\\Upload\\Manager::TYPE_STOP') %} selected {% endif %} value="{{ constant('Bus115\\Upload\\Manager::TYPE_STOP') }}">Зупинка</option>
             <option {% if type == constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') %} selected {% endif %} value="{{ constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') }}">Транспорт</option>
         </select>
         <div class="card-columns mt-3">
@@ -38,7 +38,7 @@
                                         <option value="{{ constant('Bus115\\Entity\\Transport::TYPE_TRAM') }}">Трамвай</option>
                                     </select>
                                 {% endif %}
-                                <input type="hidden" id="{{ image.uuid|e }}_verify_token" value="{{ verify_token|e }}">
+                                <input type="hidden" id="{{ image.uuid|e }}_verify_token" value="{{ verifyToken|e }}">
                                 <input type="hidden" id="{{ image.uuid|e }}_type" value="{{ type|e }}">
                                 <input type="hidden" id="{{ image.uuid|e }}_name" value="{{ image.name|e }}">
                             </div>
