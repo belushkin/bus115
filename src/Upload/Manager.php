@@ -79,6 +79,27 @@ class Manager
         return true;
     }
 
+    public function remove($type, $uuid, $name)
+    {
+        $image = $this->app['em']->getRepository('Bus115\Entity\Image')->findOneBy(
+            array('uuid' => $uuid)
+        );
+        if (!$image) {
+            return false;
+        }
+        if ($type == self::TYPE_STOP) {
+            $path = ROOT_FOLDER .'/public/upload/'.self::FOLDER_STOPS.'/'.$name;
+        } else {
+            $path = ROOT_FOLDER .'/public/upload/'.self::FOLDER_TRANSPORTS.'/'.$name;
+        }
+
+        $this->app['em']->remove($image);
+        $this->app['em']->flush();
+
+        unlink ($path);
+        return true;
+    }
+
     private function filesize($bytes, $decimals = 2)
     {
         return round ($bytes / 1048576, $decimals);
