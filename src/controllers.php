@@ -42,7 +42,14 @@ $app->get('/upload_transport', function (Request $request) use ($app) {
     $verifyToken    = $request->get('verifyToken');
     return $app['twig']->render('upload_transport.html.twig', array(
         'verifyToken'   => $verifyToken,
-        'token'         => $app['eway']['token']
+        'token'         => $app['eway']['token'],
+        'images' => $app['app.upload_lister']->manage(
+            __DIR__.'/../public/images/'.Manager::FOLDER_TRANSPORTS.'/',
+            Manager::TYPE_TRANSPORT,
+            true,
+            10
+        ),
+        'type' => Manager::TYPE_TRANSPORT
     ));
 });
 

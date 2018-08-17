@@ -1,0 +1,17 @@
+<div class="card-columns mt-3">
+    {% for image in images %}
+        <div class="card" id="{{ image.uuid|e }}">
+            {% if type == constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') %}
+                <img class="card-img-top" src="/images/{{ constant('Bus115\\Upload\\Manager::FOLDER_TRANSPORTS') }}/{{ image.name|e }}" alt="{{ image.description|e }}">
+            {% else %}
+                <img class="card-img-top" src="/images/{{ constant('Bus115\\Upload\\Manager::FOLDER_STOPS') }}/{{ image.name|e }}" alt="{{ image.description|e }}">
+            {% endif %}
+            <div class="card-body">
+                <p class="card-text">{{ image.description|e }}</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Створено: {{ image.date|e }}</small>
+            </div>
+        </div>
+    {% endfor %}
+</div>

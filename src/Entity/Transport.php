@@ -112,4 +112,9 @@ class Transport
     {
         $this->uuid = $uuid;
     }
+
+    public function getDateCreated()
+    {
+        return $this->date_created;
+    }
 }

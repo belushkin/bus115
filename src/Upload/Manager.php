@@ -68,7 +68,7 @@ class Manager
         $pathFrom = ROOT_FOLDER .'/public/upload/'.$folder.'/'.$name;
         $pathTo = ROOT_FOLDER .'/public/images/'.$folder.'/'.$name;
         $entity->setDescription($image->getDescription());
-        $entity->setUuid(\Ramsey\Uuid\Uuid::uuid4()->toString());
+        $entity->setUuid($image->getUuid());
         $entity->setEwayId($ewayId);
 
         $this->app['em']->persist($entity);
