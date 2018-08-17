@@ -48,4 +48,13 @@
         return false;
     }
 
+    $("#control_type").change(function(){
+        var type = $( this ).val();
+        var location = window.location;
+        if (type === 'stop') {
+            window.location = location.href.replace('transport', 'stop');
+        } else {
+            window.location = location.href.replace('stop', 'transport');
+        }
+    });
 }(jQuery);

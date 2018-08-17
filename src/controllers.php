@@ -22,16 +22,28 @@ $app->after(function (Request $request, Response $response) {
     $response->headers->set('Access-Control-Allow-Origin', '*');
 });
 
-$app->get('/', function () use ($app) {
-    return $app['twig']->render('index.html.twig', array());
+$app->get('/', function (Request $request) use ($app) {
+    $verifyToken    = $request->get('verifyToken');
+    return $app['twig']->render('index.html.twig', array(
+        'verifyToken'   => $verifyToken,
+        'token'         => $app['eway']['token']
+    ));
 })->bind('homepage');
 
 $app->get('/upload_stop', function (Request $request) use ($app) {
-    return $app['twig']->render('upload_stop.html.twig', array());
+    $verifyToken    = $request->get('verifyToken');
+    return $app['twig']->render('upload_stop.html.twig', array(
+        'verifyToken'   => $verifyToken,
+        'token'         => $app['eway']['token']
+    ));
 });
 
 $app->get('/upload_transport', function (Request $request) use ($app) {
-    return $app['twig']->render('upload_transport.html.twig', array());
+    $verifyToken    = $request->get('verifyToken');
+    return $app['twig']->render('upload_transport.html.twig', array(
+        'verifyToken'   => $verifyToken,
+        'token'         => $app['eway']['token']
+    ));
 });
 
 $app->post('/upload_stop', function (Request $request) use ($app) {

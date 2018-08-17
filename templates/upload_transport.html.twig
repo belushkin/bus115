@@ -4,8 +4,14 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <a href="/">Головна</a> |
-                <strong>Завантажити фото транспорту</strong>
+                <form class="form-inline">
+                    <a class="my-1 mr-sm-2" href="{% if verifyToken == token %}/?verifyToken={{ token }}{% else %}/{% endif %}">Головна</a> |
+                    <strong class="ml-2">Завантажити фото транспорту</strong>
+                    <select id="control_type" class="form-control mt-2 ml-auto">
+                        <option selected value="{{ constant('Bus115\\Upload\\Manager::TYPE_TRANSPORT') }}">Транспорт</option>
+                        <option value="{{ constant('Bus115\\Upload\\Manager::TYPE_STOP') }}">Зупинка</option>
+                    </select>
+                </form>
             </div>
             <div class="card-body">
                 <h4>Оберіть файли фотографій ТРАНСПОРТУ з компьютера</h4>

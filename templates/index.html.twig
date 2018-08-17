@@ -10,8 +10,11 @@
                             Додати зображення
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/upload_transport">Транспорт</a>
-                            <a class="dropdown-item"href="/upload_stop">Зупинка</a>
+                            <a class="dropdown-item" href="{% if verifyToken == token %}/upload_transport?verifyToken={{ token }}{% else %}/upload_transport{% endif %}">Транспорт</a>
+                            <a class="dropdown-item"href="{% if verifyToken == token %}/upload_stop?verifyToken={{ token }}{% else %}/upload_stop{% endif %}">Зупинка</a>
+                            {% if verifyToken == token %}
+                                <a class="dropdown-item"href="/uploaded_images?verifyToken={{ token }}&type=stop">Усі фото</a>
+                            {% endif %}
                         </div>
                     </li>
                 </ul>
