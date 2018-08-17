@@ -51,12 +51,10 @@ $app->post('/upload_stop', function (Request $request) use ($app) {
     $description    = $request->request->get('arr');
     $uploadmanager  = $app['app.upload_manager'];
 
-    if (!empty($file)) {
-        $uploadmanager->manage($file, $description, 'stop');
-        return new Response();
-    } else {
-        return new Response("An error ocurred. Did you really send a file?");
+    if (!empty($file) && $uploadmanager->manage($file, $description, 'stop')) {
+        return new Response('EVENT_RECEIVED');
     }
+    return new Response("An error ocurred. Did you really send a file?");
 });
 
 $app->post('/upload_transport', function (Request $request) use ($app) {
@@ -64,12 +62,10 @@ $app->post('/upload_transport', function (Request $request) use ($app) {
     $description    = $request->request->get('arr');
     $uploadmanager  = $app['app.upload_manager'];
 
-    if (!empty($file)) {
-        $uploadmanager->manage($file, $description, 'transport');
-        return new Response();
-    } else {
-        return new Response("An error ocurred. Did you really send a file?");
+    if (!empty($file) && $uploadmanager->manage($file, $description, 'transport')) {
+        return new Response('EVENT_RECEIVED');
     }
+    return new Response("An error ocurred. Did you really send a file?");
 });
 
 /**

@@ -19,6 +19,14 @@ class Manager
     const TYPE_STOP = 'stop';
     const TYPE_TRANSPORT = 'transport';
 
+    const ALLOWED_FILESIZE_MB = 10;
+
+    private $allowedExtensions = [
+        'jpeg',
+        'jpg',
+        'png'
+    ];
+
     public function __construct(Application $app)
     {
         $this->app = $app;
@@ -34,8 +42,11 @@ class Manager
         $this->app['em']->persist($image);
         $this->app['em']->flush();
 
-        $file->move($path, $image->getUuid() . '.' . $file->getClientOriginalExtension());
-        return true;
+        if (in_array($file->guessClientExtension(), $this->allowedExtensions) && $this->filesize($file->getSize()) < self::ALLOWED_FILESIZE_MB) {
+            $file->move($path, $image->getUuid() . '.' . $file->getClientOriginalExtension());
+            return true;
+        }
+        return false;
     }
 
     public function move($type, $uuid, $ewayId, $name, $transportType)
@@ -66,6 +77,11 @@ class Manager
 
         rename ($pathFrom, $pathTo);
         return true;
+    }
+
+    private function filesize($bytes, $decimals = 2)
+    {
+        return round ($bytes / 1048576, $decimals);
     }
 
 }

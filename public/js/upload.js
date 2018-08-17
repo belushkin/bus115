@@ -21,6 +21,24 @@
         formData.set('file', file);
         formData.set('arr', [document.getElementById('formGroupInput').value]);
         request.open("POST", document.getElementById('js-upload-form').action);
+
+        request.onreadystatechange = function() {
+            if (this.readyState != 4) return;
+            if (this.responseText == 'EVENT_RECEIVED') {
+                $("#drop-zone").css("background-color", "#90ee90");
+                setTimeout(function(){
+                    $("#drop-zone").css("background-color", "white");
+                    }, 4000
+                );
+            } else {
+                $("#drop-zone").css("background-color", "red");
+                setTimeout(function(){
+                        $("#drop-zone").css("background-color", "white");
+                    }, 4000
+                );
+            }
+        }
+
         request.send(formData);
     };
 
