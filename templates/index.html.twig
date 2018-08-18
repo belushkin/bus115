@@ -1,32 +1,33 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">
-                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Додати зображення
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% if verifyToken == token %}/upload_transport?verifyToken={{ token }}{% else %}/upload_transport{% endif %}">Транспорт</a>
-                            <a class="dropdown-item"href="{% if verifyToken == token %}/upload_stop?verifyToken={{ token }}{% else %}/upload_stop{% endif %}">Зупинка</a>
-                            {% if verifyToken == token %}
-                                <a class="dropdown-item"href="/uploaded_images?verifyToken={{ token }}&type=stop">Усі фото</a>
-                            {% endif %}
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="imageContainer">
-        <img src="/images/bus115.png" alt="Bus115 Logo">
-    </div>
-    <div class="container_center">
-        <h1 class="text-center">Чат-бот розкладу громадського транспорту Києва</h1>
+        <div class="collapse navbar-collapse" id="navbarsExample03">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Додати зображення
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% if verifyToken == token %}/upload_transport?verifyToken={{ token }}{% else %}/upload_transport{% endif %}">Транспорт</a>
+                        <a class="dropdown-item"href="{% if verifyToken == token %}/upload_stop?verifyToken={{ token }}{% else %}/upload_stop{% endif %}">Зупинка</a>
+                        {% if verifyToken == token %}
+                            <a class="dropdown-item"href="/uploaded_images?verifyToken={{ token }}&type=stop">Усі фото</a>
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container h-100 d-flex justify-content-center">
+        <div class="my-auto">
+            <img class="text-center" src="/images/bus115.png" alt="Bus115 Logo">
+            <h1 class="text-center">Чат-бот розкладу громадського транспорту Києва</h1>
+        </div>
     </div>
 {% endblock %}
 
