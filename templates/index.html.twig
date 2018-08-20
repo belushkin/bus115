@@ -1,7 +1,7 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <nav class="navbar fixed-top navbar-expand-sm navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,10 +23,12 @@
             </ul>
         </div>
     </nav>
-    <div class="container h-100 d-flex justify-content-center">
-        <div class="my-auto">
-            <img class="text-center" src="/images/bus115.png" alt="Bus115 Logo">
-            <h1 class="text-center">Чат-бот розкладу громадського транспорту Києва</h1>
+    <div class="container h-100">
+        <div class="row align-items-center h-100">
+            <div class="col-12 mx-auto">
+                <img class="mx-auto d-block" src="/images/bus115.png" alt="Чат-бот транспорту Києва" title="Чат-бот транспорту Києва">
+                <h1 class="text-center">Чат-бот транспорту Києва</h1>
+            </div>
         </div>
     </div>
 {% endblock %}
