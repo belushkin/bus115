@@ -1,18 +1,14 @@
-.imageContainer{
-    position: absolute;
-    width: 300px; /*the image width*/
-    height: 300px; /*the image height*/
-    left: 50%;
-    top: 50%;
-    margin-left: -150px; /*half the image width*/
-    margin-top: -150px; /*half the image height*/
+html,body {
+    height: 100%;
 }
 
-.container_center {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+@media screen and (max-width: 600px) {
+    strong.ml-2, h4 {
+        display: none;
+    }
+    .upload-drop-zone {
+        margin-top: 10px;
+    }
 }
 
 /*Upload zone*/
@@ -31,4 +27,9 @@
 .upload-drop-zone.drop {
     color: #222;
     border-color: #222;
+}
+
+.custom-file-label,
+.custom-file-label::after {
+    height: initial;
 }
