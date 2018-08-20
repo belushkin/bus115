@@ -2,25 +2,13 @@ html,body {
     height: 100%;
 }
 
-.imageContainer{
-    position: absolute;
-    width: 300px; /*the image width*/
-    height: 300px; /*the image height*/
-    left: 50%;
-    top: 50%;
-    margin-left: -150px; /*half the image width*/
-    margin-top: -150px; /*half the image height*/
-}
-@media only screen and (max-width: 768px) {
-    .imageContainer{
-        top: 30%;
+@media screen and (max-width: 600px) {
+    strong.ml-2, h4 {
+        display: none;
     }
-}
-.container_center {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    .upload-drop-zone {
+        margin-top: 10px;
+    }
 }
 
 /*Upload zone*/

@@ -75,4 +75,7 @@
             window.location = location.href.replace('stop', 'transport');
         }
     });
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+        console.log('ss');
+    }
 }(jQuery);
