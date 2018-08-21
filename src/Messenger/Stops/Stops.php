@@ -3,6 +3,7 @@
 namespace Bus115\Messenger\Stops;
 
 use Silex\Application;
+use Bus115\Entity\Stop;
 
 class Stops implements AttachmentInterface
 {
@@ -28,7 +29,7 @@ class Stops implements AttachmentInterface
                 $elements[] = [
                     'title' => $stop->title,
                     'subtitle' => 'В напрямку ' . $this->getStopDirection($stop->id),
-                    'image_url' => 'https://bus115.kiev.ua/images/stop.jpg',
+                    'image_url' => $this->getStopImage($stop->id),
                     'buttons' => [
                         [
                             'type' => 'postback',
@@ -68,4 +69,17 @@ class Stops implements AttachmentInterface
         }
         return '-';
     }
+
+    private function getStopImage($id)
+    {
+        $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
+        $entity = $this->app['em']->getRepository('Bus115\Entity\Stop')->findOneBy(
+            array('eway_id' => $id)
+        );
+        if ($entity) {
+            $imageUrl = "https://bus115.kiev.ua/images/stops/{$entity->getUuid()}.jpg";
+        }
+        return $imageUrl;
+    }
+
 }

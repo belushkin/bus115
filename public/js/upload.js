@@ -80,7 +80,5 @@
         $("#control_type").addClass('form-control-lg');
         $(".custom-file-label").addClass('form-control-lg d-inline-block');
         $("#js-upload-submit").addClass('btn-lg').removeClass('btn-sm');
-
-        console.log('ss');
     }
 }(jQuery);
