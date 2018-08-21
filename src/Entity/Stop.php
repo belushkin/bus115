@@ -34,7 +34,7 @@ class Stop
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=50, unique=true, nullable=false, columnDefinition="AFTER `uuid`")
+     * @ORM\Column(type="string", length=50, unique=true, nullable=false)
      */
     private $name;
 
