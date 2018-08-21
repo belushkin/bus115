@@ -76,7 +76,7 @@ $app->register(new SecurityServiceProvider(), array(
         ),
         'api' => array(
             'pattern'       => '^/api',
-            'security'      => (ENV == 'development') ? false : true,
+            'security'      => false,//(ENV == 'development') ? false : true,
             'logout'        => true,
             'guard'         => array(
                 'authenticators'  => array(

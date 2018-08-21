@@ -114,7 +114,7 @@ $app->post('/upload_transport', function (Request $request) use ($app) {
  *
  */
 $app->get('/api/v1/getstops', function (Request $request) use ($app) {
-
+    exit();
     $lat = $request->get('lat');
     $lng = $request->get('lng');
 
