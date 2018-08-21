@@ -71,14 +71,15 @@ class Manager
         $pathTo2 = ROOT_FOLDER .'/public/images/original/'.$name;
         $entity->setDescription($image->getDescription());
         $entity->setUuid($image->getUuid());
+        $entity->setName($name);
         $entity->setEwayId($ewayId);
 
         $this->app['em']->persist($entity);
         $this->app['em']->remove($image);
         $this->app['em']->flush();
 
-        rename ($pathFrom, $pathTo);
 //        copy($pathFrom, $pathTo2);
+        rename ($pathFrom, $pathTo);
 //        $this->storeUploadedImage($pathFrom, $pathTo, 750, 1000);
         return true;
     }

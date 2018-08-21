@@ -34,6 +34,11 @@ class Transport
     private $title;
 
     /**
+     * @ORM\Column(type="string", length=50, unique=true, nullable=false)
+     */
+    private $name;
+
+    /**
      * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $description;
@@ -93,6 +98,11 @@ class Transport
         return $this->id;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function getEwayId()
     {
         return $this->eway_id;
@@ -101,6 +111,11 @@ class Transport
     public function setEwayId($ewayId)
     {
         $this->eway_id = $ewayId;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     public function getUuid()

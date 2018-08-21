@@ -34,6 +34,11 @@ class Stop
     private $title;
 
     /**
+     * @ORM\Column(type="string", length=50, unique=true, nullable=false, columnDefinition="AFTER `uuid`")
+     */
+    private $name;
+
+    /**
      * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $description;
@@ -68,6 +73,11 @@ class Stop
         return $this->direction;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -81,6 +91,11 @@ class Stop
     public function setEwayId($ewayId)
     {
         $this->eway_id = $ewayId;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     public function getUuid()
