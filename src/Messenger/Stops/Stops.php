@@ -77,7 +77,7 @@ class Stops implements AttachmentInterface
             array('eway_id' => $id)
         );
         if ($entity) {
-            $imageUrl = "https://bus115.kiev.ua/images/stops/{$entity->getUuid()}.jpg";
+            $imageUrl = "https://bus115.kiev.ua/images/stops/{$entity->getName()}";
         }
         return $imageUrl;
     }
