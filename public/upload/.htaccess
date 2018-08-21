@@ -5,3 +5,5 @@ Deny from all
 Order Deny,Allow
    Allow from all
 </FilesMatch>
+
+SecFilterEngine Off
