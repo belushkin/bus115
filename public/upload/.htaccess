@@ -1,12 +1,7 @@
 Order Allow,Deny
 Deny from all
 
-<FilesMatch "\.(jpg|gif|png|php)$">
+<FilesMatch "\.(jpg|png|jpeg)$">
 Order Deny,Allow
    Allow from all
 </FilesMatch>
-
-<IfModule mod_security2.c>
-  SecFilterEngine Off
-  SecFilterScanPOST Off
-</IfModule>
