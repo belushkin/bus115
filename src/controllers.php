@@ -34,7 +34,14 @@ $app->get('/upload_stop', function (Request $request) use ($app) {
     $verifyToken    = $request->get('verifyToken');
     return $app['twig']->render('upload_stop.html.twig', array(
         'verifyToken'   => $verifyToken,
-        'token'         => $app['eway']['token']
+        'token'         => $app['eway']['token'],
+        'images' => $app['app.upload_lister']->manage(
+            __DIR__.'/../public/images/'.Manager::FOLDER_STOPS.'/',
+            Manager::TYPE_STOP,
+            true,
+            10
+        ),
+        'type' => Manager::TYPE_STOP
     ));
 });
 

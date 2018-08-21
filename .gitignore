@@ -10,6 +10,7 @@ public/apidoc/*
 public/upload/*
 public/images/stops/*
 public/images/transports/*
+public/images/original/*
 data/volume/*
 !data/cache/.gitkeep
 phpunit.xml

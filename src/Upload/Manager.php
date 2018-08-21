@@ -5,6 +5,7 @@ namespace Bus115\Upload;
 use Bus115\Entity\Image;
 use Bus115\Entity\Stop;
 use Bus115\Entity\Transport;
+use Bus115\Upload\SimpleImage;
 
 use Silex\Application;
 
@@ -67,6 +68,7 @@ class Manager
         }
         $pathFrom = ROOT_FOLDER .'/public/upload/'.$folder.'/'.$name;
         $pathTo = ROOT_FOLDER .'/public/images/'.$folder.'/'.$name;
+        $pathTo2 = ROOT_FOLDER .'/public/images/original/'.$name;
         $entity->setDescription($image->getDescription());
         $entity->setUuid($image->getUuid());
         $entity->setEwayId($ewayId);
@@ -76,6 +78,8 @@ class Manager
         $this->app['em']->flush();
 
         rename ($pathFrom, $pathTo);
+//        copy($pathFrom, $pathTo2);
+//        $this->storeUploadedImage($pathFrom, $pathTo, 750, 1000);
         return true;
     }
 
@@ -105,4 +109,12 @@ class Manager
         return round ($bytes / 1048576, $decimals);
     }
 
+    private function storeUploadedImage($pathFrom, $pathTo, $width, $height)
+    {
+        $image = new SimpleImage();
+        $image->load($pathFrom);
+        $image->resize($width, $height);
+        $image->save($pathTo);
+        return true;
+    }
 }
