@@ -72,14 +72,14 @@ class Stops implements AttachmentInterface
 
     private function getStopImage($id)
     {
-        $this->app['monolog']->info(sprintf('StopId: %s', $id));
+//        $this->app['monolog']->info(sprintf('StopId: %s', $id));
         $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
         $entity = $this->app['em']->getRepository('Bus115\Entity\Stop')->findOneBy(
             array('eway_id' => $id)
         );
-        $this->app['monolog']->info(sprintf('Entity exists: %s', var_export((array)$entity, true)));
+//        $this->app['monolog']->info(sprintf('Entity exists: %s', var_export((array)$entity, true)));
         if ($entity) {
-            $this->app['monolog']->info(sprintf('Entity url: %s', $entity->getUuid()));
+//            $this->app['monolog']->info(sprintf('Entity url: %s', $entity->getUuid()));
             $imageUrl = "https://bus115.kiev.ua/images/stops/{$entity->getUuid()}.jpg";
         }
         return $imageUrl;

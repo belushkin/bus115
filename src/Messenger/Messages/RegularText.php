@@ -27,7 +27,7 @@ class RegularText implements MessageInterface
                     $elements[] = [
                         'title'     => $item->title,
                         'subtitle'  => 'В напрямку ' . $this->getStopDirection($item->id),
-                        'image_url' => "https://bus115.kiev.ua/images/stop.jpg",
+                        'image_url' => $this->getStopImage($item->id),
                         'buttons' => [
                             [
                                 'type' => 'postback',
@@ -67,5 +67,20 @@ class RegularText implements MessageInterface
             return $body->routes[0]->directionTitle . ', (' . $body->routes[0]->transportName . ')';
         }
         return '-';
+    }
+
+    private function getStopImage($id)
+    {
+//        $this->app['monolog']->info(sprintf('StopId: %s', $id));
+        $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
+        $entity = $this->app['em']->getRepository('Bus115\Entity\Stop')->findOneBy(
+            array('eway_id' => $id)
+        );
+//        $this->app['monolog']->info(sprintf('Entity exists: %s', var_export((array)$entity, true)));
+        if ($entity) {
+//            $this->app['monolog']->info(sprintf('Entity url: %s', $entity->getUuid()));
+            $imageUrl = "https://bus115.kiev.ua/images/stops/{$entity->getUuid()}.jpg";
+        }
+        return $imageUrl;
     }
 }
