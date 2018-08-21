@@ -6,4 +6,7 @@ Order Deny,Allow
    Allow from all
 </FilesMatch>
 
-SecFilterEngine Off
+<IfModule mod_security2.c>
+  SecFilterEngine Off
+  SecFilterScanPOST Off
+</IfModule>
