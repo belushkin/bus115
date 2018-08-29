@@ -16,7 +16,7 @@ class RegularText implements MessageInterface
 
     public function text($term = '')
     {
-        $this->app['monolog']->info(sprintf('User entered Term: %s', $term));
+        $this->app['monolog']->info(sprintf('SEARCH WORKS, User entered Term: %s', $term));
         if (!empty($term) && strlen($term) >= 4) {
             $body       = $this->app['app.eway']->getPlacesByName($term);
             if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
@@ -44,11 +44,15 @@ class RegularText implements MessageInterface
                 }
                 $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
                 return $responses;
+            } else {
+                $results = $this->app['app.api']->getGoogleCoordinates($term);
+                return $this->getStopsByGoogleCoordinates($results);
             }
+
         }
 
         $responses[] = [
-            'text' => "Нажаль, я не розумію, скажи help і я тобі підкажу, також я не шукаю адреси меньше 4 символів",
+            'text' => "Нічого не знайдено, для допомоги надрукуй help",
             'quick_replies' => [
                 [
                     'content_type' => 'location',
@@ -80,4 +84,32 @@ class RegularText implements MessageInterface
         }
         return $imageUrl;
     }
+
+    private function getStopsByGoogleCoordinates($results = [])
+    {
+        $location = (isset($results['results']['geometry']['location'])) ? isset($results['results']['geometry']['location']) : [];
+        if (empty($location)) {
+            $this->app['monolog']->info(sprintf('Request to Google FAILED, %s', \GuzzleHttp\json_encode($location)));
+            $responses[] = [
+                'text' => "Нічого не знайдено, для допомоги надрукуй help",
+                'quick_replies' => [
+                    [
+                        'content_type' => 'location',
+
+                    ]
+                ]
+            ];
+            return $responses;
+        }
+        $attachment = [
+            'payload' => [
+                'coordinates' => [
+                    'lat' => $location['lat'],
+                    'long' => $location['lng']
+                ]
+            ]
+        ];
+        return $this->app['app.stops']->text($attachment);
+    }
+
 }

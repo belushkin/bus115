@@ -30,7 +30,7 @@ class Messenger implements MessageInterface
         if (isset($receivedMessage['text'])) {
             $text = htmlspecialchars(addslashes(trim(mb_strtolower($receivedMessage['text']))));
             if (empty($intents) && empty($address) && empty($location)) {
-                if ($text == 'help') {
+                if ($text == 'help' || $text == 'допомога' || $text == 'помощь') {
                     $responses = $this->app['app.help']->text($text);
                 } else {
                     $responses = $this->app['app.regular_text']->text($text);

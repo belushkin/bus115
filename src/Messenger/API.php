@@ -37,4 +37,18 @@ class API
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_exec($ch);
     }
+
+    public function getGoogleCoordinates($string)
+    {
+        $url = "http://maps.google.com/maps/api/geocode/json?address={$string}";
+
+        $this->app['monolog']->info(sprintf('Request Google coordinates, %s', $string));
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        return \GuzzleHttp\json_decode(curl_exec($ch));
+    }
+
 }

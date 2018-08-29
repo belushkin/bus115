@@ -49,7 +49,7 @@ class Stops implements AttachmentInterface
         }
 
         $responses[] = [
-            'text' => "Нажаль, нічого не знайдено.",
+            'text' => "Нічого не знайдено, для допомоги надрукуй help",
             'quick_replies' => [
                 [
                     'content_type' => 'location',

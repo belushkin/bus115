@@ -17,7 +17,7 @@ class Help implements MessageInterface
     public function text($term = '')
     {
         $responses[] = [
-            'text' => 'Напиши просто назву вулиці, або провулку, або площі, або на пиши "де я" і я зрозумію, що ти хочеш.',
+            'text' => 'Напиши назву вулиці де знаходиться зупинка, або напиши "де я".',
             'quick_replies' => [
                 [
                     'content_type' => 'location',

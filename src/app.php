@@ -24,6 +24,7 @@ use Bus115\Security\TokenAuthenticator;
 use Bus115\Security\User\UserProvider;
 use Bus115\Messenger\Messenger;
 use Bus115\Messenger\Postback;
+use Bus115\Messenger\Google;
 use Bus115\Messenger\API;
 use Bus115\Messenger\Response;
 use Bus115\Messenger\TrimHelper;
@@ -129,6 +130,10 @@ $app['app.messenger'] = function ($app) {
 
 $app['app.postback'] = function ($app) {
     return new Postback($app);
+};
+
+$app['app.google'] = function ($app) {
+    return new Google($app);
 };
 
 $app['app.api'] = function ($app) {

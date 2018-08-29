@@ -17,7 +17,7 @@ class FirstHandShake implements MessageInterface
     public function text($payload = '')
     {
         $responses[] = [
-            'text' => "Привіт, скажи мені, де ти знаходишся?",
+            'text' => "Напишіть, звідки Ви вирушаєте - назву вулиці, провулку, площі тощо або назву зупинки. Або ж надішліть локацію",
             'quick_replies' => [
                 [
                     'content_type' => 'location',
