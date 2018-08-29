@@ -109,6 +109,7 @@ class RegularText implements MessageInterface
                 ]
             ]
         ];
+        $this->app['monolog']->info(sprintf('Request to Google ATTACHMENT, %s', var_export($attachment, true)));
         return $this->app['app.stops']->text($attachment);
     }
 
