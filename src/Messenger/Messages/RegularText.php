@@ -87,30 +87,37 @@ class RegularText implements MessageInterface
 
     private function getStopsByGoogleCoordinates($results = [])
     {
-        $location = (isset($results->results[0]->geometry->location)) ? $results->results[0]->geometry->location : (object)[];
-        if (empty($location)) {
-            $this->app['monolog']->info(sprintf('Request to Google FAILED, %s', \GuzzleHttp\json_encode($location)));
-            $responses[] = [
-                'text' => "Нічого не знайдено, для допомоги надрукуй help",
-                'quick_replies' => [
-                    [
-                        'content_type' => 'location',
+        $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($results->results[0])));
+        $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($results->results[0]->geometry)));
+        $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($results->results[0]->location)));
+        $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($results->results[0]->location->lat)));
 
+        if (isset($results->results[0]->geometry->location)) {
+            $location = $results->results[0]->geometry->location;
+            $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($location)));
+
+            $attachment = [
+                'payload' => [
+                    'coordinates' => [
+                        'lat' => $location->lat,
+                        'long' => $location->lng
                     ]
                 ]
             ];
-            return $responses;
+            $this->app['monolog']->info(sprintf('Request to Google ATTACHMENT, %s', var_export($attachment, true)));
+            return $this->app['app.stops']->text($attachment);
         }
-        $attachment = [
-            'payload' => [
-                'coordinates' => [
-                    'lat' => $location->lat,
-                    'long' => $location->lng
+
+        $responses[] = [
+            'text' => "Нічого не знайдено, для допомоги надрукуй help",
+            'quick_replies' => [
+                [
+                    'content_type' => 'location',
+
                 ]
             ]
         ];
-        $this->app['monolog']->info(sprintf('Request to Google ATTACHMENT, %s', var_export($attachment, true)));
-        return $this->app['app.stops']->text($attachment);
+        return $responses;
     }
 
 }
