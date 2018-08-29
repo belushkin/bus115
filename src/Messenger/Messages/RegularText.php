@@ -87,7 +87,7 @@ class RegularText implements MessageInterface
 
     private function getStopsByGoogleCoordinates($results = [])
     {
-        $location = (isset($results['results']['geometry']['location'])) ? isset($results['results']['geometry']['location']) : [];
+        $location = (isset($results->results[0]->geometry->location)) ? isset($results->results[0]->geometry->location) : (object)[];
         if (empty($location)) {
             $this->app['monolog']->info(sprintf('Request to Google FAILED, %s', \GuzzleHttp\json_encode($location)));
             $responses[] = [
@@ -104,8 +104,8 @@ class RegularText implements MessageInterface
         $attachment = [
             'payload' => [
                 'coordinates' => [
-                    'lat' => $location['lat'],
-                    'long' => $location['lng']
+                    'lat' => $location->lat,
+                    'long' => $location->lng
                 ]
             ]
         ];
