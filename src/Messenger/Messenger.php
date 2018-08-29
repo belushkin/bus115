@@ -35,7 +35,19 @@ class Messenger implements MessageInterface
                 } else {
                     $responses = $this->app['app.regular_text']->text($text);
                 }
-            } else if (!empty($intents)){
+            } else if (!empty($location)) {
+                foreach ($location as $item) {
+                    $responses = $this->app['app.regular_text']->text(
+                        $this->app['app.trim_helper']->trim($item['value'])
+                    );
+                }
+            } else if (!empty($address)) {
+                foreach ($address as $item) {
+                    $responses = $this->app['app.regular_text']->text(
+                        $this->app['app.trim_helper']->trim($item['value'])
+                    );
+                }
+            }  else if (!empty($intents)){
                 foreach ($intents as $intent) {
                     if ($intent['value'] == 'joke' && $intent['confidence'] > self::NLP_THRESHOLD) {
                         $responses = $this->app['app.joke']->text($text);
@@ -46,18 +58,6 @@ class Messenger implements MessageInterface
                     } else {
                         $responses = $this->app['app.fallback']->text($text);
                     }
-                }
-            } else if (!empty($address)) {
-                foreach ($address as $item) {
-                    $responses = $this->app['app.regular_text']->text(
-                        $this->app['app.trim_helper']->trim($item['value'])
-                    );
-                }
-            }  else if (!empty($location)) {
-                foreach ($location as $item) {
-                    $responses = $this->app['app.regular_text']->text(
-                        $this->app['app.trim_helper']->trim($item['value'])
-                    );
                 }
             } else {
                 $responses = $this->app['app.fallback']->text($text);
