@@ -42,13 +42,15 @@ class API
     {
         $url = "http://maps.google.com/maps/api/geocode/json?address={$string}";
 
-        $this->app['monolog']->info(sprintf('Request Google coordinates, %s', $string));
+        $this->app['monolog']->info(sprintf('Request Google coordinates, %s', $url));
         $ch = curl_init($url);
 
         curl_setopt($ch, CURLOPT_URL,$url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-        return \GuzzleHttp\json_decode(curl_exec($ch));
+        $result = curl_exec($ch);
+        $this->app['monolog']->info(sprintf('Google API RESPONSE, %s', var_export($result, true)));
+        return \GuzzleHttp\json_decode($result);
     }
 
 }
