@@ -87,12 +87,6 @@ class RegularText implements MessageInterface
 
     private function getStopsByGoogleCoordinates($results)
     {
-        $this->app['monolog']->info(sprintf('Google LOCATION, %s', var_export($results->results, true)));
-//        $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($results->results[0])));
-//        $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($results->results[0]->geometry)));
-//        $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($results->results[0]->location)));
-//        $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($results->results[0]->location->lat)));
-
         if (isset($results->results[0]->geometry->location)) {
             $location = $results->results[0]->geometry->location;
             $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($location)));
