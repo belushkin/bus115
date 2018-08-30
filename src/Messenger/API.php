@@ -49,6 +49,8 @@ class API
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $result = curl_exec($ch);
+        $this->app['monolog']->info(sprintf('Request Google RESULT, %s', $result));
+        return [];
         return \GuzzleHttp\json_decode($result);
     }
 
