@@ -45,8 +45,8 @@ class RegularText implements MessageInterface
                 $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
                 return $responses;
             } else {
-//                $results = $this->app['app.api']->getGoogleCoordinates($term);
-//                return $this->getStopsByGoogleCoordinates($results);
+                $results = $this->app['app.api']->getGoogleCoordinates($term);
+                return $this->getStopsByGoogleCoordinates($results);
             }
 
         }
