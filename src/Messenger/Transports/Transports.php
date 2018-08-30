@@ -19,9 +19,13 @@ class Transports implements IdInterface
         $routes     = $this->callStopInfo($id);
         $elements   = [];
         $responses  = [];
+        $cache      = [];
 
         $i = 0;
         foreach ($routes as $route) {
+            if (in_array($route->id, $cache)) { // removing duplicates from Eway API
+                continue;
+            }
             $elements[] = [
                 'title'     => $route->transportName . ' №' . $route->title,
                 'subtitle'  => 'В напрямку:' . $route->directionTitle,
@@ -39,6 +43,7 @@ class Transports implements IdInterface
                 $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
                 $elements = [];
             }
+            $cache[] = $route->id;
         }
         $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
         return $responses;
