@@ -8,6 +8,10 @@ class RegularText implements MessageInterface
 {
 
     private $app;
+    private $terms = [
+        'ул', 'ул.', 'вул', 'вул.',
+        'улица', 'улиця', 'уліца',
+    ];
 
     public function __construct(Application $app)
     {
@@ -17,6 +21,9 @@ class RegularText implements MessageInterface
     public function text($term = '')
     {
         $this->app['monolog']->info(sprintf('SEARCH WORKS, User entered Term: %s', $term));
+        $term = $this->stripTerms($term);
+        $this->app['monolog']->info(sprintf('Term after STRIP: %s', $term));
+
         if (!empty($term) && strlen($term) >= 4) {
             $body       = $this->app['app.eway']->getPlacesByName($term);
             if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
@@ -118,4 +125,8 @@ class RegularText implements MessageInterface
         return $responses;
     }
 
+    private function stripTerms($term)
+    {
+        return trim(preg_replace('/\s+/', ' ',str_replace($this->terms,'', $term)));
+    }
 }
