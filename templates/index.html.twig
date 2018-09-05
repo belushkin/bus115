@@ -1,28 +1,7 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <nav class="navbar fixed-top navbar-expand-sm navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarsExample03">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Додати зображення
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% if verifyToken == token %}/upload_transport?verifyToken={{ token }}{% else %}/upload_transport{% endif %}">Транспорт</a>
-                        <a class="dropdown-item"href="{% if verifyToken == token %}/upload_stop?verifyToken={{ token }}{% else %}/upload_stop{% endif %}">Зупинка</a>
-                        {% if verifyToken == token %}
-                            <a class="dropdown-item"href="/uploaded_images?verifyToken={{ token }}&type=stop">Усі фото</a>
-                        {% endif %}
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    {% include 'nav.html.twig' %}
     <div class="container h-100">
         <div class="row align-items-center h-100">
             <div class="col-12 mx-auto">
