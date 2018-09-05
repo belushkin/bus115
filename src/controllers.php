@@ -244,9 +244,15 @@ $app->get('/api/v1/webhook', function (Request $request) use ($app) {
  *
  */
 $app->post('/api/v1/webhook', function (Request $request) use ($app) {
-    $object     = $request->request->get('object');
-    $entry      = $request->request->get('entry');
-    if ($object == 'page') {
+    $object             = $request->request->get('object');
+    $entry              = $request->request->get('entry');
+    $policyEnforcement  = $request->request->get('policy-enforcement');
+
+    if (!empty($policyEnforcement)) {
+        $action = $policyEnforcement['action'];
+        $reason = $policyEnforcement['reason'];
+        $app['monolog']->info(sprintf('Webhook Event messaging_policy_enforcement, %s, %s', $action, $reason));
+    } else if ($object == 'page') {
         $webhookEvent   = $entry[0]['messaging'][0];
         $senderPsid     = $webhookEvent['sender']['id'];
         $app['monolog']->info(sprintf('Sender Psid: %s', $senderPsid));
