@@ -53,6 +53,14 @@ $app->get('/privacy-policy', function (Request $request) use ($app) {
     ]);
 });
 
+$app->get('/tos', function (Request $request) use ($app) {
+    $verifyToken    = $request->get('verifyToken');
+    return $app['twig']->render('tos.html.twig', [
+        'verifyToken'   => $verifyToken,
+        'token'         => $app['eway']['token']
+    ]);
+});
+
 $app->get('/upload_transport', function (Request $request) use ($app) {
     $verifyToken    = $request->get('verifyToken');
     return $app['twig']->render('upload_transport.html.twig', array(
