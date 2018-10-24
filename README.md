@@ -33,6 +33,10 @@ vendor/bin/doctrine orm:schema-tool:update --force --dump-sql
 ~/workspace/haproxy $ docker run --net=host -it haproxy
 ~/workspace/haproxy $ docker run -d --net=host --restart always haproxy
 ```
+In order to check certificate:
+```
+~/workspace/haproxy/private (master) $ sudo ssl-cert-check -c bus115.kiev.ua.pem
+```
 
 ###Portainer
 ```bash
