@@ -19,7 +19,7 @@ class SetWebhook
         $bot_api_key  = $this->app['eway']['telegram_token'];
         $bot_username = 'Bus115Bot';
         $hook_url     = 'https://bus115.kiev.ua/api/v1/telegramwebhook';
-        $path         = @'/home/maxb/workspace/haproxy/private/bus115.kiev.ua.pem';
+        $path         = '/home/maxb/workspace/haproxy/private/bus115.kiev.ua.pem';
 
         try {
             // Create Telegram API object
