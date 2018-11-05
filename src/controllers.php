@@ -216,6 +216,8 @@ $app->get('/uploaded_images', function (Request $request) use ($app) {
 $app->post('/api/v1/telegramwebhook', function (Request $request) use ($app) {
     $messageId  = $request->request->get('message_id');
     $chatId     = $request->request->get('chat')['id'];
+    $this->app['monolog']->info($messageId);
+    $this->app['monolog']->info($chatId);
 
     if (is_int($messageId) && is_int($chatId)) {
         $app['app.telegram.webhook']->handle($messageId, $chatId);
