@@ -34,11 +34,12 @@ class Webhook
             $telegram->enableLimiter();
 
             // Handle telegram webhook request
-            $telegram->handle();
+            $an = $telegram->handle();
+            $this->app['monolog']->info((string)$an);
 
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
-            // Silence is golden!
-            // log telegram errors
+            $this->app['monolog']->info($e->getMessage());
+        } catch (\Longman\TelegramBot\Exception\TelegramLogException $e) {
             $this->app['monolog']->info($e->getMessage());
         }
     }
