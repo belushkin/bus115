@@ -23,6 +23,11 @@ class Webhook
             // Create Telegram API object
             $telegram = new \Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
 
+            \Longman\TelegramBot\TelegramLog::initialize($this->app['monolog']);
+
+            // Requests Limiter (tries to prevent reaching Telegram API limits)
+            $telegram->enableLimiter();
+
             // Handle telegram webhook request
             $telegram->handle();
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {

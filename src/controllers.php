@@ -213,7 +213,7 @@ $app->get('/uploaded_images', function (Request $request) use ($app) {
     $app->abort(403, "Invalid Verify Token or Type");
 });
 
-$app->get('/api/v1/telegramwebhook', function (Request $request) use ($app) {
+$app->post('/api/v1/telegramwebhook', function (Request $request) use ($app) {
     $app['app.telegram.webhook']->handle();
     return new Response('EVENT_RECEIVED');
 });
