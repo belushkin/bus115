@@ -19,7 +19,6 @@ class SetWebhook
         $bot_api_key  = $this->app['eway']['telegram_token'];
         $bot_username = 'Bus115Bot';
         $hook_url     = 'https://bus115.kiev.ua/api/v1/telegramwebhook';
-        $path         = @'/var/www/data/logs/bus115.kiev.ua.pem';
 
         try {
             // Create Telegram API object
@@ -27,7 +26,6 @@ class SetWebhook
 
             // Set webhook
             $result = $telegram->setWebhook($hook_url);
-            //$result = $telegram->setWebhook($hook_url, ['certificate' => $path]);
             if ($result->isOk()) {
                 return $result->getDescription();
             }
