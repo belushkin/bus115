@@ -27,6 +27,10 @@ class Webhook
             // Create Telegram API object
             $telegram = new \Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
 
+            // Logging
+            \Longman\TelegramBot\TelegramLog::initErrorLog(__DIR__ . "/../../data/logs/{$bot_username}_error.log");
+            \Longman\TelegramBot\TelegramLog::initDebugLog(__DIR__ . "/../../data/logs/{$bot_username}_debug.log");
+            \Longman\TelegramBot\TelegramLog::initUpdateLog(__DIR__ . "/../../data/logs/{$bot_username}_update.log");
             \Longman\TelegramBot\TelegramLog::initialize($this->app['monolog']);
 
             $telegram->addCommandsPaths($commands_paths);
