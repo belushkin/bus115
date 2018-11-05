@@ -14,7 +14,7 @@ class Webhook
         $this->app = $app;
     }
 
-    public function handle()
+    public function handle($messageId, $chatId)
     {
         $bot_api_key  = $this->app['eway']['telegram_token'];
         $bot_username = 'Bus115Bot';
@@ -30,10 +30,12 @@ class Webhook
 
             // Handle telegram webhook request
             $telegram->handle();
+            $this->app['monolog']->info($telegram->getCustomInput());
+
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
             // Silence is golden!
             // log telegram errors
-            // echo $e->getMessage();
+            $this->app['monolog']->info($e->getMessage());
         }
     }
 
