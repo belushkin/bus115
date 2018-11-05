@@ -26,8 +26,8 @@ class SetWebhook
             $telegram = new \Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
 
             // Set webhook
-            //$result = $telegram->setWebhook($hook_url);
-            $result = $telegram->setWebhook($hook_url, ['certificate' => $path]);
+            $result = $telegram->setWebhook($hook_url);
+            //$result = $telegram->setWebhook($hook_url, ['certificate' => $path]);
             if ($result->isOk()) {
                 return $result->getDescription();
             }
