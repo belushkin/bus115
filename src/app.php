@@ -38,6 +38,9 @@ use Bus115\Messenger\Messages\Location;
 use Bus115\Messenger\Messages\FallBack;
 use Bus115\Messenger\Stops\Stops;
 use Bus115\Messenger\Transports\Transports;
+
+use Bus115\Telegram\SetWebhook;
+use Bus115\Telegram\Webhook;
 use Bus115\Eway\Eway;
 
 $app = new Application();
@@ -65,7 +68,8 @@ if (file_exists($eway)) {
         'city'              => 'city',
         'url'               => 'url',
         'token'             => 'token',
-        'page_access_token' => 'page_access_token'
+        'page_access_token' => 'page_access_token',
+        'telegram_token'    => 'telegram_token'
     ];
 }
 
@@ -134,6 +138,14 @@ $app['app.postback'] = function ($app) {
 
 $app['app.google'] = function ($app) {
     return new Google($app);
+};
+
+$app['app.telegram.setwebhook'] = function ($app) {
+    return new SetWebhook($app);
+};
+
+$app['app.telegram.webhook'] = function ($app) {
+    return new Webhook($app);
 };
 
 $app['app.api'] = function ($app) {

@@ -21,7 +21,8 @@
         "symfony/yaml": "^4.1",
         "doctrine/orm": "^2.6",
         "guzzlehttp/guzzle": "~6.0",
-        "ramsey/uuid": "3.6.*"
+        "ramsey/uuid": "3.6.*",
+        "longman/telegram-bot": "^0.54.1"
     },
     "autoload": {
         "psr-4": { "Bus115\\": "src/" },
