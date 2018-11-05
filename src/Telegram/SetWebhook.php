@@ -26,6 +26,7 @@ class SetWebhook
 
             // Set webhook
             $result = $telegram->setWebhook($hook_url);
+            //$result = $telegram->setWebhook($hook_url, ['certificate' => '/path/to/certificate']);
             if ($result->isOk()) {
                 return $result->getDescription();
             }

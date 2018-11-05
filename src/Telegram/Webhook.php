@@ -27,14 +27,15 @@ class Webhook
             // Create Telegram API object
             $telegram = new \Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
 
-            $dbParams = include ROOT_FOLDER . '/migrations-db.php';
-            $mysql_credentials = [
-                'host'     => $dbParams['host'],
-                'user'     => $dbParams['user'],
-                'password' => $dbParams['password'],
-                'database' => $dbParams['dbname'],
-            ];
-            $telegram->enableMySql($mysql_credentials);
+            //https://github.com/php-telegram-bot/core#example-bot
+//            $dbParams = include ROOT_FOLDER . '/migrations-db.php';
+//            $mysql_credentials = [
+//                'host'     => $dbParams['host'],
+//                'user'     => $dbParams['user'],
+//                'password' => $dbParams['password'],
+//                'database' => $dbParams['dbname'],
+//            ];
+//            $telegram->enableMySql($mysql_credentials);
 
             // Logging
             \Longman\TelegramBot\TelegramLog::initErrorLog(__DIR__ . "/../../data/logs/{$bot_username}_error.log");
