@@ -60,7 +60,7 @@ class GenericCommand extends SystemCommand
             'text'    => 'Command /' . $command . ' not found.. :(',
         ];
 
-        error_log("It works: " . __METHOD__ . "\n", 3, "/tmp/error.log");
+        //error_log("It works: " . __METHOD__ . "\n", 3, "/tmp/error.log");
         return Request::sendMessage($data);
     }
 }

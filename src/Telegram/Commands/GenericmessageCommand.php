@@ -69,7 +69,9 @@ class GenericmessageCommand extends SystemCommand
             return $this->telegram->executeCommand($command);
         }
 
-        error_log("It works: " . __METHOD__ . "\n", 3, "/tmp/error.log");
-        return Request::emptyResponse();
+        return Request::sendMessage([
+            'chat_id' => $this->getMessage()->getChat()->getId(),
+            'text'    => $this->getMessage()->getText(),
+        ]);
     }
 }
