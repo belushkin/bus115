@@ -1,25 +1,12 @@
 <?php
-/**
- * This file is part of the TelegramBot package.
- *
- * (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Bus115\Telegram\Commands;
+namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
 
-/**
- * Generic message command
- *
- * Gets executed when any type of message is sent.
- */
-class GenericmessageCommand extends SystemCommand
+class GenericmessageCommand extends UserCommand
 {
     /**
      * @var string
