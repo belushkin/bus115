@@ -10,14 +10,12 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
+use Longman\TelegramBot\Commands\SystemCommand;
 
 /**
  * Generic message command
- *
- * Gets executed when any type of message is sent.
  */
 class GenericmessageCommand extends SystemCommand
 {
@@ -42,19 +40,18 @@ class GenericmessageCommand extends SystemCommand
     protected $need_mysql = true;
 
     /**
-     * Command execute method if MySQL is required but not available
+     * Execution if MySQL is required but not available
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
      */
     public function executeNoDb()
     {
-        // Do nothing
+        //Do nothing
         return Request::emptyResponse();
     }
 
     /**
-     * Command execute method
+     * Execute command
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException
