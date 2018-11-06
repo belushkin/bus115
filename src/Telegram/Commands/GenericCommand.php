@@ -1,11 +1,24 @@
 <?php
+/**
+ * This file is part of the TelegramBot package.
+ *
+ * (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-namespace Longman\TelegramBot\Commands\UserCommands;
+namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
 
-class GenericCommand extends UserCommand
+/**
+ * Generic command
+ *
+ * Gets executed for generic commands, when no other appropriate one is found.
+ */
+class GenericCommand extends SystemCommand
 {
     /**
      * @var string
@@ -47,6 +60,7 @@ class GenericCommand extends UserCommand
             'text'    => 'Command /' . $command . ' not found.. :(',
         ];
 
+        error_log("It works: " . __METHOD__ . "\n", 3, "/tmp/error.log");
         return Request::sendMessage($data);
     }
 }

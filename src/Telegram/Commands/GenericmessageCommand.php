@@ -1,12 +1,25 @@
 <?php
+/**
+ * This file is part of the TelegramBot package.
+ *
+ * (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-namespace Longman\TelegramBot\Commands\UserCommands;
+namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
 
-class GenericmessageCommand extends UserCommand
+/**
+ * Generic message command
+ *
+ * Gets executed when any type of message is sent.
+ */
+class GenericmessageCommand extends SystemCommand
 {
     /**
      * @var string
@@ -59,6 +72,7 @@ class GenericmessageCommand extends UserCommand
             return $this->telegram->executeCommand($command);
         }
 
+        error_log("It works: " . __METHOD__ . "\n", 3, "/tmp/error.log");
         return Request::emptyResponse();
     }
 }
