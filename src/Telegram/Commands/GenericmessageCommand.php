@@ -58,6 +58,7 @@ class GenericmessageCommand extends SystemCommand
      */
     public function execute()
     {
+        error_log("It works: " . __METHOD__ . "\n", 3, "/tmp/error.log");
         //If a conversation is busy, execute the conversation command after handling the message
         $conversation = new Conversation(
             $this->getMessage()->getFrom()->getId(),
@@ -69,7 +70,6 @@ class GenericmessageCommand extends SystemCommand
             return $this->telegram->executeCommand($command);
         }
 
-        error_log("It works: " . __METHOD__ . "\n", 3, "/tmp/error.log");
         return Request::emptyResponse();
     }
 }
