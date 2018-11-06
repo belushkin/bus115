@@ -49,7 +49,7 @@ class Webhook
 
             // Handle telegram webhook request
             $an = $telegram->handle();
-            $this->app['monolog']->info(var_export($telegram->getCustomInput(), true));
+            $this->app['monolog']->info(var_export($telegram->getLastCommandResponse(), true));
 
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
             $this->app['monolog']->info($e->getMessage());
