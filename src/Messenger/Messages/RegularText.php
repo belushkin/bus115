@@ -75,7 +75,7 @@ class RegularText implements MessageInterface
         return $responses;
     }
 
-    private function getStopDirection($id)
+    public function getStopDirection($id)
     {
         $body = $this->app['app.eway']->handleStopInfo($id);
         if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
@@ -84,7 +84,7 @@ class RegularText implements MessageInterface
         return '-';
     }
 
-    private function getStopImage($id)
+    public function getStopImage($id)
     {
         $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
         $entity = $this->app['em']->getRepository('Bus115\Entity\Stop')->findOneBy(

@@ -41,6 +41,7 @@ use Bus115\Messenger\Transports\Transports;
 
 use Bus115\Telegram\SetWebhook;
 use Bus115\Telegram\Webhook;
+use Bus115\Telegram\Response as TelegramResponse;
 use Bus115\Eway\Eway;
 
 $app = new Application();
@@ -138,6 +139,10 @@ $app['app.postback'] = function ($app) {
 
 $app['app.google'] = function ($app) {
     return new Google($app);
+};
+
+$app['app.telegram.response'] = function ($app) {
+    return new TelegramResponse($app);
 };
 
 $app['app.telegram.setwebhook'] = function ($app) {
