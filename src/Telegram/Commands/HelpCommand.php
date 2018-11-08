@@ -2,48 +2,101 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use Longman\TelegramBot\Commands\Command;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Entities\Keyboard;
-use Longman\TelegramBot\Entities\Update;
 
 class HelpCommand extends UserCommand
 {
     protected $name = 'help';
-    protected $description = 'A command for help';
-    protected $usage = '/help';
-    protected $version = '1.0.0';
+    protected $description = 'Show bot commands help';
+    protected $usage = '/help or /help <command>';
+    protected $version = '1.3.0';
 
     public function execute()
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $user_id = $message->getFrom()->getId();
-        $text    = trim($message->getText(true));
+        $message     = $this->getMessage();
+        $chat_id     = $message->getChat()->getId();
+        $command_str = trim($message->getText(true));
 
-//        $keyboard = new Keyboard([
-//            ['text' => 'test', '' /* I DONT KNOW HOW TO TELL TO EXECUTE /test COMMAND HERE */]
-//        ]);
+        // Admin commands shouldn't be shown in group chats
+        $safe_to_show = $message->getChat()->isPrivateChat();
 
-        if ($text === '') {
-            $data['text']           = 'Choose something';
-            $data['chat_id']        = $chat_id;
-            $data['reply_markup']   = new Keyboard(['Need some help', 'Who am I?']);
+        $data = [
+            'chat_id'    => $chat_id,
+            'parse_mode' => 'markdown',
+        ];
+
+        list($all_commands, $user_commands, $admin_commands) = $this->getUserAdminCommands();
+
+        // If no command parameter is passed, show the list.
+        if ($command_str === '') {
+            $data['text'] = '*Commands List*:' . PHP_EOL;
+            foreach ($user_commands as $user_command) {
+                $data['text'] .= '/' . $user_command->getName() . ' - ' . $user_command->getDescription() . PHP_EOL;
+            }
+
+            if ($safe_to_show && count($admin_commands) > 0) {
+                $data['text'] .= PHP_EOL . '*Admin Commands List*:' . PHP_EOL;
+                foreach ($admin_commands as $admin_command) {
+                    $data['text'] .= '/' . $admin_command->getName() . ' - ' . $admin_command->getDescription() . PHP_EOL;
+                }
+            }
+
+            $data['text'] .= PHP_EOL . 'For exact command help type: /help <command>';
+
             return Request::sendMessage($data);
         }
 
-        $update = json_decode($this->update->toJson(), true);
-        if ($text === 'Need some help') {
-            $update['message']['text'] = '/test';
-            return (new TestCommand($this->telegram, new Update($update)))->preExecute();
+        $command_str = str_replace('/', '', $command_str);
+        if (isset($all_commands[$command_str]) && ($safe_to_show || !$all_commands[$command_str]->isAdminCommand())) {
+            $command      = $all_commands[$command_str];
+            $data['text'] = sprintf(
+                'Command: %s (v%s)' . PHP_EOL .
+                'Description: %s' . PHP_EOL .
+                'Usage: %s',
+                $command->getName(),
+                $command->getVersion(),
+                $command->getDescription(),
+                $command->getUsage()
+            );
+
+            return Request::sendMessage($data);
         }
 
-        $data = [
-            'chat_id' => $chat_id,
-            'text'    => 'Напиши назву вулиці де знаходиться зупинка, або напиши "де я".',
-        ];
+        $data['text'] = 'No help available: Command /' . $command_str . ' not found';
 
-        return Request::emptyResponse();
-        //return Request::sendMessage($data);
+        return Request::sendMessage($data);
+    }
+
+    /**
+     * Get all available User and Admin commands to display in the help list.
+     *
+     * @return Command[][]
+     */
+    protected function getUserAdminCommands()
+    {
+        // Only get enabled Admin and User commands that are allowed to be shown.
+        /** @var Command[] $commands */
+        $commands = array_filter($this->telegram->getCommandsList(), function ($command) {
+            /** @var Command $command */
+            return !$command->isSystemCommand() && $command->showInHelp() && $command->isEnabled();
+        });
+
+        $user_commands = array_filter($commands, function ($command) {
+            /** @var Command $command */
+            return $command->isUserCommand();
+        });
+
+        $admin_commands = array_filter($commands, function ($command) {
+            /** @var Command $command */
+            return $command->isAdminCommand();
+        });
+
+        ksort($commands);
+        ksort($user_commands);
+        ksort($admin_commands);
+
+        return [$commands, $user_commands, $admin_commands];
     }
 }
