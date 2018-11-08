@@ -219,7 +219,7 @@ $app->post('/api/v1/telegramwebhook', function (Request $request) use ($app) {
     $messageId  = $message['message_id'];
     $chatId     = $message['chat']['id'];
 
-    $app['monolog']->info(var_export($message, true));
+    $app['monolog']->info(var_export($request->request, true));
     if (is_int($messageId) && is_int($chatId)) {
         $app['app.telegram.webhook']->handle($messageId, $chatId);
     }
