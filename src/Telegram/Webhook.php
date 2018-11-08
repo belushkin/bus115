@@ -46,6 +46,10 @@ class Webhook
             $telegram->addCommandsPaths($commands_paths);
             // Requests Limiter (tries to prevent reaching Telegram API limits)
             $telegram->enableLimiter();
+
+            // Setting App inside Telegram application
+            $telegram->app = $this->app;
+
             // Handle telegram webhook request
             $telegram->handle();
 

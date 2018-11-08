@@ -24,6 +24,12 @@ class GenericmessageCommand extends SystemCommand
     {
         $text = trim($this->getMessage()->getText(true));
 
+        $this->telegram->app['monolog']->info(sprintf('TELEGRAM SEARCH WORKS, User entered Term: %s', $text));
+//        $term = $this->stripTerms($term);
+//        $this->app['monolog']->info(sprintf('Term after STRIP: %s', $term));
+
+        \Longman\TelegramBot\TelegramLog::debug('PASOS');
+
         $update = json_decode($this->update->toJson(), true);
 
         if ($text === 'Need some help') {
@@ -37,4 +43,6 @@ class GenericmessageCommand extends SystemCommand
 
         return Request::emptyResponse();
     }
+
+
 }

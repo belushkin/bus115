@@ -7,16 +7,16 @@ use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Entities\KeyboardButton;
 use Longman\TelegramBot\Request;
 
-class ExecCommand extends UserCommand
+class LocationCommand extends UserCommand
 {
-    protected $name = 'exec';
-    protected $description = 'Exec command';
-    protected $usage = '/exec';
+    protected $name = 'location';
+    protected $description = 'Share your location, works only on mobile devices';
+    protected $usage = '/location';
     protected $version = '1.0.0';
 
     public function execute()
     {
-        $button = new KeyboardButton('location');
+        $button = new KeyboardButton('Location');
         $button->setRequestLocation(true);
 
         $keyboard = new Keyboard($button);
@@ -24,7 +24,7 @@ class ExecCommand extends UserCommand
 
         $data = [
             'chat_id'      => $this->getMessage()->getChat()->getId(),
-            'text'         => 'Choose something',
+            'text'         => 'Choose location',
             'reply_markup' => $keyboard,
         ];
 

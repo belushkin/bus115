@@ -125,7 +125,7 @@ class RegularText implements MessageInterface
         return $responses;
     }
 
-    private function stripTerms($term)
+    public function stripTerms($term)
     {
         return trim(preg_replace('/\s+/', ' ',str_replace($this->terms,'', $term)));
     }
