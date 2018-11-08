@@ -19,10 +19,13 @@ class ExecCommand extends UserCommand
         $button = new KeyboardButton('location');
         $button->setRequestLocation(true);
 
+        $keyboard = new Keyboard($button);
+        $keyboard->setResizeKeyboard(true);
+
         $data = [
             'chat_id'      => $this->getMessage()->getChat()->getId(),
             'text'         => 'Choose something',
-            'reply_markup' => new Keyboard($button),
+            'reply_markup' => $keyboard,
         ];
 
         return Request::sendMessage($data);
