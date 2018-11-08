@@ -46,10 +46,8 @@ class Webhook
             $telegram->addCommandsPaths($commands_paths);
             // Requests Limiter (tries to prevent reaching Telegram API limits)
             $telegram->enableLimiter();
-
             // Handle telegram webhook request
-            $an = $telegram->handle();
-            $this->app['monolog']->info(var_export($telegram->getLastCommandResponse(), true));
+            $telegram->handle();
 
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
             $this->app['monolog']->info($e->getMessage());

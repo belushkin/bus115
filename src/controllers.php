@@ -219,8 +219,8 @@ $app->post('/api/v1/telegramwebhook', function (Request $request) use ($app) {
     $messageId  = $message['message_id'];
     $chatId     = $message['chat']['id'];
 
+    $app['monolog']->info(var_export($message, true));
     if (is_int($messageId) && is_int($chatId)) {
-        $app['monolog']->info('sssq sq  s');
         $app['app.telegram.webhook']->handle($messageId, $chatId);
     }
     return new Response('EVENT_RECEIVED');
