@@ -34,8 +34,8 @@ class HelpCommand extends UserCommand
 
         $update = json_decode($this->update->toJson(), true);
         if ($text === 'Need some help') {
-            $update['message']['text'] = '/help';
-            return (new HelpCommand($this->telegram, new Update($update)))->preExecute();
+            $update['message']['text'] = '/test';
+            return (new TestCommand($this->telegram, new Update($update)))->preExecute();
         }
 
         $data = [
