@@ -27,8 +27,8 @@ class GenericmessageCommand extends SystemCommand
 
     public function execute()
     {
-        $button = new InlineKeyboardButton('select');
-        $button->setCallbackData('999000');
+        $button = new InlineKeyboardButton(['text' => 'select', 'callback_data' => 999000]);
+        //$button->setCallbackData('999000');
 
         $keyboard = new InlineKeyboard($button);
         $keyboard->setResizeKeyboard(true);
