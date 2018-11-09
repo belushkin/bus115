@@ -27,31 +27,22 @@ class GenericmessageCommand extends SystemCommand
 
     public function execute()
     {
-        $button = new InlineKeyboardButton(['text' => 'select', 'callback_data' => 999000]);
-        //$button->setCallbackData('999000');
-
-        $keyboard = new InlineKeyboard($button);
-        $keyboard->setResizeKeyboard(true);
-
-        $data = [
-            'chat_id'       => $this->getMessage()->getChat()->getId(),
-            'latitude'      =>  '50.44033432006836',
-            'longitude'     =>  '30.619548797607422',
-            'title'         => 'Venue title',
-            'address'       => 'Venue address',
-            'reply_markup'  => $keyboard,
-        ];
-
-        Request::sendVenue($data);
-        Request::sendVenue($data);
-        return true;
-//        $location = new Location();
-//        $location->s
-//        $venue = new Venue();
+//
+//        $data = [
+//            'chat_id'       => $this->getMessage()->getChat()->getId(),
+//            'latitude'      =>  '50.44033432006836',
+//            'longitude'     =>  '30.619548797607422',
+//            'title'         => 'Venue title',
+//            'address'       => 'Venue address',
+//            'reply_markup'  => $keyboard,
+//        ];
+//
+//        Request::sendVenue($data);
+//        Request::sendVenue($data);
+//        return true;
 
 
-
-        $update = json_decode($this->update->toJson(), true);
+//        $update = json_decode($this->update->toJson(), true);
 
         $term = trim($this->getMessage()->getText(true));
 
@@ -59,42 +50,40 @@ class GenericmessageCommand extends SystemCommand
         $term = $this->telegram->app['app.regular_text']->stripTerms($term);
         \Longman\TelegramBot\TelegramLog::debug(sprintf('Term after STRIP: %s', $term));
 
-        if (!empty($term) && strlen($term) >= 4) {
-            $body       = $this->telegram->app['app.eway']->getPlacesByName($term);
-            if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
-                $i = 0;
-                $elements   = [];
-                $responses  = [];
-                foreach ($body->item as $item) {
-                    $elements[] = [
-                        'title'     => $item->title,
-                        'subtitle'  => 'В напрямку ' . $this->telegram->app['app.regular_text']->getStopDirection($item->id),
-                        'image_url' => $this->telegram->app['app.regular_text']->getStopImage($item->id),
-//                        'buttons' => [
-//                            [
-//                                'type' => 'postback',
-//                                'title' => 'Вибрати цю зупинку',
-//                                'payload' => $item->id
-//                            ]
-//                        ]
-                    ];
-                    $i++;
-                    if ($i % 10 == 0) {
-                        $responses[] = $this->telegram->app['app.telegram.response']->generateGenericResponse($elements);
-                        $elements = [];
-                    }
-                }
-                $responses[] = $this->telegram->app['app.telegram.response']->generateGenericResponse($elements);
-                return $responses;
-            } else {
-                try {
-                    $results = $this->telegram->app['app.api']->getGoogleCoordinates($term);
-                } catch (\InvalidArgumentException $e) {
-                    $results = [];
-                }
-                return $this->getStopsByGoogleCoordinates($results);
-            }
+        if (empty($term) || strlen($term) < 4) {
+            $data = [
+                'chat_id' => $this->getMessage()->getChat()->getId(),
+                'text'    => 'Введіть запит більше 4 символів',
+            ];
+            return Request::sendMessage($data);
+        }
 
+        $body = $this->telegram->app['app.eway']->getPlacesByName($term);
+
+        if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
+            $elements  = [];
+            foreach ($body->item as $item) {
+                $button = new InlineKeyboardButton(['text' => 'select', 'callback_data' => 'stop_' . $item->id]);
+                $keyboard = new InlineKeyboard($button);
+                $keyboard->setResizeKeyboard(true);
+
+                $elements[] = [
+                    'chat_id'       =>  $this->getMessage()->getChat()->getId(),
+                    'latitude'      =>  $item->lat,
+                    'longitude'     =>  $item->lng,
+                    'title'         =>  $item->title,
+                    'address'       =>  'В напрямку ' . $this->telegram->app['app.regular_text']->getStopDirection($item->id),
+                    'reply_markup'  =>  $keyboard
+                ];
+            }
+        } else {
+            try {
+                \Longman\TelegramBot\TelegramLog::debug(sprintf('Telegram Google works'));
+                $results = $this->telegram->app['app.api']->getGoogleCoordinates($term);
+            } catch (\InvalidArgumentException $e) {
+                $results = [];
+            }
+            return $this->getStopsByGoogleCoordinates($results);
         }
 
 //
@@ -113,32 +102,18 @@ class GenericmessageCommand extends SystemCommand
 
     private function getStopsByGoogleCoordinates($results)
     {
-//        if (isset($results->results[0]->geometry->location)) {
-//            $location = $results->results[0]->geometry->location;
-//            $this->app['monolog']->info(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($location)));
-//
-//            $attachment = [
-//                'payload' => [
-//                    'coordinates' => [
-//                        'lat' => $location->lat,
-//                        'long' => $location->lng
-//                    ]
-//                ]
-//            ];
-//            return $this->app['app.stops']->text($attachment);
-//        }
-//
-//        $responses[] = [
-//            'text' => "Нічого не знайдено, для допомоги надрукуй help",
-//            'quick_replies' => [
-//                [
-//                    'content_type' => 'location',
-//
-//                ]
-//            ]
-//        ];
-//        return $responses;
-        return [];
+        if (isset($results->results[0]->geometry->location)) {
+            $location = $results->results[0]->geometry->location;
+            \Longman\TelegramBot\TelegramLog::debug(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($location)));
+
+            return $this->telegram->app['app.telegram.stops']->text($location->lat, $location->lng);
+        }
+
+        $data = [
+            'chat_id' => $this->getMessage()->getChat()->getId(),
+            'text'    => 'Нічого не знайдено, для допомоги надрукуй help',
+        ];
+        return Request::sendMessage($data);
     }
 
 }
