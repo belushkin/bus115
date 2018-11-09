@@ -61,7 +61,7 @@ class Stops implements AttachmentInterface
         return $responses;
     }
 
-    private function getStopDirection($id)
+    public function getStopDirection($id)
     {
         $body = $this->app['app.eway']->handleStopInfo($id);
         if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {

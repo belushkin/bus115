@@ -3,15 +3,30 @@
 namespace Bus115\Telegram\Stops;
 
 use Silex\Application;
+use Longman\TelegramBot\Entities\InlineKeyboardButton;
+use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Request;
 
 class Stops
 {
 
     private $app;
+    private $message;
 
     public function __construct(Application $app)
     {
         $this->app = $app;
+    }
+
+    public function setMessage($message)
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function getMessage()
+    {
+        return $this->message;
     }
 
     public function text($lat, $lng)
@@ -19,63 +34,28 @@ class Stops
         $body       = $this->app['app.eway']->getStopsNearPoint($lat, $lng);
         if (isset($body->stop) && is_array($body->stop) && !empty($body->stop)) {
             $elements   = [];
-            $responses  = [];
-            $i = 0;
             foreach ($body->stop as $stop) {
+                $button = new InlineKeyboardButton(['text' => 'select', 'callback_data' => 'stop_' . $stop->id]);
+                $keyboard = new InlineKeyboard($button);
+                $keyboard->setResizeKeyboard(true);
+
                 $elements[] = [
-                    'title' => $stop->title,
-                    'subtitle' => 'В напрямку ' . $this->getStopDirection($stop->id),
-                    'image_url' => $this->getStopImage($stop->id),
-                    'buttons' => [
-                        [
-                            'type' => 'postback',
-                            'title' => 'Вибрати цю зупинку',
-                            'payload' => $stop->id
-                        ]
-                    ]
+                    'chat_id'       =>  $this->getMessage()->getChat()->getId(),
+                    'latitude'      =>  $stop->lat,
+                    'longitude'     =>  $stop->lng,
+                    'title'         =>  $stop->title,
+                    'address'       =>  'В напрямку ' . $this->app['app.stops']->getStopDirection($stop->id),
+                    'reply_markup'  =>  $keyboard
                 ];
-                $i++;
-                if ($i % 10 == 0) {
-                    $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
-                    $elements = [];
-                }
             }
-            $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
-            return $responses;
+            return $this->app['app.telegram.response']->venues($elements);
         }
 
-        $responses[] = [
-            'text' => "Нічого не знайдено, для допомоги надрукуй help",
-            'quick_replies' => [
-                [
-                    'content_type' => 'location',
-
-                ]
-            ]
+        $data = [
+            'chat_id' => $this->getMessage()->getChat()->getId(),
+            'text'    => 'Нічого не знайдено, для допомоги надрукуй help',
         ];
-
-        return $responses;
-    }
-
-    private function getStopDirection($id)
-    {
-        $body = $this->app['app.eway']->handleStopInfo($id);
-        if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
-            return $body->routes[0]->directionTitle . ', (' . $body->routes[0]->transportName . ')';
-        }
-        return '-';
-    }
-
-    private function getStopImage($id)
-    {
-        $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
-        $entity = $this->app['em']->getRepository('Bus115\Entity\Stop')->findOneBy(
-            array('eway_id' => $id)
-        );
-        if ($entity) {
-            $imageUrl = "https://bus115.kiev.ua/images/stops/{$entity->getName()}";
-        }
-        return $imageUrl;
+        return Request::sendMessage($data);
     }
 
 }

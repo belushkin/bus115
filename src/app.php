@@ -41,6 +41,7 @@ use Bus115\Messenger\Transports\Transports;
 
 use Bus115\Telegram\SetWebhook;
 use Bus115\Telegram\Webhook;
+use Bus115\Telegram\Places\Places as TelegramPlaces;
 use Bus115\Telegram\Stops\Stops as TelegramStops;
 use Bus115\Telegram\Transports\Transports as TelegramTransports;
 use Bus115\Telegram\Response as TelegramResponse;
@@ -149,6 +150,10 @@ $app['app.telegram.response'] = function ($app) {
 
 $app['app.telegram.setwebhook'] = function ($app) {
     return new SetWebhook($app);
+};
+
+$app['app.telegram.places'] = function ($app) {
+    return new TelegramPlaces($app);
 };
 
 $app['app.telegram.stops'] = function ($app) {

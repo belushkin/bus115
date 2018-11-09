@@ -3,6 +3,7 @@
 namespace Bus115\Telegram;
 
 use Silex\Application;
+use Longman\TelegramBot\Request;
 
 class Response
 {
@@ -14,23 +15,13 @@ class Response
         $this->app = $app;
     }
 
-    public function generateGenericResponse($elements = [], $chat_id)
+    public function venues($elements = [])
     {
-        $data = [
-            'chat_id'    => $chat_id,
-            'parse_mode' => 'markdown',
-        ];
-
-        $response = [
-            'attachment' => [
-                'type' => 'template',
-                'payload' => [
-                    'template_type' => 'generic',
-                    'elements' => $elements
-                ]
-            ]
-        ];
-        return $response;
+        $result = null;
+        foreach ($elements as $element) {
+            $result = Request::sendVenue($element);
+        }
+        return $result;
     }
 
 }
