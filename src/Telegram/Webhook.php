@@ -14,7 +14,7 @@ class Webhook
         $this->app = $app;
     }
 
-    public function handle($messageId, $chatId)
+    public function handle()
     {
         $bot_api_key  = $this->app['eway']['telegram_token'];
         $bot_username = 'Bus115Bot';
