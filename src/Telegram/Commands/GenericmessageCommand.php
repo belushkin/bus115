@@ -5,7 +5,10 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Commands\UserCommands\HelpCommand;
 use Longman\TelegramBot\Commands\UserCommands\WhoamiCommand;
+use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\Update;
+use Longman\TelegramBot\Entities\Location;
+use Longman\TelegramBot\Entities\Venue;
 use Longman\TelegramBot\Request;
 
 class GenericmessageCommand extends SystemCommand
@@ -22,7 +25,30 @@ class GenericmessageCommand extends SystemCommand
 
     public function execute()
     {
-        return Request::emptyResponse();
+//        $message = new Message();
+//        $button = new KeyboardButton('Location');
+//        $button->setRequestLocation(true);
+//
+//        $keyboard = new Keyboard($button);
+//        $keyboard->setResizeKeyboard(true);
+//
+        $data = [
+            'chat_id'       => $this->getMessage()->getChat()->getId(),
+            'latitude'      =>  '50.44033432006836',
+            'longitude'     =>  '30.619548797607422',
+            'title'         => 'Venue title',
+            'address'       => 'Venue address',
+            //'reply_markup'  => $keyboard,
+        ];
+
+        return Request::sendVenue($data);
+
+//        $location = new Location();
+//        $location->s
+//        $venue = new Venue();
+
+
+
         $update = json_decode($this->update->toJson(), true);
 
         $term = trim($this->getMessage()->getText(true));
