@@ -35,7 +35,7 @@ class Stops
         if (isset($body->stop) && is_array($body->stop) && !empty($body->stop)) {
             $elements   = [];
             foreach ($body->stop as $stop) {
-                $button = new InlineKeyboardButton(['text' => 'select', 'callback_data' => 'stop_' . $stop->id]);
+                $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => 'stop_' . $stop->id]);
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 
@@ -53,7 +53,7 @@ class Stops
 
         $data = [
             'chat_id' => $this->getMessage()->getChat()->getId(),
-            'text'    => 'Нічого не знайдено, для допомоги надрукуй help',
+            'text'    => 'Нічого не знайдено, для допомоги надрукуй /help',
         ];
         return Request::sendMessage($data);
     }

@@ -56,12 +56,10 @@ class Places
     {
         $body = $this->app['app.eway']->getPlacesByName($term);
 
-        \Longman\TelegramBot\TelegramLog::debug(sprintf('Started searchingg'));
         if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
-            \Longman\TelegramBot\TelegramLog::debug(sprintf('Started iterating'));
             $elements  = [];
             foreach ($body->item as $item) {
-                $button = new InlineKeyboardButton(['text' => 'select', 'callback_data' => 'stop_' . $item->id]);
+                $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => 'stop_' . $item->id]);
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 
@@ -74,7 +72,6 @@ class Places
                     'reply_markup'  =>  $keyboard
                 ];
             }
-            \Longman\TelegramBot\TelegramLog::debug(sprintf('Started returning'));
             return $this->app['app.telegram.response']->venues($elements);
         } else {
             try {
@@ -100,7 +97,7 @@ class Places
 
         $data = [
             'chat_id' => $this->getMessage()->getChat()->getId(),
-            'text'    => 'Нічого не знайдено, для допомоги надрукуй help',
+            'text'    => 'Нічого не знайдено, для допомоги надрукуй /help',
         ];
         return Request::sendMessage($data);
     }

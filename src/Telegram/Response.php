@@ -17,10 +17,18 @@ class Response
 
     public function venues($elements = [])
     {
-        \Longman\TelegramBot\TelegramLog::debug(sprintf('Started SEERRAPING'));
         $result = null;
         foreach ($elements as $element) {
             $result = Request::sendVenue($element);
+        }
+        return $result;
+    }
+
+    public function photos($elements = [])
+    {
+        $result = null;
+        foreach ($elements as $element) {
+            $result = Request::sendPhoto($element);
         }
         return $result;
     }
