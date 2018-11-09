@@ -44,19 +44,9 @@ class Transports
             $keyboard->setResizeKeyboard(true);
             $elements[] = [
                 'chat_id'       =>  $this->getMessage()->getChat()->getId(),
-                'caption'       =>  $route->transportName . ' №' . $route->title,
+                'caption'       =>  $route->transportName . ' №' . $route->title . ', в напрямку: ' . $route->directionTitle,
                 'photo'         => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
                 'reply_markup'  =>  $keyboard
-
-//                'title'     => $route->transportName . ' №' . $route->title,
-//                'subtitle'  => 'В напрямку:' . $route->directionTitle,
-//                'image_url' => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
-//                'buttons' => [
-//                    [
-//                        'type' => 'postback',
-//                        'title' => 'Оновити час прибуття',
-//                        'payload' => $id . '_'. $route->id
-//                    ]
             ];
             $cache[] = $route->id;
         }
