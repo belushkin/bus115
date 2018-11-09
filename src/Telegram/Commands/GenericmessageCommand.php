@@ -9,6 +9,8 @@ use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Entities\Location;
 use Longman\TelegramBot\Entities\Venue;
+use Longman\TelegramBot\Entities\InlineKeyboardButton;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 
 class GenericmessageCommand extends SystemCommand
@@ -25,20 +27,19 @@ class GenericmessageCommand extends SystemCommand
 
     public function execute()
     {
-//        $message = new Message();
-//        $button = new KeyboardButton('Location');
-//        $button->setRequestLocation(true);
-//
-//        $keyboard = new Keyboard($button);
-//        $keyboard->setResizeKeyboard(true);
-//
+        $button = new InlineKeyboardButton('select');
+        $button->setCallbackData('999000');
+
+        $keyboard = new InlineKeyboard($button);
+        $keyboard->setResizeKeyboard(true);
+
         $data = [
             'chat_id'       => $this->getMessage()->getChat()->getId(),
             'latitude'      =>  '50.44033432006836',
             'longitude'     =>  '30.619548797607422',
             'title'         => 'Venue title',
             'address'       => 'Venue address',
-            //'reply_markup'  => $keyboard,
+            'reply_markup'  => $keyboard,
         ];
 
         return Request::sendVenue($data);
