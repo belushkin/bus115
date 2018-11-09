@@ -24,6 +24,11 @@ class CallbackqueryCommand extends SystemCommand
             'cache_time'        => 5,
         ];
 
-        return Request::answerCallbackQuery($data);
+        Request::answerCallbackQuery($data);
+        $data = [
+            'chat_id' => $this->getCallbackQuery()->getMessage()->getChat()->getId(),
+            'text'    => 'Нічого не знайдено, для допомоги надрукуй /help',
+        ];
+        return Request::sendMessage($data);
     }
 }
