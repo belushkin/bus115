@@ -42,7 +42,7 @@ class GenericmessageCommand extends SystemCommand
             'reply_markup'  => $keyboard,
         ];
 
-        return Request::sendVenue($data);
+        return Request::sendVenue([$data, $data]);
 
 //        $location = new Location();
 //        $location->s
