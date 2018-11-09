@@ -17,6 +17,7 @@ class Response
 
     public function venues($elements = [])
     {
+        \Longman\TelegramBot\TelegramLog::debug(sprintf('Started SEERRAPING'));
         $result = null;
         foreach ($elements as $element) {
             $result = Request::sendVenue($element);

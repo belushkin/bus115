@@ -56,7 +56,9 @@ class Places
     {
         $body = $this->app['app.eway']->getPlacesByName($term);
 
+        \Longman\TelegramBot\TelegramLog::debug(sprintf('Started searchingg'));
         if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
+            \Longman\TelegramBot\TelegramLog::debug(sprintf('Started iterating'));
             $elements  = [];
             foreach ($body->item as $item) {
                 $button = new InlineKeyboardButton(['text' => 'select', 'callback_data' => 'stop_' . $item->id]);
@@ -72,6 +74,7 @@ class Places
                     'reply_markup'  =>  $keyboard
                 ];
             }
+            \Longman\TelegramBot\TelegramLog::debug(sprintf('Started returning'));
             return $this->app['app.telegram.response']->venues($elements);
         } else {
             try {
