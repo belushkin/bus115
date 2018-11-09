@@ -26,6 +26,7 @@ class Response
 
     public function photos($elements = [])
     {
+        \Longman\TelegramBot\TelegramLog::debug(var_export($elements, true));
         $result = null;
         foreach ($elements as $element) {
             $result = Request::sendPhoto($element);
