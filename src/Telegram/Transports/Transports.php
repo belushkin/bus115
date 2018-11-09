@@ -45,7 +45,7 @@ class Transports
             $elements[] = [
                 'chat_id'       =>  $this->getMessage()->getChat()->getId(),
                 'caption'       =>  $route->transportName . ' №' . $route->title,
-                'image_url'     => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
+                'photo'         => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
                 'reply_markup'  =>  $keyboard
 
 //                'title'     => $route->transportName . ' №' . $route->title,
