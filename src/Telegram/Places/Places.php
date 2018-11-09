@@ -3,12 +3,6 @@
 namespace Bus115\Telegram\Places;
 
 use Silex\Application;
-use Longman\TelegramBot\Commands\UserCommands\HelpCommand;
-use Longman\TelegramBot\Commands\UserCommands\WhoamiCommand;
-use Longman\TelegramBot\Entities\Message;
-use Longman\TelegramBot\Entities\Update;
-use Longman\TelegramBot\Entities\Location;
-use Longman\TelegramBot\Entities\Venue;
 use Longman\TelegramBot\Entities\InlineKeyboardButton;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
@@ -41,7 +35,14 @@ class Places
         $term = $this->app['app.regular_text']->stripTerms($term);
         \Longman\TelegramBot\TelegramLog::debug(sprintf('Term after STRIP: %s', $term));
 
-        if (empty($term) || strlen($term) < 4) {
+        if ($this->getMessage()->getLocation()) {
+            return $this->app['app.telegram.stops']->
+            setMessage($this->getMessage())->
+            text(
+                $this->getMessage()->getLocation()->getLatitude(),
+                $this->getMessage()->getLocation()->getLongitude()
+            );
+        } elseif (empty($term) || strlen($term) < 4) {
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
                 'text'    => 'Введіть запит більше 4 символів',
