@@ -19,15 +19,22 @@ class CallbackqueryCommand extends SystemCommand
 
         $data = [
             'callback_query_id' => $callback_query_id,
-            'text'              => 'Hello World!',
-            'show_alert'        => true,
+            'text'              => $callback_query->getMessage()->getVenue()->getTitle(),
             'cache_time'        => 5,
         ];
 
         Request::answerCallbackQuery($data);
+
+        $params = explode('_', $callback_data);
+        if ((isset($params[0]) && $params[0] == 'stop') && (isset($params[1]) && intval($params[1]) != 0)) {
+            return $this->telegram->app['app.telegram.transports']->
+            setMessage($this->$callback_query->getMessage())->
+            text(intval($params[1]));
+        }
+
         $data = [
             'chat_id' => $this->getCallbackQuery()->getMessage()->getChat()->getId(),
-            'text'    => 'Нічого не знайдено, для допомоги надрукуй /help',
+            'text'    => 'Маршрутів не знайдено, для допомоги надрукуй /help',
         ];
         return Request::sendMessage($data);
     }

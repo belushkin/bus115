@@ -19,26 +19,11 @@ class GenericmessageCommand extends SystemCommand
 
     public function execute()
     {
-        \Longman\TelegramBot\TelegramLog::debug("\n\n\n\n\n\n\n\n\n\n\n\n\nNNNNNNNNNN processing\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        if ($this->getCallbackQuery()) {
-            \Longman\TelegramBot\TelegramLog::debug(sprintf('Callback processing'));
-            $data = $this->getCallbackQuery()->getData();
+        $term = trim($this->getMessage()->getText(true));
 
-            // Handle callback queries
-            $params = explode('_', $data);
-            if ((isset($params[0]) && $params[0] == 'stop') && (isset($params[1]) && intval($params[1]) != 0)) {
-                $this->telegram->app['app.telegram.transports']->
-                setMessage($this->getMessage())->
-                text(intval($params[1]));
-            }
-        } else {
-            \Longman\TelegramBot\TelegramLog::debug(sprintf('PPPPPPPP processing'));
-            $term = trim($this->getMessage()->getText(true));
-
-            $this->telegram->app['app.telegram.places']->
-            setMessage($this->getMessage())->
-            text($term);
-        }
+        $this->telegram->app['app.telegram.places']->
+        setMessage($this->getMessage())->
+        text($term);
     }
 
 }
