@@ -19,7 +19,7 @@ class GenericmessageCommand extends SystemCommand
 
     public function execute()
     {
-        \Longman\TelegramBot\TelegramLog::debug(sprintf('NNNNNNNNNN processing'));
+        \Longman\TelegramBot\TelegramLog::debug("\n\n\n\n\n\n\n\n\n\n\n\n\nNNNNNNNNNN processing\n\n\n\n\n\n\n\n\n\n\n\n\n");
         if ($this->getCallbackQuery()) {
             \Longman\TelegramBot\TelegramLog::debug(sprintf('Callback processing'));
             $data = $this->getCallbackQuery()->getData();
