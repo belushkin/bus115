@@ -19,6 +19,7 @@ class GenericmessageCommand extends SystemCommand
 
     public function execute()
     {
+        \Longman\TelegramBot\TelegramLog::debug(sprintf('NNNNNNNNNN processing'));
         if ($this->getCallbackQuery()) {
             \Longman\TelegramBot\TelegramLog::debug(sprintf('Callback processing'));
             $data = $this->getCallbackQuery()->getData();
@@ -31,6 +32,7 @@ class GenericmessageCommand extends SystemCommand
                 text(intval($params[1]));
             }
         } else {
+            \Longman\TelegramBot\TelegramLog::debug(sprintf('PPPPPPPP processing'));
             $term = trim($this->getMessage()->getText(true));
 
             $this->telegram->app['app.telegram.places']->
