@@ -44,6 +44,7 @@ use Bus115\Telegram\Webhook;
 use Bus115\Telegram\Places\Places as TelegramPlaces;
 use Bus115\Telegram\Stops\Stops as TelegramStops;
 use Bus115\Telegram\Transports\Transports as TelegramTransports;
+use Bus115\Telegram\Information\ArrivalMessage as TelegramArrivalMessage;
 use Bus115\Telegram\Response as TelegramResponse;
 use Bus115\Eway\Eway;
 
@@ -162,6 +163,10 @@ $app['app.telegram.stops'] = function ($app) {
 
 $app['app.telegram.transports'] = function ($app) {
     return new TelegramTransports($app);
+};
+
+$app['app.telegram.arrival'] = function ($app) {
+    return new TelegramArrivalMessage($app);
 };
 
 $app['app.telegram.webhook'] = function ($app) {

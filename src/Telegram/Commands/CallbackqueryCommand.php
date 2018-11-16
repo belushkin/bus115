@@ -17,12 +17,15 @@ class CallbackqueryCommand extends SystemCommand
         $callback_query_id = $callback_query->getId();
         $callback_data     = $callback_query->getData();
 
+        $caption    = $callback_query->getMessage()->getCaption();
+        $venueTitle = $callback_query->getMessage()->getVenue()->getTitle();
+        $text = ($caption) ? $caption : $venueTitle;
+
         $data = [
             'callback_query_id' => $callback_query_id,
-            'text'              => $callback_query->getMessage()->getVenue()->getTitle(),
+            'text'              => $text,
             'cache_time'        => 5,
         ];
-
         Request::answerCallbackQuery($data);
 
         $params = explode('_', $callback_data);
@@ -30,6 +33,10 @@ class CallbackqueryCommand extends SystemCommand
             return $this->telegram->app['app.telegram.transports']->
             setMessage($callback_query->getMessage())->
             text(intval($params[1]));
+        } elseif ((isset($params[0]) && intval($params[0]) != 0) && (isset($params[1]) && intval($params[1]) != 0)) {
+            return $this->telegram->app['app.telegram.arrival']->
+            setMessage($callback_query->getMessage())->
+            text(intval($params[0]), intval($params[1]));
         }
 
         $data = [
