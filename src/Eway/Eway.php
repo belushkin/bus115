@@ -27,6 +27,7 @@ class Eway
                 'city'      => $this->app['eway']['city'],
                 'lat'       => $lat,
                 'lng'       => $lng,
+                'r'         => 400
             ]
         ]);
 
