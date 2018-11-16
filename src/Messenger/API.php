@@ -41,20 +41,11 @@ class API
     public function getGoogleCoordinates($string)
     {
         $url = "https://maps.googleapis.com/maps/api/geocode/json?address=".urlencode($string)."&key=".$this->app['eway']['maps_key'];
-
-        $this->app['monolog']->info(sprintf('Request Google URL, %s', $url));
         $ch = curl_init($url);
-
         curl_setopt($ch, CURLOPT_URL,$url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $result = curl_exec($ch);
-        $this->app['monolog']->info(sprintf('Request Google RESULT, %s', $result));
-        $host= gethostname();
-        $ip = gethostbyname($host);
-
-        $this->app['monolog']->info(sprintf('Request Google HOST, %s', $host));
-        $this->app['monolog']->info(sprintf('Request Google IP, %s', $ip));
         return \GuzzleHttp\json_decode($result);
     }
 
