@@ -18,8 +18,7 @@ class CallbackqueryCommand extends SystemCommand
         $callback_data     = $callback_query->getData();
 
         $caption    = $callback_query->getMessage()->getCaption();
-        $venueTitle = $callback_query->getMessage()->getVenue()->getTitle();
-        $text = ($caption) ? $caption : $venueTitle;
+        $text = ($caption) ? $caption : $callback_query->getMessage()->getVenue()->getTitle();
 
         $data = [
             'callback_query_id' => $callback_query_id,
