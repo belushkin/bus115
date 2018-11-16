@@ -40,7 +40,7 @@ class API
 
     public function getGoogleCoordinates($string)
     {
-        $url = "https://maps.google.com/maps/api/geocode/json?key=".$this->app['eway']['maps_key']."&address=" . htmlentities($string);
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?address=".htmlentities($string)."&key=".$this->app['eway']['maps_key'];
 
         $this->app['monolog']->info(sprintf('Request Google URL, %s', $url));
         $ch = curl_init($url);
