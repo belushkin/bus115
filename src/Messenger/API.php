@@ -47,9 +47,16 @@ class API
 
         curl_setopt($ch, CURLOPT_URL,$url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+        $verbose = fopen('php://temp', 'w+');
+        curl_setopt($ch, CURLOPT_STDERR, $verbose);
 
         $result = curl_exec($ch);
+        rewind($verbose);
+        $verboseLog = stream_get_contents($verbose);
+
         $this->app['monolog']->info(sprintf('Request Google RESULT, %s', $result));
+        $this->app['monolog']->info(sprintf('Request Google VERBOSE, %s', $verboseLog));
         return \GuzzleHttp\json_decode($result);
     }
 
