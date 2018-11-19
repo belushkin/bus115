@@ -1,25 +1,25 @@
-#Synopsis 
+# Synopsis 
 This is the application for traffic control for Kyiv users
 
-#Installation
+# Installation
 ```bash
 ./toolbox.sh up --on-production
 ```
 
-#Useful commands
+# Useful commands
 ```bash
 ./vendor/bin/doctrine-migrations generate
 vendor/bin/doctrine orm:schema-tool:update --force --dump-sql
 ```
-###Tests
+### Tests
 ```bash
 ./toolbox.sh tests
 ```
-###CLI mode
+### CLI mode
 ```bash
 ./toolbox.sh exec php console.php GET "/api/v1/getstops?lat=4711&lng=4567"
 ```
-###APIDOC
+### APIDOC
 ```bash
 ./toolbox.sh apidoc
 ```
@@ -38,7 +38,7 @@ In order to check certificate:
 ~/workspace/haproxy/private (master) $ sudo ssl-cert-check -c bus115.kiev.ua.pem
 ```
 
-###Portainer
+### Portainer
 ```bash
 docker volume create portainer_data
 docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
@@ -47,6 +47,6 @@ docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v porta
 ### CircleCI
 https://circleci.com/gh/belushkin
 
-##Contributors @belushkin
+## Contributors @belushkin
 
-##License MIT License
+## License MIT License
