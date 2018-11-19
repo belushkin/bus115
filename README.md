@@ -5,11 +5,11 @@ This is the application for traffic control for Kyiv users
 ```bash
 ./toolbox.sh up --on-production
 ```
-
 # Useful commands
 ```bash
 ./vendor/bin/doctrine-migrations generate
 vendor/bin/doctrine orm:schema-tool:update --force --dump-sql
+./toolbox.sh logs
 ```
 ### Tests
 ```bash
@@ -23,7 +23,6 @@ vendor/bin/doctrine orm:schema-tool:update --force --dump-sql
 ```bash
 ./toolbox.sh apidoc
 ```
-
 ### SSL CERTIFICATE
 ```bash
 ~/workspace $ sudo http-server ssl -p 80
@@ -47,6 +46,7 @@ docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v porta
 ### CircleCI
 https://circleci.com/gh/belushkin
 
-## Contributors @belushkin
+## Contributors 
+@belushkin
 
 ## License MIT License
