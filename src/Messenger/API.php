@@ -27,11 +27,11 @@ class API
 
         $ch = curl_init($url);
 
-        if ($requestBody['message']['text']) {
-            $this->app['monolog']->info(sprintf('Sent message back: %s', $response['text']));
-        } else {
-            $this->app['monolog']->info(sprintf('Sent attachment back, %s', \GuzzleHttp\json_encode($requestBody)));
-        }
+//        if ($requestBody['message']['text']) {
+//            $this->app['monolog']->info(sprintf('Sent message back: %s', $response['text']));
+//        } else {
+//            $this->app['monolog']->info(sprintf('Sent attachment back, %s', \GuzzleHttp\json_encode($requestBody)));
+//        }
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, \GuzzleHttp\json_encode($requestBody));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -52,6 +52,7 @@ class API
     public function witai($string)
     {
         $url = "https://api.wit.ai/message?q=".urlencode($string);
+        $this->app['monolog']->info(sprintf('URLE: %s', $url));
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_URL,$url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
