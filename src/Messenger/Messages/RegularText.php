@@ -31,9 +31,11 @@ class RegularText implements MessageInterface
                 $elements   = [];
                 $responses  = [];
                 foreach ($body->item as $item) {
+                    $direction = $this->getStopDirection($item->id);
+                    if ($direction == '-') continue;
                     $elements[] = [
                         'title'     => $item->title,
-                        'subtitle'  => 'В напрямку ' . $this->getStopDirection($item->id),
+                        'subtitle'  => 'В напрямку ' . $direction,
                         'image_url' => $this->getStopImage($item->id),
                         'buttons' => [
                             [

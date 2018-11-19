@@ -26,9 +26,11 @@ class Stops implements AttachmentInterface
             $responses  = [];
             $i = 0;
             foreach ($body->stop as $stop) {
+                $direction = $this->getStopDirection($stop->id);
+                if ($direction == '-') continue;
                 $elements[] = [
                     'title' => $stop->title,
-                    'subtitle' => 'В напрямку ' . $this->getStopDirection($stop->id),
+                    'subtitle' => 'В напрямку ' . $direction,
                     'image_url' => $this->getStopImage($stop->id),
                     'buttons' => [
                         [

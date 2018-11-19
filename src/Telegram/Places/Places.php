@@ -64,12 +64,15 @@ class Places
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 
+                $direction = $this->app['app.regular_text']->getStopDirection($item->id);
+                if ($direction == '-') continue;
+
                 $elements[] = [
                     'chat_id'       =>  $this->getMessage()->getChat()->getId(),
                     'latitude'      =>  $item->lat,
                     'longitude'     =>  $item->lng,
                     'title'         =>  $item->title,
-                    'address'       =>  'В напрямку ' . $this->app['app.regular_text']->getStopDirection($item->id),
+                    'address'       =>  'В напрямку ' . $direction,
                     'reply_markup'  =>  $keyboard
                 ];
             }
