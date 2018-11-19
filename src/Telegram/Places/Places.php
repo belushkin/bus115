@@ -95,12 +95,8 @@ class Places
                     return Request::sendMessage($data);
                 } else if ($intent['value'] == 'location_ask' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
                     return $this->getTelegram()->executeCommand('location');
-//                    $this->getTelegram()->
-//                    $command = new LocationCommand($this->getTelegram());
-//                    return $command->execute();
                 } else if ($intent['value'] == 'first_hand_shake' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
-                    $command = new LocationCommand($this->getTelegram());
-                    return $command->execute();
+                    return $this->getTelegram()->executeCommand('location');
                 } else {
                     return $this->searchPlaces($term);
                 }
