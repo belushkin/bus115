@@ -49,4 +49,16 @@ class API
         return \GuzzleHttp\json_decode($result);
     }
 
+    public function witai($string)
+    {
+        $url = "https://api.wit.ai/message?q=".urlencode($string);
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer '.$this->app['eway']['wit_server_token']));
+
+        $result = curl_exec($ch);
+        return \GuzzleHttp\json_decode($result);
+    }
+
 }
