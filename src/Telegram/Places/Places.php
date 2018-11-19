@@ -14,6 +14,7 @@ class Places
 
     private $app;
     private $message;
+    private $telegram;
 
     public function __construct(Application $app)
     {
@@ -29,6 +30,17 @@ class Places
     public function getMessage()
     {
         return $this->message;
+    }
+
+    public function setTelegram($telegram)
+    {
+        $this->telegram = $telegram;
+        return $this;
+    }
+
+    public function getTelegram()
+    {
+        return $this->telegram;
     }
 
     public function text($term)
@@ -82,10 +94,10 @@ class Places
                     ];
                     return Request::sendMessage($data);
                 } else if ($intent['value'] == 'location_ask' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
-                    $command = new LocationCommand($this->getMessage()->getTelegram());
+                    $command = new LocationCommand($this->getTelegram());
                     return $command->execute();
                 } else if ($intent['value'] == 'first_hand_shake' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
-                    $command = new LocationCommand($this->getMessage()->getTelegram());
+                    $command = new LocationCommand($this->getTelegram());
                     return $command->execute();
                 } else {
                     return $this->searchPlaces($term);

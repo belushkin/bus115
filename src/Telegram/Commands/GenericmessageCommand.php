@@ -23,6 +23,7 @@ class GenericmessageCommand extends SystemCommand
 
         $this->telegram->app['app.telegram.places']->
         setMessage($this->getMessage())->
+        setTelegram($this->getTelegram())->
         text($term);
     }
 
