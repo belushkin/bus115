@@ -47,6 +47,7 @@ docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v porta
 Webhook validation
 ```
 curl -H "Content-Type: application/json" -X POST "https://bus115.kiev.ua/api/v1/webhook" -d '{"object": "page", "entry": [{"messaging": [{"message": "TEST_MESSAGE"}]}]}'
+curl -X GET "https://bus115.kiev.ua/api/v1/webhook?hub.verify_token=<YOUR_VERIFY_TOKEN>&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"
 ```
 
 ### CircleCI
