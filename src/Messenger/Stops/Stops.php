@@ -51,7 +51,7 @@ class Stops implements AttachmentInterface
         }
 
         $responses[] = [
-            'text' => "Нічого не знайдено, для допомоги надрукуй help",
+            'text' => "Надрукуйте назву вулиці, провулку площі або зупинки.",
             'quick_replies' => [
                 [
                     'content_type' => 'location',

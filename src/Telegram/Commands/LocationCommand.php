@@ -24,7 +24,7 @@ class LocationCommand extends UserCommand
 
         $data = [
             'chat_id'      => $this->getMessage()->getChat()->getId(),
-            'text'         => 'Choose location',
+            'text'         => 'Надішліть своє місцезнаходження',
             'reply_markup' => $keyboard,
         ];
 

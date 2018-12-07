@@ -17,7 +17,7 @@ class Location implements MessageInterface
     public function text($term = '')
     {
         $responses[] = [
-            'text' => 'Вкажи свою адресу використовуючи мобільний додаток, або просто скажи мені де ти знаходишся',
+            'text' => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
             'quick_replies' => [
                 [
                     'content_type' => 'location',

@@ -53,7 +53,7 @@ class Transports
         if (empty($elements)) {
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
-                'text'    => 'Маршрути не знайдено, для допомоги надрукуй /help',
+                'text'    => 'Маршрути не знайдено, надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
             ];
             return Request::sendMessage($data);
         }

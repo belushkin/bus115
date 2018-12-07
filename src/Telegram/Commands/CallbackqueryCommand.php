@@ -40,7 +40,7 @@ class CallbackqueryCommand extends SystemCommand
 
         $data = [
             'chat_id' => $callback_query->getMessage()->getChat()->getId(),
-            'text'    => 'Маршрутів не знайдено, для допомоги надрукуй /help',
+            'text'    => 'Перевірте правильність написання або скористайтеся функцією location',
         ];
         return Request::sendMessage($data);
     }

@@ -56,7 +56,7 @@ class Stops
 
         $data = [
             'chat_id' => $this->getMessage()->getChat()->getId(),
-            'text'    => 'Нічого не знайдено, для допомоги надрукуй /help',
+            'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
         ];
         return Request::sendMessage($data);
     }

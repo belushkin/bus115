@@ -17,7 +17,7 @@ class FallBack implements MessageInterface
     public function text($term = '')
     {
         $responses[] = [
-            'text' => 'Не розумію :(, але я дуже швидко навчаюсь, обіцяю, що я виправлюсь незабаром',
+            'text' => 'Перевірте правильність написання або скористайтеся функцією location',
             'quick_replies' => [
                 [
                     'content_type' => 'location',

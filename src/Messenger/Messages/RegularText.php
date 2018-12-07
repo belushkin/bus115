@@ -65,7 +65,7 @@ class RegularText implements MessageInterface
         }
 
         $responses[] = [
-            'text' => "Нічого не знайдено, для допомоги надрукуй help",
+            'text' => "Перевірте правильність написання або скористайтеся функцією location",
             'quick_replies' => [
                 [
                     'content_type' => 'location',
@@ -116,7 +116,7 @@ class RegularText implements MessageInterface
         }
 
         $responses[] = [
-            'text' => "Нічого не знайдено, для допомоги надрукуй help",
+            'text' => "Перевірте правильність написання або скористайтеся функцією location",
             'quick_replies' => [
                 [
                     'content_type' => 'location',
