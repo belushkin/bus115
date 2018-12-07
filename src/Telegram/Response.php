@@ -18,8 +18,13 @@ class Response
     public function venues($elements = [])
     {
         $result = null;
-        foreach ($elements as $element) {
-            $result = Request::sendVenue($element);
+        try {
+            foreach ($elements as $element) {
+                $result = Request::sendVenue($element);
+            }
+        } catch (\Exception $e) {
+            sleep(2);
+            $this->app['monolog']->info("Venues exception sleep 2");
         }
         return $result;
     }
