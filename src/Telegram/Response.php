@@ -26,6 +26,7 @@ class Response
                     return Request::emptyResponse();
                 }
             }
+            sleep(1);
         } catch (\RuntimeException $e) {
             $this->app['monolog']->info("Venues runtime exception sleep 2");
             return Request::emptyResponse();
@@ -50,6 +51,7 @@ class Response
                     return Request::emptyResponse();
                 }
             }
+            sleep(1);
         } catch (\RuntimeException $e) {
             $this->app['monolog']->info("Photos runtime exception sleep 2");
             return Request::emptyResponse();

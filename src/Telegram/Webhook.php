@@ -57,19 +57,17 @@ class Webhook
             sleep(1);
 
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
-            sleep(2);
             $this->app['monolog']->info("TelegramException sleep 2");
-            $this->app['monolog']->info($e->getMessage());
+            return Request::emptyResponse();
         } catch (\Longman\TelegramBot\Exception\TelegramLogException $e) {
-            sleep(2);
             $this->app['monolog']->info("TelegramLogException sleep 2");
-            $this->app['monolog']->info($e->getMessage());
+            return Request::emptyResponse();
         } catch (\Exception $e) {
-            sleep(2);
             $this->app['monolog']->info("Exception sleep 2");
+            return Request::emptyResponse();
         } catch (\Throwable $e) {
-            sleep(2);
             $this->app['monolog']->info("Throwable sleep 2");
+            return Request::emptyResponse();
         }
     }
 

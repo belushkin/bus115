@@ -58,7 +58,12 @@ class Stops
             'chat_id' => $this->getMessage()->getChat()->getId(),
             'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
         ];
-        return Request::sendMessage($data);
+        $result = Request::sendMessage($data);
+        if (!$result->isOk()) {
+            $this->app['monolog']->info("Stops ERROR " . $result->getDescription());
+            return Request::emptyResponse();
+        }
+        return $result;
     }
 
 }
