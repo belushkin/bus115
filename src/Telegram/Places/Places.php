@@ -120,7 +120,7 @@ class Places
                 if ($direction == '-') continue;
 
                 $elements[] = [
-                    'chat_id'       =>  $this->getMessage()->getChat()->getId(),
+                    'chat_id'       =>  intval($this->getMessage()->getChat()->getId()),
                     'latitude'      =>  $item->lat,
                     'longitude'     =>  $item->lng,
                     'title'         =>  $item->title,
