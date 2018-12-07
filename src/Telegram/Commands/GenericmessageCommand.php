@@ -21,7 +21,6 @@ class GenericmessageCommand extends SystemCommand
     {
         $term = trim($this->getMessage()->getText(true));
 
-        return Request::emptyResponse();
         $this->telegram->app['app.telegram.places']->
         setMessage($this->getMessage())->
         setTelegram($this->getTelegram())->

@@ -3,6 +3,7 @@
 namespace Bus115\Telegram;
 
 use Mockery\Exception;
+use Longman\TelegramBot\Request;
 use Silex\Application;
 
 class Webhook
@@ -51,6 +52,7 @@ class Webhook
             // Setting App inside Telegram application
             $telegram->app = $this->app;
 
+            return Request::emptyResponse();
             // Handle telegram webhook request
             $telegram->handle();
 
