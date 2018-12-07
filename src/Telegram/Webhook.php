@@ -67,6 +67,9 @@ class Webhook
         } catch (\Exception $e) {
             sleep(2);
             $this->app['monolog']->info("Exception sleep 2");
+        } catch (\Throwable $e) {
+            sleep(2);
+            $this->app['monolog']->info("Throwable sleep 2");
         }
     }
 
