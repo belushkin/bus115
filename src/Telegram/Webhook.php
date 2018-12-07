@@ -54,6 +54,7 @@ class Webhook
 
             // Handle telegram webhook request
             $telegram->handle();
+            sleep(1);
 
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
             sleep(2);
