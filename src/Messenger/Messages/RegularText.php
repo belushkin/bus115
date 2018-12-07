@@ -11,7 +11,7 @@ class RegularText implements MessageInterface
     private $terms = [
         'ул', 'ул.', 'вул', 'вул.',
         'улица', 'улиця', 'уліца', 'остановка', 'житловий комлекс',
-        'житловый комплекс'
+        'житловый комплекс', 'станція метро', 'станция метро'
     ];
 
     public function __construct(Application $app)
