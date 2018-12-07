@@ -31,7 +31,7 @@ class Stops implements AttachmentInterface
                 $elements[] = [
                     'title' => $stop->title,
                     'subtitle' => 'В напрямку ' . $direction,
-                    'image_url' => $this->getStopImage($stop->id),
+                    'image_url' => $this->getStopImage($stop->id, $stop->lat, $stop->lng),
                     'buttons' => [
                         [
                             'type' => 'postback',
@@ -72,9 +72,10 @@ class Stops implements AttachmentInterface
         return '-';
     }
 
-    private function getStopImage($id)
+    private function getStopImage($id, $lat, $lng)
     {
-        $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
+//        $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
+        $imageUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$lat},{$lng}&zoom=16&size=400x400&maptype=terrain&markers=color:blue%7Clabel:S%7C{$lat},{$lng}&key=" . $this->app['eway']['maps_key'];
         $entity = $this->app['em']->getRepository('Bus115\Entity\Stop')->findOneBy(
             array('eway_id' => $id)
         );

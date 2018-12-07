@@ -10,7 +10,8 @@ class RegularText implements MessageInterface
     private $app;
     private $terms = [
         'ул', 'ул.', 'вул', 'вул.',
-        'улица', 'улиця', 'уліца',
+        'улица', 'улиця', 'уліца', 'остановка', 'житловий комлекс',
+        'житловый комплекс'
     ];
 
     public function __construct(Application $app)
@@ -21,7 +22,7 @@ class RegularText implements MessageInterface
     public function text($term = '')
     {
         $this->app['monolog']->info(sprintf('SEARCH WORKS, User entered Term: %s', $term));
-        $term = $this->stripTerms($term);
+        $term = $this->stripTerms(mb_strtolower($term));
         $this->app['monolog']->info(sprintf('Term after STRIP: %s', $term));
 
         if (!empty($term) && strlen($term) >= 4) {
@@ -36,7 +37,7 @@ class RegularText implements MessageInterface
                     $elements[] = [
                         'title'     => $item->title,
                         'subtitle'  => 'В напрямку ' . $direction,
-                        'image_url' => $this->getStopImage($item->id),
+                        'image_url' => $this->getStopImage($item->id, $item->lat, $item->lng),
                         'buttons' => [
                             [
                                 'type' => 'postback',
@@ -86,9 +87,9 @@ class RegularText implements MessageInterface
         return '-';
     }
 
-    public function getStopImage($id)
+    public function getStopImage($id, $lat, $lng)
     {
-        $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
+        $imageUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$lat},{$lng}&zoom=16&size=400x400&maptype=terrain&markers=color:blue%7Clabel:S%7C{$lat},{$lng}&key=" . $this->app['eway']['maps_key'];
         $entity = $this->app['em']->getRepository('Bus115\Entity\Stop')->findOneBy(
             array('eway_id' => $id)
         );
