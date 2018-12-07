@@ -55,7 +55,12 @@ class Transports
                 'chat_id' => $this->getMessage()->getChat()->getId(),
                 'text'    => 'Маршрути не знайдено, надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
             ];
-            return Request::sendMessage($data);
+            $result = Request::sendMessage($data);
+            if (!$result->isOk()) {
+                $this->app['monolog']->info("Transports ERROR " . $result->getDescription());
+                return Request::emptyResponse();
+            }
+            return $result;
         }
         return $this->app['app.telegram.response']->photos($elements);
     }

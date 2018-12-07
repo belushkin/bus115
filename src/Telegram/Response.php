@@ -21,17 +21,20 @@ class Response
         try {
             foreach ($elements as $element) {
                 $result = Request::sendVenue($element);
-                if ($result->getErrorCode() == 1) {
+                if (!$result->isOk()) {
                     $this->app['monolog']->info("Venues ERROR " . $result->getDescription());
                     return Request::emptyResponse();
                 }
             }
         } catch (\RuntimeException $e) {
-            sleep(2);
             $this->app['monolog']->info("Venues runtime exception sleep 2");
+            return Request::emptyResponse();
         } catch (\Exception $e) {
-            sleep(2);
             $this->app['monolog']->info("Venues exception sleep 2");
+            return Request::emptyResponse();
+        } catch (\Throwable $e) {
+            $this->app['monolog']->info("Venues Throwable sleep 2");
+            return Request::emptyResponse();
         }
         return $result;
     }
@@ -39,12 +42,23 @@ class Response
     public function photos($elements = [])
     {
         $result = null;
-        foreach ($elements as $element) {
-            $result = Request::sendPhoto($element);
-            if ($result->getErrorCode() == 1) {
-                $this->app['monolog']->info("Photos ERROR " . $result->getDescription());
-                return Request::emptyResponse();
+        try {
+            foreach ($elements as $element) {
+                $result = Request::sendPhoto($element);
+                if (!$result->isOk()) {
+                    $this->app['monolog']->info("Photos ERROR " . $result->getDescription());
+                    return Request::emptyResponse();
+                }
             }
+        } catch (\RuntimeException $e) {
+            $this->app['monolog']->info("Photos runtime exception sleep 2");
+            return Request::emptyResponse();
+        } catch (\Exception $e) {
+            $this->app['monolog']->info("Photos exception sleep 2");
+            return Request::emptyResponse();
+        } catch (\Throwable $e) {
+            $this->app['monolog']->info("Photos Throwable sleep 2");
+            return Request::emptyResponse();
         }
         return $result;
     }
