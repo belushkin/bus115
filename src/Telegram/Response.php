@@ -22,6 +22,9 @@ class Response
             foreach ($elements as $element) {
                 $result = Request::sendVenue($element);
             }
+        } catch (\RuntimeException $e) {
+            sleep(2);
+            $this->app['monolog']->info("Venues runtime exception sleep 2");
         } catch (\Exception $e) {
             sleep(2);
             $this->app['monolog']->info("Venues exception sleep 2");
