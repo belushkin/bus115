@@ -21,7 +21,7 @@ class Response
         try {
             foreach ($elements as $element) {
                 $result = Request::sendVenue($element);
-                $this->app['monolog']->info("Venues ERROR " . $result->printError(true));
+                $this->app['monolog']->info("Venues ERROR " . $result->getDescription());
             }
         } catch (\RuntimeException $e) {
             sleep(2);
