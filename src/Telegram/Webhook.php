@@ -2,6 +2,7 @@
 
 namespace Bus115\Telegram;
 
+use Mockery\Exception;
 use Silex\Application;
 
 class Webhook
@@ -54,9 +55,16 @@ class Webhook
             $telegram->handle();
 
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+            sleep(2);
+            $this->app['monolog']->info("TelegramException sleep 2");
             $this->app['monolog']->info($e->getMessage());
         } catch (\Longman\TelegramBot\Exception\TelegramLogException $e) {
+            sleep(2);
+            $this->app['monolog']->info("TelegramLogException sleep 2");
             $this->app['monolog']->info($e->getMessage());
+        } catch (\Exception $e) {
+            sleep(2);
+            $this->app['monolog']->info("Exception sleep 2");
         }
     }
 
