@@ -41,6 +41,10 @@ class Response
         $result = null;
         foreach ($elements as $element) {
             $result = Request::sendPhoto($element);
+            if ($result->getErrorCode() == 1) {
+                $this->app['monolog']->info("Photos ERROR " . $result->getDescription());
+                return null;
+            }
         }
         return $result;
     }
