@@ -52,7 +52,6 @@ class Webhook
             // Setting App inside Telegram application
             $telegram->app = $this->app;
 
-            return Request::emptyResponse();
             // Handle telegram webhook request
             $telegram->handle();
 
