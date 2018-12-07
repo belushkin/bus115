@@ -92,7 +92,13 @@ class Places
                         'chat_id' => $this->getMessage()->getChat()->getId(),
                         'text'    => 'Прикольно',
                     ];
-                    return Request::sendMessage($data);
+                    //$result = Request::sendMessage($data);
+                    $result = Request::sendMessage($data);
+                    if (!$result->isOk()) {
+                        $this->app['monolog']->info("Joke ERROR " . $result->getDescription());
+                        return Request::emptyResponse();
+                    }
+                    return $result;
                 } else if ($intent['value'] == 'location_ask' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
                     return $this->getTelegram()->executeCommand('location');
                 } else if ($intent['value'] == 'first_hand_shake' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
@@ -155,7 +161,12 @@ class Places
             'chat_id' => $this->getMessage()->getChat()->getId(),
             'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
         ];
-        return Request::sendMessage($data);
+        $result = Request::sendMessage($data);
+        if (!$result->isOk()) {
+            $this->app['monolog']->info("Places ERROR " . $result->getDescription());
+            return Request::emptyResponse();
+        }
+        return $result;
     }
 
 }
