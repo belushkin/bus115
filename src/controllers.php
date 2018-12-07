@@ -219,7 +219,6 @@ $app->post('/api/v1/telegramwebhook', function (Request $request) use ($app) {
 
 //    $app['monolog']->info(var_export($callback, true));
     //$app['monolog']->info(var_export($request->request, true));
-    header("HTTP/1.1 200 OK");
     $app['app.telegram.webhook']->handle();
     return new Response('EVENT_RECEIVED');
 });
