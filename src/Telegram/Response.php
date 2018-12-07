@@ -23,7 +23,10 @@ class Response
                 $result = Request::sendVenue($element);
                 if ($result->getErrorCode() == 1) {
                     $this->app['monolog']->info("Venues ERROR " . $result->getDescription());
-                    return null;
+                    return [
+                        'chat_id' => $element['chat_id'],
+                        'text'    => 'Forbidden: bot was blocked by the user',
+                    ];
                 }
             }
         } catch (\RuntimeException $e) {
@@ -43,7 +46,10 @@ class Response
             $result = Request::sendPhoto($element);
             if ($result->getErrorCode() == 1) {
                 $this->app['monolog']->info("Photos ERROR " . $result->getDescription());
-                return null;
+                return [
+                    'chat_id' => $element['chat_id'],
+                    'text'    => 'Forbidden: bot was blocked by the user',
+                ];
             }
         }
         return $result;
