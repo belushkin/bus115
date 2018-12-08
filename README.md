@@ -43,11 +43,16 @@ docker volume create portainer_data
 docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
 ```
 
-###
-Webhook validation
+### Facebook webhook
+Validation
 ```
 curl -X GET "https://bus115.kiev.ua/api/v1/webhook?hub.verify_token=<YOUR_VERIFY_TOKEN>&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"
 curl -H "Content-Type: application/json" -X POST "https://bus115.kiev.ua/api/v1/webhook" -d '{"object": "page", "entry": [{"messaging": [{"message": "TEST_MESSAGE"}]}]}'
+```
+### Telegram webhook
+Get webhook info
+```
+https://api.telegram.org/bot[$TToken]/getWebhookInfo
 ```
 
 ### CircleCI
