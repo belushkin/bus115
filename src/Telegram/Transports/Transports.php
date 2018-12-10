@@ -4,6 +4,7 @@ namespace Bus115\Telegram\Transports;
 
 use Silex\Application;
 use Longman\TelegramBot\Entities\InlineKeyboardButton;
+use Longman\TelegramBot\Entities\InlineKeyboardMarkup;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 
@@ -67,15 +68,6 @@ class Transports
 
         $editMessageId = ($this->getEditMessageId()) ? $this->getEditMessageId() : $this->getMessage()->getMessageId();
 
-//        $keyboard = array(
-//            array(
-//                array('text'=>'Оновити', 'callback_data' => $editMessageId . '_' . $id)
-//            )
-//        );
-//        $inlineKeyboardMarkup = array(
-//            'inline_keyboard' => $keyboard
-//        );
-
         $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $editMessageId . '_' . $id]);
         $keyboard = new InlineKeyboard($button);
 
@@ -85,7 +77,6 @@ class Transports
         $data['text']           = implode(PHP_EOL, $text);
         $data['parse_mode']     = 'Markdown';
         $data['reply_markup']   = $keyboard;
-        //$data['reply_markup']   = json_encode($inlineKeyboardMarkup);
 
         if ($this->getEditMessageId()) {
             $data['message_id'] = $this->getEditMessageId();
@@ -95,7 +86,9 @@ class Transports
             $this->app['monolog']->info("UPDATING" . $t);
             return 1;
         }
-        return Request::sendMessage($data);
+        $p = Request::sendMessage($data);
+        $this->app['monolog']->info("UPDATING REAL MESSAGE" . $p->getResult()->getMessageId());
+        return 1;
     }
 
     private function callStopInfo($id)
