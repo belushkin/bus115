@@ -66,15 +66,26 @@ class Transports
         }
 
         $editMessageId = ($this->getEditMessageId()) ? $this->getEditMessageId() : $this->getMessage()->getMessageId();
-        $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $editMessageId . '_' . $id]);
-        $keyboard = new InlineKeyboard($button);
 
-        $keyboard->setResizeKeyboard(true);
+        $keyboard = array(
+            array(
+                array('text'=>'Оновити', 'callback_data' => $editMessageId . '_' . $id)
+            )
+        );
+        $inlineKeyboardMarkup = array(
+            'inline_keyboard' => $keyboard
+        );
+
+//        $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $editMessageId . '_' . $id]);
+//        $keyboard = new InlineKeyboard($button);
+//
+//        $keyboard->setResizeKeyboard(true);
 
         $data['chat_id']        = $this->getMessage()->getChat()->getId();
         $data['text']           = implode(PHP_EOL, $text);
         $data['parse_mode']     = 'Markdown';
-        $data['reply_markup']   = $keyboard;
+        //$data['reply_markup']   = $keyboard;
+        $data['reply_markup']   = json_encode($inlineKeyboardMarkup);
 
         if ($this->getEditMessageId()) {
             $data['message_id'] = $this->getEditMessageId();
