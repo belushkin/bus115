@@ -81,15 +81,10 @@ class Transports
 
         if ($this->getEditMessageId()) {
             $data['message_id'] = $this->getEditMessageId();
-            $data['text'] = 'updated';
-            //$this->app['monolog']->info("UPDATING" . $data['message_id']);
-            $t = Request::editMessageText($data);
-            $this->app['monolog']->info("UPDATING" . $t);
-            return 1;
+            $data['text'] = $text;
+            return Request::editMessageText($data);
         }
-        $p = Request::sendMessage($data);
-        //$this->app['monolog']->info("UPDATING REAL MESSAGE" . $p->getResult()->getMessageId());
-        return 1;
+        return Request::sendMessage($data);
     }
 
     private function callStopInfo($id)
