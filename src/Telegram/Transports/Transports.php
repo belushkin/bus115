@@ -66,9 +66,6 @@ class Transports
             $cache[] = $route->id;
         }
 
-        //$editMessageId = ($this->getEditMessageId()) ? $this->getEditMessageId() : $this->getMessage()->getMessageId();
-        //$button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $editMessageId . '_' . $id]);
-
         $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => 1 . '_' . $id]);
         $keyboard = new InlineKeyboard($button);
 
@@ -81,7 +78,7 @@ class Transports
 
         if ($this->getEditMessageId()) {
             $data['message_id'] = $this->getEditMessageId();
-            $data['text'] = $text;
+            $data['text'] = implode(PHP_EOL, $text);
             return Request::editMessageText($data);
         }
         return Request::sendMessage($data);
