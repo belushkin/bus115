@@ -22,6 +22,7 @@ class CallbackqueryCommand extends SystemCommand
             $text = $callback_query->getMessage()->getVenue()->getTitle();
         }
         //$callback_query->getMessage()->getMessageId();
+        $this->telegram->app['monolog']->info("UPDATING INLINEMESSGAGEID " . $callback_query->getInlineMessageId());
         $data = [
             'callback_query_id' => $callback_query_id,
             'text'              => $text,
