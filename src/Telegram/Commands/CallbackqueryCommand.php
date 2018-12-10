@@ -31,7 +31,7 @@ class CallbackqueryCommand extends SystemCommand
 
         $params         = explode('_', $callback_data);
 
-        if (count($params)) {
+        if (count($params) > 1) {
             return $this->telegram->app['app.telegram.transports']
                 ->setMessage($callback_query->getMessage())
                 ->setEditMessageId(intval($params[0]))
