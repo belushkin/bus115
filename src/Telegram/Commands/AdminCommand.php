@@ -15,5 +15,5 @@ abstract class AdminCommand extends Command
     /**
      * @var bool
      */
-    protected $private_only = true;
+    protected $private_only = false;
 }
