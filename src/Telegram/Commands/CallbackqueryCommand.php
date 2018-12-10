@@ -32,7 +32,7 @@ class CallbackqueryCommand extends SystemCommand
         $params         = explode('_', $callback_data);
 
         if (count($params) > 1) {
-            $this->app['monolog']->info("UPDATING CALLBACK " . $params[0]);
+            $this->telegram->app['monolog']->info("UPDATING CALLBACK " . $params[0]);
             return $this->telegram->app['app.telegram.transports']
                 ->setMessage($callback_query->getMessage())
                 ->setEditMessageId(intval($params[0]))
