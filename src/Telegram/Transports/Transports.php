@@ -43,11 +43,12 @@ class Transports
                 continue;
             }
 
-            $string = $route->transportName . ' №' . $route->title . ', ';
+            $string = '*'.$route->transportName.'*' . ' №' . $route->title . ', ';
             $string .= 'в напрямку: ' . $route->directionTitle . ', ';
             $string .= 'прибуде через ' . $route->timeLeftFormatted;
 
             $text[] = $string;
+            $text[] = '';
             $cache[] = $route->id;
         }
 
