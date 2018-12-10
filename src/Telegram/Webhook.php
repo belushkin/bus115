@@ -51,6 +51,9 @@ class Webhook
             // Requests Limiter (tries to prevent reaching Telegram API limits)
             $telegram->enableLimiter();
 
+            // Enable admin
+            $telegram->enableAdmin($this->app['eway']['telegram_user_id']);
+
             // Setting App inside Telegram application
             $telegram->app = $this->app;
 
