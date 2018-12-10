@@ -78,6 +78,7 @@ class Transports
 
         if ($this->getEditMessageId()) {
             $data['message_id'] = $this->getEditMessageId();
+            $this->app['monolog']->info("UPDATING" . $data['message_id']);
             return Request::editMessageText($data);
         }
         return Request::sendMessage($data);
