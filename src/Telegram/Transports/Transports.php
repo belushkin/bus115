@@ -12,6 +12,8 @@ class Transports
 
     private $app;
     private $message;
+    private $stopName       = '';
+    private $editMessageId;
 
     public function __construct(Application $app)
     {
@@ -29,6 +31,17 @@ class Transports
         return $this->message;
     }
 
+    public function setEditMessageId($id)
+    {
+        $this->editMessageId = $id;
+        return $this;
+    }
+
+    public function getEditMessageId()
+    {
+        return $this->editMessageId;
+    }
+
     public function text($id)
     {
         $routes     = $this->callStopInfo($id);
@@ -36,7 +49,7 @@ class Transports
         $cache      = [];
         $text       = [];
 
-        $text[] = '*Транспорт:*';
+        $text[] = '*'.$this->stopName.':*';
         $text[] = '';
         foreach ($routes as $route) {
             if (in_array($route->id, $cache)) { // removing duplicates from Eway API
@@ -52,7 +65,8 @@ class Transports
             $cache[] = $route->id;
         }
 
-        $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $id]);
+        $editMessageId = ($this->getEditMessageId()) ? $this->getEditMessageId() : $this->getMessage()->getMessageId();
+        $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $editMessageId . '_' . $id]);
         $keyboard = new InlineKeyboard($button);
 
         $keyboard->setResizeKeyboard(true);
@@ -62,12 +76,18 @@ class Transports
         $data['parse_mode']     = 'Markdown';
         $data['reply_markup']   = $keyboard;
 
+        if ($this->getEditMessageId()) {
+            $data['message_id'] = $this->getEditMessageId();
+            return Request::editMessageText($data);
+        }
         return Request::sendMessage($data);
     }
 
     private function callStopInfo($id)
     {
         $body = $this->app['app.eway']->handleStopInfo($id);
+        $this->stopName = (isset($body->title)) ? $body->title : "";
+
         if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
             return $body->routes;
         }

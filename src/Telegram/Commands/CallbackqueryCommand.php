@@ -21,7 +21,7 @@ class CallbackqueryCommand extends SystemCommand
         if (!empty($callback_query->getMessage()->getVenue())) {
             $text = $callback_query->getMessage()->getVenue()->getTitle();
         }
-
+        //$callback_query->getMessage()->getMessageId();
         $data = [
             'callback_query_id' => $callback_query_id,
             'text'              => $text,
@@ -29,16 +29,17 @@ class CallbackqueryCommand extends SystemCommand
         ];
         Request::answerCallbackQuery($data);
 
-        if ((isset($callback_data) && intval($callback_data) != 0)) {
-            return $this->telegram->app['app.telegram.transports']->
-            setMessage($callback_query->getMessage())->
-            text(intval($callback_data));
+        $params         = explode('_', $callback_data);
+        $callbackObject = $this->telegram->app['app.telegram.transports']
+            ->setMessage($callback_query->getMessage());
+
+        if (count($params)) {
+            return $callbackObject
+                ->setEditMessageId(intval($params[0]))
+                ->text(intval($params[1]));
         }
 
-        $data = [
-            'chat_id' => $callback_query->getMessage()->getChat()->getId(),
-            'text'    => 'Перевірте правильність написання або скористайтеся функцією location',
-        ];
-        return Request::sendMessage($data);
+        return $callbackObject
+            ->text(intval($callback_data));
     }
 }
