@@ -61,13 +61,16 @@ class Stops implements AttachmentInterface
         return $responses;
     }
 
-    public function getStopSubtitle(array $routes = [])
+    public function getStopSubtitle($routes)
     {
         $result = [];
-        foreach ($routes as $route) {
-            $result[] = $route['title'];
+        if (isset($routes->route) && is_array($routes->route)) {
+            foreach ($routes->route as $route) {
+                $result[] = $route->title;
+            }
+            return implode(",", $result);
         }
-        return implode(",", $result);
+        return '';
     }
 
     private function getStopImage($id, $lat, $lng)
