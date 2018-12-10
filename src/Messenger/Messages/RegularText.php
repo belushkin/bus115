@@ -32,11 +32,9 @@ class RegularText implements MessageInterface
                 $elements   = [];
                 $responses  = [];
                 foreach ($body->item as $item) {
-                    $direction = $this->getStopDirection($item->id);
-                    if ($direction == '-') continue;
                     $elements[] = [
                         'title'     => $item->title,
-                        'subtitle'  => 'В напрямку ' . $direction,
+                        'subtitle'  => $this->app['app.stops']->getStopSubtitle($item->routes),
                         'image_url' => $this->getStopImage($item->id, $item->lat, $item->lng),
                         'buttons' => [
                             [
@@ -76,15 +74,6 @@ class RegularText implements MessageInterface
         ];
 
         return $responses;
-    }
-
-    public function getStopDirection($id)
-    {
-        $body = $this->app['app.eway']->handleStopInfo($id);
-        if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
-            return $body->routes[0]->directionTitle . ', (' . $body->routes[0]->transportName . ')';
-        }
-        return '-';
     }
 
     public function getStopImage($id, $lat, $lng)

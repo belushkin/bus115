@@ -50,6 +50,7 @@ class Transports
             ];
             $cache[] = $route->id;
         }
+
         if (empty($elements)) {
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
@@ -62,6 +63,7 @@ class Transports
             }
             return $result;
         }
+
         return $this->app['app.telegram.response']->photos($elements);
     }
 

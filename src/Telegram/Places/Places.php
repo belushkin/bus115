@@ -122,15 +122,12 @@ class Places
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 
-                $direction = $this->app['app.regular_text']->getStopDirection($item->id);
-                if ($direction == '-') continue;
-
                 $elements[] = [
                     'chat_id'       =>  intval($this->getMessage()->getChat()->getId()),
                     'latitude'      =>  $item->lat,
                     'longitude'     =>  $item->lng,
                     'title'         =>  $item->title,
-                    'address'       =>  'В напрямку ' . $direction,
+                    'address'       =>  $this->app['app.stops']->getStopSubtitle($item->routes),
                     'reply_markup'  =>  $keyboard
                 ];
             }
