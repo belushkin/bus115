@@ -68,7 +68,7 @@ class Stops implements AttachmentInterface
             foreach ($routes->route as $route) {
                 $result[] = $route->title;
             }
-            return implode(",", $result);
+            return 'Транспорт: ' . implode(", ", $result);
         }
         return '';
     }
