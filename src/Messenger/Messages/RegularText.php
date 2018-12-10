@@ -31,10 +31,15 @@ class RegularText implements MessageInterface
                 $i = 0;
                 $elements   = [];
                 $responses  = [];
+                $subtitles  = [];
                 foreach ($body->item as $item) {
+                    $subtitle = $this->app['app.stops']->getStopSubtitle($item->routes);
+                    if (in_array($subtitle, $subtitles)) {
+                        continue;
+                    }
                     $elements[] = [
                         'title'     => $item->title,
-                        'subtitle'  => $this->app['app.stops']->getStopSubtitle($item->routes),
+                        'subtitle'  => 'Транспорт: ' . $subtitle,
                         'image_url' => $this->getStopImage($item->id, $item->lat, $item->lng),
                         'buttons' => [
                             [
@@ -44,6 +49,7 @@ class RegularText implements MessageInterface
                             ]
                         ]
                     ];
+                    $subtitles[] = $subtitle;
                     $i++;
                     if ($i % 10 == 0) {
                         $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);

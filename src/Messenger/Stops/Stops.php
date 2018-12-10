@@ -25,10 +25,15 @@ class Stops implements AttachmentInterface
             $elements   = [];
             $responses  = [];
             $i = 0;
+            $subtitles  = [];
             foreach ($body->stop as $stop) {
+                $subtitle = $this->getStopSubtitle($stop->routes);
+                if (in_array($subtitle, $subtitles)) {
+                    continue;
+                }
                 $elements[] = [
                     'title' => $stop->title,
-                    'subtitle' => $this->getStopSubtitle($stop->routes),
+                    'subtitle' => 'Транспорт: ' . $subtitle,
                     'image_url' => $this->getStopImage($stop->id, $stop->lat, $stop->lng),
                     'buttons' => [
                         [
@@ -38,6 +43,7 @@ class Stops implements AttachmentInterface
                         ]
                     ]
                 ];
+                $subtitles[] = $subtitle;
                 $i++;
                 if ($i % 10 == 0) {
                     $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
@@ -68,7 +74,7 @@ class Stops implements AttachmentInterface
             foreach ($routes->route as $route) {
                 $result[] = $route->title;
             }
-            return 'Транспорт: ' . implode(", ", $result);
+            return implode(", ", $result);
         }
         return '';
     }

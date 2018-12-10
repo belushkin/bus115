@@ -116,20 +116,26 @@ class Places
         $body = $this->app['app.eway']->getPlacesByName($term);
 
         if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
-            $elements  = [];
+            $elements   = [];
+            $subtitles  = [];
             foreach ($body->item as $item) {
                 $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => 'stop_' . $item->id]);
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 
+                $subtitle = $this->app['app.stops']->getStopSubtitle($item->routes);
+                if (in_array($subtitle, $subtitles)) {
+                    continue;
+                }
                 $elements[] = [
                     'chat_id'       =>  intval($this->getMessage()->getChat()->getId()),
                     'latitude'      =>  $item->lat,
                     'longitude'     =>  $item->lng,
                     'title'         =>  $item->title,
-                    'address'       =>  $this->app['app.stops']->getStopSubtitle($item->routes),
+                    'address'       =>  'Транспорт: ' . $subtitle,
                     'reply_markup'  =>  $keyboard
                 ];
+                $subtitles[] = $subtitle;
             }
             return $this->app['app.telegram.response']->venues($elements);
         } else {

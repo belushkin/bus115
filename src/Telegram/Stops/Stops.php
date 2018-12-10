@@ -34,19 +34,25 @@ class Stops
         $body       = $this->app['app.eway']->getStopsNearPoint($lat, $lng);
         if (isset($body->stop) && is_array($body->stop) && !empty($body->stop)) {
             $elements   = [];
+            $subtitles  = [];
             foreach ($body->stop as $stop) {
                 $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => 'stop_' . $stop->id]);
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 
+                $subtitle = $this->app['app.stops']->getStopSubtitle($stop->routes);
+                if (in_array($subtitle, $subtitles)) {
+                    continue;
+                }
                 $elements[] = [
                     'chat_id'       =>  intval($this->getMessage()->getChat()->getId()),
                     'latitude'      =>  $stop->lat,
                     'longitude'     =>  $stop->lng,
                     'title'         =>  $stop->title,
-                    'address'       =>  $this->app['app.stops']->getStopSubtitle($stop->routes),
+                    'address'       =>  'Транспорт: ' . $subtitle,
                     'reply_markup'  =>  $keyboard
                 ];
+                $subtitles[] = $subtitle;
             }
             return $this->app['app.telegram.response']->venues($elements);
         }
