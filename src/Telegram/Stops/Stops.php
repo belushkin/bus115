@@ -36,7 +36,7 @@ class Stops
             $elements   = [];
             $subtitles  = [];
             foreach ($body->stop as $stop) {
-                $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => 'stop_' . $stop->id]);
+                $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => $stop->id]);
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 

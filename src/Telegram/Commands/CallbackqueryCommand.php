@@ -17,8 +17,10 @@ class CallbackqueryCommand extends SystemCommand
         $callback_query_id = $callback_query->getId();
         $callback_data     = $callback_query->getData();
 
-        $caption    = $callback_query->getMessage()->getCaption();
-        $text = ($caption) ? $caption : $callback_query->getMessage()->getVenue()->getTitle();
+        $text = 'оновити';
+        if (!empty($callback_query->getMessage()->getVenue())) {
+            $text = $callback_query->getMessage()->getVenue()->getTitle();
+        }
 
         $data = [
             'callback_query_id' => $callback_query_id,
@@ -27,15 +29,10 @@ class CallbackqueryCommand extends SystemCommand
         ];
         Request::answerCallbackQuery($data);
 
-        $params = explode('_', $callback_data);
-        if ((isset($params[0]) && $params[0] == 'stop') && (isset($params[1]) && intval($params[1]) != 0)) {
+        if ((isset($callback_data) && intval($callback_data) != 0)) {
             return $this->telegram->app['app.telegram.transports']->
             setMessage($callback_query->getMessage())->
-            text(intval($params[1]));
-        } elseif ((isset($params[0]) && intval($params[0]) != 0) && (isset($params[1]) && intval($params[1]) != 0)) {
-            return $this->telegram->app['app.telegram.arrival']->
-            setMessage($callback_query->getMessage())->
-            text(intval($params[0]), intval($params[1]));
+            text(intval($callback_data));
         }
 
         $data = [

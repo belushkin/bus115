@@ -119,7 +119,7 @@ class Places
             $elements   = [];
             $subtitles  = [];
             foreach ($body->item as $item) {
-                $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => 'stop_' . $item->id]);
+                $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => $item->id]);
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 

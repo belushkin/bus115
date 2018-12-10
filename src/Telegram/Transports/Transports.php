@@ -32,39 +32,36 @@ class Transports
     public function text($id)
     {
         $routes     = $this->callStopInfo($id);
-        $elements   = [];
-        $cache      = [];
 
+        $cache      = [];
+        $text       = [];
+
+        $text[] = '*Транспорт:*';
+        $text[] = '';
         foreach ($routes as $route) {
             if (in_array($route->id, $cache)) { // removing duplicates from Eway API
                 continue;
             }
-            $button = new InlineKeyboardButton(['text' => 'Оновити час прибуття', 'callback_data' => $id . '_'. $route->id]);
-            $keyboard = new InlineKeyboard($button);
-            $keyboard->setResizeKeyboard(true);
-            $elements[] = [
-                'chat_id'       =>  $this->getMessage()->getChat()->getId(),
-                'caption'       =>  $route->transportName . ' №' . $route->title . ', в напрямку: ' . $route->directionTitle,
-                'photo'         => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
-                'reply_markup'  =>  $keyboard
-            ];
+
+            $string = $route->transportName . ' №' . $route->title . ', ';
+            $string .= 'в напрямку: ' . $route->directionTitle . ', ';
+            $string .= 'прибуде через ' . $route->timeLeftFormatted;
+
+            $text[] = $string;
             $cache[] = $route->id;
         }
 
-        if (empty($elements)) {
-            $data = [
-                'chat_id' => $this->getMessage()->getChat()->getId(),
-                'text'    => 'Маршрути не знайдено, надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
-            ];
-            $result = Request::sendMessage($data);
-            if (!$result->isOk()) {
-                $this->app['monolog']->info("Transports ERROR " . $result->getDescription());
-                return Request::emptyResponse();
-            }
-            return $result;
-        }
+        $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $id]);
+        $keyboard = new InlineKeyboard($button);
 
-        return $this->app['app.telegram.response']->photos($elements);
+        $keyboard->setResizeKeyboard(true);
+
+        $data['chat_id']        = $this->getMessage()->getChat()->getId();
+        $data['text']           = implode(PHP_EOL, $text);
+        $data['parse_mode']     = 'Markdown';
+        $data['reply_markup']   = $keyboard;
+
+        return Request::sendMessage($data);
     }
 
     private function callStopInfo($id)
