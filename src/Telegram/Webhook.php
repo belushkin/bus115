@@ -52,7 +52,7 @@ class Webhook
             $telegram->enableLimiter();
 
             // Enable admin
-            $telegram->enableAdmin($this->app['eway']['telegram_user_id']);
+            $telegram->enableAdmin(intval($this->app['eway']['telegram_user_id']));
 
             // Setting App inside Telegram application
             $telegram->app = $this->app;
