@@ -66,9 +66,10 @@ class Transports
             $cache[] = $route->id;
         }
 
-        $editMessageId = ($this->getEditMessageId()) ? $this->getEditMessageId() : $this->getMessage()->getMessageId();
+        //$editMessageId = ($this->getEditMessageId()) ? $this->getEditMessageId() : $this->getMessage()->getMessageId();
+        //$button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $editMessageId . '_' . $id]);
 
-        $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $editMessageId . '_' . $id]);
+        $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => 1 . '_' . $id]);
         $keyboard = new InlineKeyboard($button);
 
         $keyboard->setResizeKeyboard(true);
@@ -81,13 +82,13 @@ class Transports
         if ($this->getEditMessageId()) {
             $data['message_id'] = $this->getEditMessageId();
             $data['text'] = 'updated';
-            $this->app['monolog']->info("UPDATING" . $data['message_id']);
+            //$this->app['monolog']->info("UPDATING" . $data['message_id']);
             $t = Request::editMessageText($data);
             $this->app['monolog']->info("UPDATING" . $t);
             return 1;
         }
         $p = Request::sendMessage($data);
-        $this->app['monolog']->info("UPDATING REAL MESSAGE" . $p->getResult()->getMessageId());
+        //$this->app['monolog']->info("UPDATING REAL MESSAGE" . $p->getResult()->getMessageId());
         return 1;
     }
 

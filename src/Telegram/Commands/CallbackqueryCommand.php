@@ -22,7 +22,6 @@ class CallbackqueryCommand extends SystemCommand
             $text = $callback_query->getMessage()->getVenue()->getTitle();
         }
         //$callback_query->getMessage()->getMessageId();
-        $this->telegram->app['monolog']->info("UPDATING INLINEMESSGAGEID " . $callback_query->getInlineMessageId());
         $data = [
             'callback_query_id' => $callback_query_id,
             'text'              => $text,
@@ -33,10 +32,10 @@ class CallbackqueryCommand extends SystemCommand
         $params         = explode('_', $callback_data);
 
         if (count($params) > 1) {
-            $this->telegram->app['monolog']->info("UPDATING CALLBACK " . $params[0]);
+//            $this->telegram->app['monolog']->info("UPDATING CALLBACK " . $params[0]);
             return $this->telegram->app['app.telegram.transports']
                 ->setMessage($callback_query->getMessage())
-                ->setEditMessageId(intval($params[0]))
+                ->setEditMessageId($callback_query->getMessage()->getMessageId())
                 ->text(intval($params[1]));
         }
 
