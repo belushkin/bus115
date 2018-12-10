@@ -35,7 +35,7 @@ class ArrivalMessage
                 if ($route->id == $routeId) {
                     $string = $route->transportName . ' №' . $route->title . ', ';
                     $string .= 'в напрямку: ' . $route->directionTitle . ', ';
-                    $string .= "буде через " . $route->timeLeftFormatted;
+                    $string .= "прибуде через " . $route->timeLeftFormatted;
 
                     $data = [
                         'chat_id' => $this->getMessage()->getChat()->getId(),

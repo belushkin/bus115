@@ -23,11 +23,10 @@ class Eway
             'query' => [
                 'login'     => $this->app['eway']['login'],
                 'password'  => $this->app['eway']['pass'],
-                'function'  => 'stops.GetStopsNearPoint',
+                'function'  => 'stops.GetStopsNearPointWithRoutes',
                 'city'      => $this->app['eway']['city'],
                 'lat'       => $lat,
-                'lng'       => $lng,
-                'r'         => 400
+                'lng'       => $lng
             ]
         ]);
 

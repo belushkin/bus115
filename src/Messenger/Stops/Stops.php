@@ -26,11 +26,9 @@ class Stops implements AttachmentInterface
             $responses  = [];
             $i = 0;
             foreach ($body->stop as $stop) {
-                $direction = $this->getStopDirection($stop->id);
-                if ($direction == '-') continue;
                 $elements[] = [
                     'title' => $stop->title,
-                    'subtitle' => 'В напрямку ' . $direction,
+                    'subtitle' => $this->getStopSubtitle($stop->routes),
                     'image_url' => $this->getStopImage($stop->id, $stop->lat, $stop->lng),
                     'buttons' => [
                         [
@@ -63,18 +61,17 @@ class Stops implements AttachmentInterface
         return $responses;
     }
 
-    public function getStopDirection($id)
+    public function getStopSubtitle(array $routes = [])
     {
-        $body = $this->app['app.eway']->handleStopInfo($id);
-        if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
-            return $body->routes[0]->directionTitle . ', (' . $body->routes[0]->transportName . ')';
+        $result = [];
+        foreach ($routes as $route) {
+            $result[] = $route['title'];
         }
-        return '-';
+        return implode(",", $result);
     }
 
     private function getStopImage($id, $lat, $lng)
     {
-//        $imageUrl = 'https://bus115.kiev.ua/images/stop.jpg';
         $imageUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$lat},{$lng}&zoom=16&size=400x400&maptype=terrain&markers=color:blue%7Clabel:S%7C{$lat},{$lng}&key=" . $this->app['eway']['maps_key'];
         $entity = $this->app['em']->getRepository('Bus115\Entity\Stop')->findOneBy(
             array('eway_id' => $id)

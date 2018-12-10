@@ -39,15 +39,12 @@ class Stops
                 $keyboard = new InlineKeyboard($button);
                 $keyboard->setResizeKeyboard(true);
 
-                $direction = $this->app['app.stops']->getStopDirection($stop->id);
-                if ($direction == '-') continue;
-
                 $elements[] = [
                     'chat_id'       =>  intval($this->getMessage()->getChat()->getId()),
                     'latitude'      =>  $stop->lat,
                     'longitude'     =>  $stop->lng,
                     'title'         =>  $stop->title,
-                    'address'       =>  'В напрямку ' . $direction,
+                    'address'       =>  $this->app['app.stops']->getStopSubtitle($stop->routes),
                     'reply_markup'  =>  $keyboard
                 ];
             }
