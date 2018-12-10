@@ -65,7 +65,8 @@ class Transports
             $cache[] = $route->id;
         }
 
-        $editMessageId = ($this->getEditMessageId()) ? $this->getEditMessageId() : $this->getMessage()->getMessageId();
+        //$editMessageId = ($this->getEditMessageId()) ? $this->getEditMessageId() : $this->getMessage()->getMessageId();
+        $editMessageId = $this->getMessage()->getMessageId();
         $button = new InlineKeyboardButton(['text' => 'Оновити', 'callback_data' => $editMessageId . '_' . $id]);
         $keyboard = new InlineKeyboard($button);
 
