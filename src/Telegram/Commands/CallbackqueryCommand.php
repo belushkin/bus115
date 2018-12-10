@@ -30,16 +30,16 @@ class CallbackqueryCommand extends SystemCommand
         Request::answerCallbackQuery($data);
 
         $params         = explode('_', $callback_data);
-        $callbackObject = $this->telegram->app['app.telegram.transports']
-            ->setMessage($callback_query->getMessage());
 
         if (count($params)) {
-            return $callbackObject
+            return $this->telegram->app['app.telegram.transports']
+                ->setMessage($callback_query->getMessage())
                 ->setEditMessageId(intval($params[0]))
                 ->text(intval($params[1]));
         }
 
-        return $callbackObject
+        return $this->telegram->app['app.telegram.transports']
+            ->setMessage($callback_query->getMessage())
             ->text(intval($callback_data));
     }
 }
