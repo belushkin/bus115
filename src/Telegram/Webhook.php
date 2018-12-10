@@ -83,7 +83,7 @@ class Webhook
             $this->app['monolog']->info("Exception sleep 2");
             return Request::emptyResponse();
         } catch (\Throwable $e) {
-            $this->app['monolog']->info("Throwable sleep 2");
+            $this->app['monolog']->info("Throwable sleep 2" . $e->getMessage());
             return Request::emptyResponse();
         }
     }
