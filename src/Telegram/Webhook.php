@@ -77,7 +77,7 @@ class Webhook
             sleep(1);
 
         } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
-            $this->app['monolog']->info("TelegramException sleep 2");
+            $this->app['monolog']->info("TelegramException sleep 2" . $e->getMessage());
             return Request::emptyResponse();
         } catch (\Longman\TelegramBot\Exception\TelegramLogException $e) {
             $this->app['monolog']->info("TelegramLogException sleep 2");
