@@ -45,9 +45,7 @@ class Places
 
     public function text($term)
     {
-        //\Longman\TelegramBot\TelegramLog::debug(sprintf('TELEGRAM SEARCH WORKS, User entered Term: %s', $term));
         $term = $this->app['app.regular_text']->stripTerms($term);
-        //\Longman\TelegramBot\TelegramLog::debug(sprintf('Term after STRIP: %s', $term));
 
         if ($this->getMessage()->getLocation()) {
             return $this->app['app.telegram.stops']->

@@ -4,7 +4,6 @@ namespace Bus115\Telegram\Transports;
 
 use Silex\Application;
 use Longman\TelegramBot\Entities\InlineKeyboardButton;
-use Longman\TelegramBot\Entities\InlineKeyboardMarkup;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Request;
 
@@ -45,6 +44,7 @@ class Transports
 
     public function text($id)
     {
+        sleep(1);
         $routes     = $this->callStopInfo($id);
 
         $cache      = [];
