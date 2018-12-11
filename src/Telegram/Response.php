@@ -23,6 +23,7 @@ class Response
                 $result = Request::sendVenue($element);
                 if (!$result->isOk()) {
                     $this->app['monolog']->info("Venues ERROR " . $result->getDescription());
+                    sleep(2);
                     return Request::emptyResponse();
                 }
             }
@@ -48,6 +49,7 @@ class Response
                 $result = Request::sendPhoto($element);
                 if (!$result->isOk()) {
                     $this->app['monolog']->info("Photos ERROR " . $result->getDescription());
+                    sleep(2);
                     return Request::emptyResponse();
                 }
             }
