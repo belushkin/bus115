@@ -59,10 +59,15 @@ class Transports
         $text       = [];
 
         $text[] = '*'.$this->stopName.':*';
-        $text[] = '';
+
+        $separator = '';
         foreach ($routes as $route) {
             if (in_array($route->id, $cache)) { // removing duplicates from Eway API
                 continue;
+            }
+            if ($route->transportKey != $separator) {
+                $text[] = '';
+                $separator = $route->transportKey;
             }
 
             $string = '*'.$route->transportName.'*' . ' №' . $route->title . ', ';
