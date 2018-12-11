@@ -44,8 +44,16 @@ class Transports
 
     public function text($id)
     {
-        sleep(1);
+        //sleep(1);
         $routes     = $this->callStopInfo($id);
+
+        // Sort the routes
+        $key    = array_column($routes, 'transportKey');
+        $title  = array_column($routes, 'title');
+
+        // Sort the data with volume descending, edition ascending
+        // Add $data as the last parameter, to sort by the common key
+        array_multisort($key, SORT_ASC, $title, SORT_ASC, $routes);
 
         $cache      = [];
         $text       = [];
