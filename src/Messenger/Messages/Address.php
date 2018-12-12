@@ -23,7 +23,7 @@ class Address implements MessageInterface
 
         // Wit.ai detected that this is address and we try to find it through the eway
         // urlencode term before sending it to eway
-        $body       = $this->app['app.eway']->getPlacesByName(urlencode($term));
+        $body       = $this->app['app.eway']->getPlacesByName($term);
         if (empty($body->item)) {
             return $this->app['app.fallback']->text('');
         }
