@@ -45,9 +45,10 @@ class Places
 
     public function text($term)
     {
-        $term = $this->app['app.regular_text']->stripTerms($term);
+        $term = $this->app['app.trim_helper']->trim($term);
 
         if ($this->getMessage()->getLocation()) {
+            // If user shared location
             return $this->app['app.telegram.stops']->
             setMessage($this->getMessage())->
             text(
@@ -55,6 +56,7 @@ class Places
                 $this->getMessage()->getLocation()->getLongitude()
             );
         } elseif (empty($term) || strlen($term) < 4) {
+            // fallback
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
                 'text'    => 'Введіть запит більше 4 символів',
@@ -63,25 +65,31 @@ class Places
         }
 
         // Request using WIT.AI NLP provider
-        $term = htmlspecialchars(addslashes(trim(mb_strtolower($term))));
         $nlp        = $this->app['app.api']->witai($term);
         $intents    = (isset($nlp['entities']['intent']))   ? $nlp['entities']['intent']    : [];
         $address    = (isset($nlp['entities']['address']))  ? $nlp['entities']['address']   : [];
         $location   = (isset($nlp['entities']['location'])) ? $nlp['entities']['location']  : [];
 
         if (empty($intents) && empty($address) && empty($location)) {
-            return $this->searchPlaces($term);
+            $data = [
+                'chat_id' => $this->getMessage()->getChat()->getId(),
+                'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
+            ];
+            return Request::sendMessage($data);
         } else if (!empty($location)) {
             foreach ($location as $item) {
-                return $this->searchPlaces(
-                    $this->app['app.trim_helper']->trim($item['value'])
-                );
+                try {
+                    \Longman\TelegramBot\TelegramLog::debug(sprintf('Telegram Google works'));
+                    $results = $this->app['app.api']->getGoogleCoordinates($item['value']);
+                } catch (\InvalidArgumentException $e) {
+                    $results = [];
+                }
+                return $this->getStopsByGoogleCoordinates($results);
             }
         } else if (!empty($address)) {
             foreach ($address as $item) {
-                return $this->searchPlaces(
-                    $this->app['app.trim_helper']->trim($item['value'])
-                );
+                // Search through the Eway
+                return $this->searchPlaces(urlencode($item['value']));
             }
         }  else if (!empty($intents)) {
             foreach ($intents as $intent) {
@@ -90,7 +98,6 @@ class Places
                         'chat_id' => $this->getMessage()->getChat()->getId(),
                         'text'    => 'Прикольно',
                     ];
-                    //$result = Request::sendMessage($data);
                     $result = Request::sendMessage($data);
                     if (!$result->isOk()) {
                         $this->app['monolog']->info("Joke ERROR " . $result->getDescription());
@@ -100,51 +107,60 @@ class Places
                 } else if ($intent['value'] == 'location_ask' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
                     return $this->getTelegram()->executeCommand('location');
                 } else if ($intent['value'] == 'first_hand_shake' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
-                    return $this->getTelegram()->executeCommand('location');
+                    $data = [
+                        'chat_id' => $this->getMessage()->getChat()->getId(),
+                        'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
+                    ];
+                    return Request::sendMessage($data);
                 } else {
-                    return $this->searchPlaces($term);
+                    $data = [
+                        'chat_id' => $this->getMessage()->getChat()->getId(),
+                        'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
+                    ];
+                    return Request::sendMessage($data);
                 }
             }
         }
-        return $this->searchPlaces($term);
+        $data = [
+            'chat_id' => $this->getMessage()->getChat()->getId(),
+            'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
+        ];
+        return Request::sendMessage($data);
     }
 
     private function searchPlaces($term)
     {
         $body = $this->app['app.eway']->getPlacesByName($term);
-
-        if (isset($body->item) && is_array($body->item) && !empty($body->item)) {
-            $elements   = [];
-            $subtitles  = [];
-            foreach ($body->item as $item) {
-                $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => $item->id]);
-                $keyboard = new InlineKeyboard($button);
-                $keyboard->setResizeKeyboard(true);
-
-                $subtitle = $this->app['app.stops']->getStopSubtitle($item->routes);
-                if (in_array($subtitle, $subtitles)) {
-                    continue;
-                }
-                $elements[] = [
-                    'chat_id'       =>  intval($this->getMessage()->getChat()->getId()),
-                    'latitude'      =>  $item->lat,
-                    'longitude'     =>  $item->lng,
-                    'title'         =>  $item->title,
-                    'address'       =>  'Транспорт: ' . $subtitle,
-                    'reply_markup'  =>  $keyboard
-                ];
-                $subtitles[] = $subtitle;
-            }
-            return $this->app['app.telegram.response']->venues($elements);
-        } else {
-            try {
-                \Longman\TelegramBot\TelegramLog::debug(sprintf('Telegram Google works'));
-                $results = $this->app['app.api']->getGoogleCoordinates($term);
-            } catch (\InvalidArgumentException $e) {
-                $results = [];
-            }
-            return $this->getStopsByGoogleCoordinates($results);
+        if (empty($body->item)) {
+            $data = [
+                'chat_id' => $this->getMessage()->getChat()->getId(),
+                'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
+            ];
+            return Request::sendMessage($data);
         }
+
+        $elements   = [];
+        $subtitles  = [];
+        foreach ($body->item as $item) {
+            $button = new InlineKeyboardButton(['text' => 'Обрати', 'callback_data' => $item->id]);
+            $keyboard = new InlineKeyboard($button);
+            $keyboard->setResizeKeyboard(true);
+
+            $subtitle = $this->app['app.stops']->getStopSubtitle($item->routes);
+            if (in_array($subtitle, $subtitles)) {
+                continue;
+            }
+            $elements[] = [
+                'chat_id'       =>  intval($this->getMessage()->getChat()->getId()),
+                'latitude'      =>  $item->lat,
+                'longitude'     =>  $item->lng,
+                'title'         =>  $item->title,
+                'address'       =>  'Транспорт: ' . $subtitle,
+                'reply_markup'  =>  $keyboard
+            ];
+            $subtitles[] = $subtitle;
+        }
+        return $this->app['app.telegram.response']->venues($elements);
     }
 
     private function getStopsByGoogleCoordinates($results)

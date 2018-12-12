@@ -36,16 +36,7 @@ class ArrivalMessage implements MessageInterface
                 }
             }
         }
-        $responses[] = [
-            'text' => "Час прибуття невідомий, оновіть своє місцезнаходження.",
-            'quick_replies' => [
-                [
-                    'content_type' => 'location',
-
-                ]
-            ]
-        ];
-        return $responses;
+        return $this->app['app.fallback']->text('');
     }
 
 }

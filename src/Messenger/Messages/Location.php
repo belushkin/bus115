@@ -16,17 +16,30 @@ class Location implements MessageInterface
 
     public function text($term = '')
     {
-        $responses[] = [
-            'text' => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
-            'quick_replies' => [
-                [
-                    'content_type' => 'location',
+        try {
+            $results = $this->app['app.api']->getGoogleCoordinates($term);
+        } catch (\InvalidArgumentException $e) {
+            $results = [];
+        }
+        return $this->getStopsByGoogleCoordinates($results);
+    }
 
+    private function getStopsByGoogleCoordinates($results)
+    {
+        if (empty($results->results[0]->geometry->location)) {
+            return $this->app['app.fallback']->text('');
+        }
+
+        $location = $results->results[0]->geometry->location;
+        $attachment = [
+            'payload' => [
+                'coordinates' => [
+                    'lat' => $location->lat,
+                    'long' => $location->lng
                 ]
             ]
         ];
-
-        return $responses;
+        return $this->app['app.stops']->text($attachment);
     }
 
 }

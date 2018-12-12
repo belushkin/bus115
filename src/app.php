@@ -31,9 +31,10 @@ use Bus115\Messenger\TrimHelper;
 use Bus115\Messenger\Messages\Image;
 use Bus115\Messenger\Messages\ArrivalMessage;
 use Bus115\Messenger\Messages\FirstHandShake;
-use Bus115\Messenger\Messages\RegularText;
+use Bus115\Messenger\Messages\Address;
 use Bus115\Messenger\Messages\Joke;
 use Bus115\Messenger\Messages\Help;
+use Bus115\Messenger\Messages\AskLocation;
 use Bus115\Messenger\Messages\Location;
 use Bus115\Messenger\Messages\FallBack;
 use Bus115\Messenger\Stops\Stops;
@@ -180,8 +181,8 @@ $app['app.first_hand_shake'] = function ($app) {
     return new FirstHandShake($app);
 };
 
-$app['app.regular_text'] = function ($app) {
-    return new RegularText($app);
+$app['app.address'] = function ($app) {
+    return new Address($app);
 };
 
 $app['app.joke'] = function ($app) {
@@ -198,6 +199,10 @@ $app['app.fallback'] = function ($app) {
 
 $app['app.image'] = function ($app) {
     return new Image($app);
+};
+
+$app['app.ask_location'] = function ($app) {
+    return new AskLocation($app);
 };
 
 $app['app.location'] = function ($app) {
