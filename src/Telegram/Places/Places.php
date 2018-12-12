@@ -81,7 +81,7 @@ class Places
             foreach ($address as $item) {
                 // Search through the Eway
                 $this->app['monolog']->info("ADDRESS START" . $item['value']);
-                return $this->searchPlaces(urlencode($item['value']));
+                return $this->searchPlaces($item['value']);
             }
         } else if (!empty($location)) {
             foreach ($location as $item) {
