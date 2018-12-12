@@ -76,6 +76,11 @@ class Places
                 'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
             ];
             return Request::sendMessage($data);
+        } else if (!empty($address)) {
+            foreach ($address as $item) {
+                // Search through the Eway
+                return $this->searchPlaces(urlencode($item['value']));
+            }
         } else if (!empty($location)) {
             foreach ($location as $item) {
                 try {
@@ -86,12 +91,7 @@ class Places
                 }
                 return $this->getStopsByGoogleCoordinates($results);
             }
-        } else if (!empty($address)) {
-            foreach ($address as $item) {
-                // Search through the Eway
-                return $this->searchPlaces(urlencode($item['value']));
-            }
-        }  else if (!empty($intents)) {
+        } else if (!empty($intents)) {
             foreach ($intents as $intent) {
                 if ($intent['value'] == 'joke' && $intent['confidence'] > Messenger::NLP_THRESHOLD) {
                     $data = [
