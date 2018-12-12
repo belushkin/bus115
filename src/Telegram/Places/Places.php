@@ -77,6 +77,7 @@ class Places
             ];
             return Request::sendMessage($data);
         } else if (!empty($address)) {
+            $this->app['monolog']->info("ADDRESS " . $address);
             foreach ($address as $item) {
                 // Search through the Eway
                 return $this->searchPlaces(urlencode($item['value']));
