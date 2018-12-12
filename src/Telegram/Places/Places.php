@@ -89,7 +89,7 @@ class Places
         } else if (!empty($address)) {
             foreach ($address as $item) {
                 // Search through the Eway
-                return $this->searchPlaces($item['value']);
+                return $this->searchPlaces(urlencode($item['value']));
             }
         }  else if (!empty($intents)) {
             foreach ($intents as $intent) {
