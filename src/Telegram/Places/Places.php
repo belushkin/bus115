@@ -80,7 +80,7 @@ class Places
             $this->app['monolog']->info("ADDRESS " . var_export($address, true));
             foreach ($address as $item) {
                 // Search through the Eway
-                $this->app['monolog']->info($item['value']);
+                $this->app['monolog']->info("ADDRESS START" . $item['value']);
                 return $this->searchPlaces(urlencode($item['value']));
             }
         } else if (!empty($location)) {
