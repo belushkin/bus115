@@ -47,7 +47,9 @@ class Messenger implements MessageInterface
             } else if (!empty($address)) {
                 // If wit.ai decided that this is address
                 // Address must be without numbers, just street name
+                $this->app['monolog']->info("ADDRESS MESSENGER" . var_export($address, true));
                 foreach ($address as $item) {
+                    $this->app['monolog']->info("ADDRESS MESSENGER START" . $item['value']);
                     $responses = $this->app['app.address']->text(
                         $this->app['app.trim_helper']->trim($item['value'])
                     );
