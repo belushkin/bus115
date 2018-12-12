@@ -1,6 +1,5 @@
 <?php
 
-// src/Messenger/Messenger.php
 namespace Bus115\Messenger;
 
 use Silex\Application;
@@ -24,35 +23,43 @@ class Messenger implements MessageInterface
         $address    = (isset($nlp['entities']['address']))  ? $nlp['entities']['address']   : [];
         $location   = (isset($nlp['entities']['location'])) ? $nlp['entities']['location']  : [];
 
-//        $this->app['monolog']->info(var_export($nlp, true));
-//        $this->app['monolog']->info(var_export($nlp['entities']['intent'], true));
-
+        // If user entered message
         if (isset($receivedMessage['text'])) {
+            // Get this text and clean it
             $text = htmlspecialchars(addslashes(trim(mb_strtolower($receivedMessage['text']))));
+
+            // Check wit.ai intents
+            // If nothing found from wit.ai forward it to regular text flow
             if (empty($intents) && empty($address) && empty($location)) {
                 if ($text == 'help' || $text == 'допомога' || $text == 'помощь') {
                     $responses = $this->app['app.help']->text($text);
                 } else {
-                    $responses = $this->app['app.regular_text']->text($text);
+                    $responses = $this->app['app.fallback']->text($text);
                 }
             } else if (!empty($location)) {
+                // If wit.ai decided that this is location
                 foreach ($location as $item) {
-                    $responses = $this->app['app.regular_text']->text(
+                    $responses = $this->app['app.location']->text(
                         $this->app['app.trim_helper']->trim($item['value'])
                     );
+                    break;
                 }
             } else if (!empty($address)) {
+                // If wit.ai decided that this is address
+                // Address must be without numbers, just street name
                 foreach ($address as $item) {
-                    $responses = $this->app['app.regular_text']->text(
+                    $responses = $this->app['app.address']->text(
                         $this->app['app.trim_helper']->trim($item['value'])
                     );
+                    break;
                 }
-            }  else if (!empty($intents)){
+            } else if (!empty($intents)){
+                // Walking through the intents
                 foreach ($intents as $intent) {
                     if ($intent['value'] == 'joke' && $intent['confidence'] > self::NLP_THRESHOLD) {
                         $responses = $this->app['app.joke']->text($text);
                     } else if ($intent['value'] == 'location_ask' && $intent['confidence'] > self::NLP_THRESHOLD) {
-                        $responses = $this->app['app.location']->text($text);
+                        $responses = $this->app['app.ask_location']->text($text);
                     } else if ($intent['value'] == 'first_hand_shake' && $intent['confidence'] > self::NLP_THRESHOLD) {
                         $responses = $this->app['app.first_hand_shake']->text($text);
                     } else {
