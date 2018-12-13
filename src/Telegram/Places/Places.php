@@ -160,7 +160,7 @@ class Places
     private function processCoordinates($results)
     {
         if (!isset($results['payload'])) {
-            $this->app['monolog']->info("ENGINE " . var_export($results, true));
+            $this->app['monolog']->info("ENGINE " . var_export($results[0]['attachment'], true));
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
                 'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
