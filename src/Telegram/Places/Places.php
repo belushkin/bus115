@@ -160,7 +160,6 @@ class Places
     private function processCoordinates($results)
     {
         if (!isset($results[0]['attachment'])) {
-            $this->app['monolog']->info("ENGINE " . var_export($results[0]['attachment'], true));
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
                 'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
@@ -172,6 +171,7 @@ class Places
             }
             return $result;
         }
+        $this->app['monolog']->info("ENGINE " . var_export($results[0]['attachment'], true));
         $lat        = $results[0]['attachment']['payload']['coordinates']['lat'];
         $lng        = $results[0]['attachment']['payload']['coordinates']['long'];
 
