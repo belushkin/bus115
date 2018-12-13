@@ -84,14 +84,9 @@ class Places
             }
         } else if (!empty($location)) {
             foreach ($location as $item) {
-                try {
-                    $this->app['monolog']->info("WIT TELEGRAM LOCATION VALUE" . $item['value']);
-                    \Longman\TelegramBot\TelegramLog::debug(sprintf('Telegram Google works'));
-                    $results = $this->app['app.api']->getGoogleCoordinates($item['value']);
-                } catch (\InvalidArgumentException $e) {
-                    $results = [];
-                }
-                return $this->getStopsByGoogleCoordinates($results);
+                $this->app['monolog']->info("WIT TELEGRAM LOCATION VALUE" . $item['value']);
+                $results = $this->app['app.location']->text($item['value']);
+                return $this->processCoordinates($results);
             }
         } else if (!empty($intents)) {
             foreach ($intents as $intent) {
@@ -134,11 +129,8 @@ class Places
     {
         $body = $this->app['app.eway']->getPlacesByName($term);
         if (empty($body->item)) {
-            $data = [
-                'chat_id' => $this->getMessage()->getChat()->getId(),
-                'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
-            ];
-            return Request::sendMessage($data);
+            $results = $this->app['app.location']->text($term);
+            return $this->processCoordinates($results);
         }
 
         $elements   = [];
@@ -165,27 +157,26 @@ class Places
         return $this->app['app.telegram.response']->venues($elements);
     }
 
-    private function getStopsByGoogleCoordinates($results)
+    private function processCoordinates($results)
     {
-        if (isset($results->results[0]->geometry->location)) {
-            $location = $results->results[0]->geometry->location;
-            \Longman\TelegramBot\TelegramLog::debug(sprintf('Google LOCATION, %s', \GuzzleHttp\json_encode($location)));
-
-            return $this->app['app.telegram.stops']->
-            setMessage($this->getMessage())->
-            text($location->lat, $location->lng);
+        if (!isset($results['payload'])) {
+            $data = [
+                'chat_id' => $this->getMessage()->getChat()->getId(),
+                'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
+            ];
+            $result = Request::sendMessage($data);
+            if (!$result->isOk()) {
+                $this->app['monolog']->info("Places ERROR " . $result->getDescription());
+                return Request::emptyResponse();
+            }
+            return $result;
         }
+        $lat        = $results['payload']['coordinates']['lat'];
+        $lng        = $results['payload']['coordinates']['long'];
 
-        $data = [
-            'chat_id' => $this->getMessage()->getChat()->getId(),
-            'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
-        ];
-        $result = Request::sendMessage($data);
-        if (!$result->isOk()) {
-            $this->app['monolog']->info("Places ERROR " . $result->getDescription());
-            return Request::emptyResponse();
-        }
-        return $result;
+        return $this->app['app.telegram.stops']->
+        setMessage($this->getMessage())->
+        text($lat, $lng);
     }
 
 }
