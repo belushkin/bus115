@@ -160,7 +160,7 @@ class Places
     private function processCoordinates($results)
     {
         // lat, long
-        if (count($results) != 2) {
+        if (isset($results['text'])) {
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
                 'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
