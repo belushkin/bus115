@@ -17,7 +17,7 @@ class Location implements MessageInterface
         $this->app = $app;
     }
 
-    public function text($term = '')
+    public function text($term = '', $telegram = false)
     {
         // Save term for the internal usage
         $this->term = $term;
@@ -29,6 +29,9 @@ class Location implements MessageInterface
         );
         if (!empty($geo)) {
             $this->app['monolog']->info("ENGINE LOCAL" . $term);
+            if ($telegram) {
+                return [$geo->getLat(), $geo->getLng()];
+            }
             return $this->response($geo->getLat(), $geo->getLng());
         }
 
@@ -40,7 +43,7 @@ class Location implements MessageInterface
         }
         if (!empty($results)) {
             $this->app['monolog']->info("ENGINE GOOGLE" . $term);
-            return $this->getStopsByGoogleCoordinates($results);
+            return $this->getStopsByGoogleCoordinates($results, $telegram);
         }
 
         // Third search by Nominatim (Open Streets Map)
@@ -51,7 +54,7 @@ class Location implements MessageInterface
         }
         if (!empty($results)) {
             $this->app['monolog']->info("ENGINE NOMINATIM" . $term);
-            return $this->getStopsByNominatimCoordinates($results);
+            return $this->getStopsByNominatimCoordinates($results, $telegram);
         }
 
         // If nothing found then switch off
@@ -59,7 +62,7 @@ class Location implements MessageInterface
     }
 
     // Google
-    private function getStopsByGoogleCoordinates($results)
+    private function getStopsByGoogleCoordinates($results, $telegram)
     {
         if (empty($results->results[0]->geometry->location)) {
             return $this->app['app.fallback']->text('');
@@ -78,11 +81,14 @@ class Location implements MessageInterface
         } catch (UniqueConstraintViolationException $e) {
 
         }
+        if ($telegram) {
+            return [$location->lat, $location->lng];
+        }
         return $this->response($location->lat, $location->lng);
     }
 
     // Nominatim
-    private function getStopsByNominatimCoordinates($results)
+    private function getStopsByNominatimCoordinates($results, $telegram)
     {
         if (empty($results[0]->place_id)) {
             return $this->app['app.fallback']->text('');
@@ -100,6 +106,9 @@ class Location implements MessageInterface
             $this->app['em']->flush();
         } catch (UniqueConstraintViolationException $e) {
 
+        }
+        if ($telegram) {
+            return [$location->lat, $location->lon];
         }
         return $this->response($location->lat, $location->lon);
     }
