@@ -28,3 +28,8 @@ if (file_exists('migrations-db.php')) {
 
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
 $entityManager = EntityManager::create($dbParams, $config);
+
+// **Fatal error**: Uncaught exception 'Doctrine\DBAL\DBALException' with message 'Unknown database type enum requested, Doctrine\DBAL\Platforms\MySqlPlatform may not support it.'
+$platform = $entityManager->getConnection()->getDatabasePlatform();
+$platform->registerDoctrineTypeMapping('enum', 'string');
+$platform->registerDoctrineTypeMapping('set', 'string');

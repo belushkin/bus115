@@ -79,13 +79,13 @@ class Places
         } else if (!empty($address)) {
             foreach ($address as $item) {
                 // Search through the Eway
-                $this->app['monolog']->info("WIT MESSENGER ADDRESS VALUE" . $item['value']);
+                $this->app['monolog']->info("WIT TELEGRAM ADDRESS VALUE" . $item['value']);
                 return $this->searchPlaces($item['value']);
             }
         } else if (!empty($location)) {
             foreach ($location as $item) {
                 try {
-                    $this->app['monolog']->info("WIT MESSENGER LOCATION VALUE" . $item['value']);
+                    $this->app['monolog']->info("WIT TELEGRAM LOCATION VALUE" . $item['value']);
                     \Longman\TelegramBot\TelegramLog::debug(sprintf('Telegram Google works'));
                     $results = $this->app['app.api']->getGoogleCoordinates($item['value']);
                 } catch (\InvalidArgumentException $e) {

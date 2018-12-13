@@ -25,7 +25,7 @@ class Address implements MessageInterface
         // urlencode term before sending it to eway
         $body       = $this->app['app.eway']->getPlacesByName($term);
         if (empty($body->item)) {
-            return $this->app['app.fallback']->text('');
+            return false;
         }
 
         $i = 0;

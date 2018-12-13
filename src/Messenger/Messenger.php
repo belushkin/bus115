@@ -40,19 +40,20 @@ class Messenger implements MessageInterface
                 // If wit.ai decided that this is location
                 foreach ($location as $item) {
                     $this->app['monolog']->info("WIT MESSENGER LOCATION VALUE" . $item['value']);
-                    $responses = $this->app['app.location']->text(
-                        $this->app['app.trim_helper']->trim($item['value'])
-                    );
+
+                    $responses = $this->app['app.location']->text($item['value']);
                     break;
                 }
             } else if (!empty($address)) {
                 // If wit.ai decided that this is address
-                // Address must be without numbers, just street name
                 foreach ($address as $item) {
                     $this->app['monolog']->info("WIT MESSENGER ADDRESS VALUE" . $item['value']);
-                    $responses = $this->app['app.address']->text(
-                        $this->app['app.trim_helper']->trim($item['value'])
-                    );
+
+                    $responses = $this->app['app.address']->text($item['value']);
+                    // Check for this specific false because the result can be different
+                    if ($responses === false) {
+                        $responses = $this->app['app.location']->text($item['value']);
+                    }
                     break;
                 }
             } else if (!empty($intents)){
