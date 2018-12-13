@@ -159,7 +159,7 @@ class Places
 
     private function processCoordinates($results)
     {
-        if (!isset($results['payload'])) {
+        if (!isset($results[0]['attachment'])) {
             $this->app['monolog']->info("ENGINE " . var_export($results[0]['attachment'], true));
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
@@ -172,8 +172,8 @@ class Places
             }
             return $result;
         }
-        $lat        = $results['payload']['coordinates']['lat'];
-        $lng        = $results['payload']['coordinates']['long'];
+        $lat        = $results[0]['attachment']['payload']['coordinates']['lat'];
+        $lng        = $results[0]['attachment']['payload']['coordinates']['long'];
 
         return $this->app['app.telegram.stops']->
         setMessage($this->getMessage())->
