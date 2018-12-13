@@ -64,7 +64,7 @@ class Geocode
 
     public function setOriginal($original)
     {
-        $this->original = $original;
+        $this->original = $this->doTranslit($original);
         $this->setKey($original);
     }
 
