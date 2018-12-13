@@ -173,6 +173,7 @@ class Places
             }
             return $result;
         }
+        $this->app['monolog']->info("ENGINE " . var_export($results, true));
         $lat        = $results[0];
         $lng        = $results[1];
 
