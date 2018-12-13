@@ -28,17 +28,17 @@ class Geocode
     private $original;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
      */
-    private $key;
+    private $changed;
 
     /**
-     * @ORM\Column(type="float", unique=false, nullable=false)
+     * @ORM\Column(type="decimal", scale=12, precision=18, nullable=true)
      */
     private $lat;
 
     /**
-     * @ORM\Column(type="float", unique=false, nullable=false)
+     * @ORM\Column(type="decimal", scale=12, precision=18, nullable=true)
      */
     private $lng;
 
@@ -64,18 +64,18 @@ class Geocode
 
     public function setOriginal($original)
     {
-        $this->original = $this->doTranslit($original);
-        $this->setKey($original);
+        $this->original = $original;
+        $this->setChanged($original);
     }
 
-    public function getKey()
+    public function getChanged()
     {
-        return $this->key;
+        return $this->changed;
     }
 
-    public function setKey($original)
+    public function setChanged($original)
     {
-        $this->key = $this->prepare($original);
+        $this->changed = $this->prepare($original);
     }
 
     public function prepare($original)

@@ -146,6 +146,7 @@ $app->get('/api/v1/getstops', function (Request $request) use ($app) {
     }
 
     $response = $app['app.eway']->getStopsNearPoint($lat, $lng);
+    //$response = $app['app.location']->text('tests');
     return new Response(\GuzzleHttp\json_encode($response));
 });
 

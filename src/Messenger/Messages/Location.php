@@ -4,6 +4,7 @@ namespace Bus115\Messenger\Messages;
 
 use Silex\Application;
 use Bus115\Entity\Geocode;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class Location implements MessageInterface
 {
@@ -24,7 +25,7 @@ class Location implements MessageInterface
         // First search in the database for already saved locations
         $geocode = new Geocode();
         $geo = $this->app['em']->getRepository('Bus115\Entity\Geocode')->findOneBy(
-            array('key' => $geocode->prepare($term))
+            array('changed' => $geocode->prepare($term))
         );
         if (!empty($geo)) {
             $this->app['monolog']->info("ENGINE LOCAL" . $term);
@@ -68,12 +69,15 @@ class Location implements MessageInterface
 
         // Save Geo into the database
         $geo = new Geocode();
-        //$geo->setOriginal($this->term);
-//        $geo->setLat($location->lat);
-//        $geo->setLng($location->lng);
-//        $this->app['em']->persist($geo);
-//        $this->app['em']->flush();
+        $geo->setOriginal($this->term);
+        $geo->setLat($location->lat);
+        $geo->setLng($location->lng);
+        try {
+            $this->app['em']->persist($geo);
+            $this->app['em']->flush();
+        } catch (UniqueConstraintViolationException $e) {
 
+        }
         return $this->response($location->lat, $location->lng);
     }
 
@@ -88,12 +92,15 @@ class Location implements MessageInterface
 
         // Save Geo into the database
         $geo = new Geocode();
-        //$geo->setOriginal($this->term);
-//        $geo->setLat($location->lat);
-//        $geo->setLng($location->lng);
-//        $this->app['em']->persist($geo);
-//        $this->app['em']->flush();
+        $geo->setOriginal($this->term);
+        $geo->setLat($location->lat);
+        $geo->setLng($location->lng);
+        try {
+            $this->app['em']->persist($geo);
+            $this->app['em']->flush();
+        } catch (UniqueConstraintViolationException $e) {
 
+        }
         return $this->response($location->lat, $location->lon);
     }
 
