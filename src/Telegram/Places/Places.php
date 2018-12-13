@@ -85,7 +85,7 @@ class Places
         } else if (!empty($location)) {
             foreach ($location as $item) {
                 $this->app['monolog']->info("WIT TELEGRAM LOCATION VALUE" . $item['value']);
-                $results = $this->app['app.location']->text($item['value']);
+                $results = $this->app['app.location']->text($item['value'], true);
                 return $this->processCoordinates($results);
             }
         } else if (!empty($intents)) {
@@ -129,7 +129,7 @@ class Places
     {
         $body = $this->app['app.eway']->getPlacesByName($term);
         if (empty($body->item)) {
-            $results = $this->app['app.location']->text($term);
+            $results = $this->app['app.location']->text($term, true);
             return $this->processCoordinates($results);
         }
 
