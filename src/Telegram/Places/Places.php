@@ -162,7 +162,7 @@ class Places
         if (!isset($results['payload'])) {
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
-                'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
+                'text'    => '1Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
             ];
             $result = Request::sendMessage($data);
             if (!$result->isOk()) {
