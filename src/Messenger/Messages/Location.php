@@ -35,6 +35,17 @@ class Location implements MessageInterface
             return $this->response($geo->getLat(), $geo->getLng());
         }
 
+        // Third search by Nominatim (Open Streets Map)
+        try {
+            $results = $this->app['app.api']->getNominatimCoordinates($term);
+        } catch (\InvalidArgumentException $e) {
+            $results = [];
+        }
+        if (!empty($results)) {
+            $this->app['monolog']->info("ENGINE NOMINATIM" . $term);
+            return $this->getStopsByNominatimCoordinates($results, $telegram);
+        }
+
         // Second search in Google
         try {
             $results = $this->app['app.api']->getGoogleCoordinates($term);
@@ -45,17 +56,6 @@ class Location implements MessageInterface
             $this->app['monolog']->info("ENGINE GOOGLE" . $term);
             $this->app['monolog']->info("ENGINE " . var_export($results, true));
             return $this->getStopsByGoogleCoordinates($results, $telegram);
-        }
-
-        // Third search by Nominatim (Open Streets Map)
-        try {
-            $results = $this->app['app.api']->getNominatimCoordinates($term);
-        } catch (\InvalidArgumentException $e) {
-            $results = [];
-        }
-        if (!empty($results)) {
-            $this->app['monolog']->info("ENGINE NOMINATIM" . $term);
-            return $this->getStopsByNominatimCoordinates($results, $telegram);
         }
 
         // If nothing found then switch off
