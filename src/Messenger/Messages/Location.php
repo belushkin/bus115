@@ -43,6 +43,7 @@ class Location implements MessageInterface
         }
         if (!empty($results)) {
             $this->app['monolog']->info("ENGINE GOOGLE" . $term);
+            $this->app['monolog']->info("ENGINE " . var_export($results, true));
             return $this->getStopsByGoogleCoordinates($results, $telegram);
         }
 
