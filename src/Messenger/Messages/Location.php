@@ -69,10 +69,10 @@ class Location implements MessageInterface
         // Save Geo into the database
         $geo = new Geocode();
         //$geo->setOriginal($this->term);
-        $geo->setLat($location->lat);
-        $geo->setLng($location->lng);
-        $this->app['em']->persist($geo);
-        $this->app['em']->flush();
+//        $geo->setLat($location->lat);
+//        $geo->setLng($location->lng);
+//        $this->app['em']->persist($geo);
+//        $this->app['em']->flush();
 
         return $this->response($location->lat, $location->lng);
     }
@@ -89,10 +89,10 @@ class Location implements MessageInterface
         // Save Geo into the database
         $geo = new Geocode();
         //$geo->setOriginal($this->term);
-        $geo->setLat($location->lat);
-        $geo->setLng($location->lng);
-        $this->app['em']->persist($geo);
-        $this->app['em']->flush();
+//        $geo->setLat($location->lat);
+//        $geo->setLng($location->lng);
+//        $this->app['em']->persist($geo);
+//        $this->app['em']->flush();
 
         return $this->response($location->lat, $location->lon);
     }
