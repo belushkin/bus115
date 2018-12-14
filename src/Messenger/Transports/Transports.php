@@ -33,7 +33,7 @@ class Transports implements IdInterface
         $responses  = [];
         $cache      = [];
 
-        $string = $body->title . "\n";
+        $string = $body->title . "\n\n";
         foreach ($body->routes as $route) {
             if (in_array($route->id, $cache)) { // removing duplicates from Eway API
                 continue;
