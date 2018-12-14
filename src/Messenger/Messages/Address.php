@@ -50,7 +50,6 @@ class Address implements MessageInterface
                 $elements = [];
             }
         }
-        $this->app['monolog']->info("ROUTE 333" . var_export($elements, true));
         $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
         return $responses;
     }

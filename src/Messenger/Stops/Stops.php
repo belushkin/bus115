@@ -82,34 +82,36 @@ class Stops implements AttachmentInterface
             $buttons    = [];
             foreach ($routes->route as $route) {
                 $attributes = (array)$route;
-                $this->app['monolog']->info("ROUTE ------" . var_export($attributes['@attributes']->type, true));
-                if (!isset($route->type)) {
+                if (isset($attributes['@attributes']) && isset($attributes['@attributes']->type)) {
+                    $type = $attributes['@attributes']->type;
+                }
+                if (empty($type)) {
                     continue;
                 }
-                if ($route->type == 'bus') {
+                if ($type == 'bus') {
                     $list['bus'] = true;
                 }
-                if ($route->type == 'trol') {
+                if ($type == 'trol') {
                     $list['trol'] = true;
                 }
-                if ($route->type == 'tram') {
+                if ($type == 'tram') {
                     $list['tram'] = true;
                 }
-                if ($route->type == 'marshrutka') {
+                if ($type == 'marshrutka') {
                     $list['marshrutka'] = true;
                 }
-                if ($route->type == 'train') {
+                if ($type == 'train') {
                     $list['train'] = true;
                 }
-                if ($route->type == 'metro') {
+                if ($type == 'metro') {
                     $list['metro'] = true;
                 }
-                if ($route->type == 'light-rail') {
+                if ($type == 'light-rail') {
                     $list['light-rail'] = true;
                 }
             }
-            $this->app['monolog']->info("ROUTE 111" );
             foreach (array_keys($list) as $transport) {
+                $this->app['monolog']->info("ROUTE 111" . $transport);
                 $buttons[] = [
                     'type' => 'postback',
                     'title' => $this->getButtonTitle($transport),
@@ -122,7 +124,6 @@ class Stops implements AttachmentInterface
             'title' => $this->getButtonTitle(false),
             'payload' => $id
         ];
-        $this->app['monolog']->info("ROUTE 222" );
         return $buttons;
     }
 
