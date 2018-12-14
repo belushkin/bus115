@@ -38,7 +38,12 @@ class Transports implements IdInterface
             if (in_array($route->id, $cache)) { // removing duplicates from Eway API
                 continue;
             }
-            if ($type && $type != $route->transportKey) {
+
+            $transportKey = $route->transportKey;
+            if ($transportKey == 'marshrutka') {
+                $transportKey = 'bus';
+            }
+            if ($type && $type != $transportKey) {
                 continue;
             }
             //$this->app['monolog']->info("ROUTE: TYPE" . $type . "TRANSPORT KEY " . $route->transportKey);

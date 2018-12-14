@@ -88,7 +88,7 @@ class Stops implements AttachmentInterface
                 if (empty($type)) {
                     continue;
                 }
-                if ($type == 'bus') {
+                if ($type == 'bus' || $type == 'marshrutka') {
                     $list['bus'] = true;
                 }
                 if ($type == 'trol') {
@@ -96,9 +96,6 @@ class Stops implements AttachmentInterface
                 }
                 if ($type == 'tram') {
                     $list['tram'] = true;
-                }
-                if ($type == 'marshrutka') {
-                    $list['marshrutka'] = true;
                 }
                 if ($type == 'train') {
                     $list['train'] = true;
@@ -129,7 +126,7 @@ class Stops implements AttachmentInterface
 
     private function getButtonTitle($type)
     {
-        if ($type == 'bus') {
+        if ($type == 'bus' || $type == 'marshrutka') {
             return 'Автобуси';
         }
         if ($type == 'trol') {
@@ -137,9 +134,6 @@ class Stops implements AttachmentInterface
         }
         if ($type == 'tram') {
             return 'Трамваї';
-        }
-        if ($type == 'marshrutka') {
-            return 'Маршрутки';
         }
         if ($type == 'train') {
             return 'Потяги';
