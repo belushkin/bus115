@@ -82,7 +82,7 @@ class Stops implements AttachmentInterface
             $buttons    = [];
             foreach ($routes->route as $route) {
                 $attributes = (array)$route;
-                $this->app['monolog']->info("ROUTE ------" . var_export($attributes['@attributes'], true));
+                $this->app['monolog']->info("ROUTE ------" . var_export($attributes['@attributes']['type'], true));
                 if (!isset($route->type)) {
                     continue;
                 }
