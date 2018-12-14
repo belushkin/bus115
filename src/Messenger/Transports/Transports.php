@@ -25,6 +25,8 @@ class Transports implements IdInterface
             $type   = false;
         }
 
+        $this->app['monolog']->info("ROUTE: id" . $id . "type " . $type);
+
         $body     = $this->callStopInfo($id);
         $responses  = [];
         $cache      = [];

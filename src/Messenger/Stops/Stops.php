@@ -111,7 +111,6 @@ class Stops implements AttachmentInterface
                 }
             }
             foreach (array_keys($list) as $transport) {
-                $this->app['monolog']->info("ROUTE 111" . $transport);
                 $buttons[] = [
                     'type' => 'postback',
                     'title' => $this->getButtonTitle($transport),
