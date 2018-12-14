@@ -28,7 +28,7 @@ class Messenger implements MessageInterface
             // Get this text and clean it
             $text = htmlspecialchars(addslashes(trim(mb_strtolower($receivedMessage['text']))));
 
-            //$this->app['monolog']->info("ROUTE: TYPE" . var_export($receivedMessage, true));
+            $this->app['monolog']->info("ROUTE: TYPE" . var_export($receivedMessage['quick_reply']['payload'], true));
             // Handle quick reply from the user
             if (strpos($receivedMessage['quick_reply']['payload'], '__')) {
                 $responses = $this->app['app.transports']->text($receivedMessage['quick_reply']['payload']);
