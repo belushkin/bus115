@@ -61,7 +61,7 @@ class Transports implements IdInterface
                 [
                     'content_type'  => 'text',
                     'title'         => 'Оновити',
-                    'payload'       => ($type) ? $id . '__' . $type : $id
+                    'payload'       => ($type) ? $id . '__' . $type : $id . '__' . 300
                 ]
             ]
         ];
