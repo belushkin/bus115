@@ -36,13 +36,7 @@ class Stops implements AttachmentInterface
                     'title' => $stop->title,
                     'subtitle' => 'Транспорт: ' . $subtitle,
                     'image_url' => $this->app['app.address']->getStopImage($stop->id, $stop->lat, $stop->lng),
-                    'buttons' => [
-                        [
-                            'type' => 'postback',
-                            'title' => 'Вибрати цю зупинку',
-                            'payload' => $stop->id
-                        ]
-                    ]
+                    'buttons' => $this->getMessengerStopButtonsArray($stop->id, $stop->routes)
                 ];
                 $subtitles[] = $subtitle;
                 $i++;
@@ -87,6 +81,10 @@ class Stops implements AttachmentInterface
             $list       = [];
             $buttons    = [];
             foreach ($routes->route as $route) {
+                $this->app['monolog']->info("ROUTE" . $route);
+                if (!isset($route->type)) {
+                    continue;
+                }
                 if ($route->type == 'bus') {
                     $list['bus'] = true;
                 }

@@ -21,15 +21,10 @@ class Postback implements MessageInterface
         // Get the payload for the postback
         $payload = htmlspecialchars(addslashes(trim(mb_strtolower($receivedPostback['payload']))));
 
-        if (intval($payload) != 0 && strpos($payload, '_') === false) { // show all stops
-            $responses = $this->app['app.transports']->text($payload);
-
-        } else if (strpos($payload, '_')) { // show specific arrival time for the transport
-
-            $responses = $this->app['app.transports']->text($payload);
-
-        } else if ($payload === 'first hand shake') {
+        if ($payload === 'first hand shake') {
             $responses = $this->app['app.first_hand_shake']->text();
+        } else {
+            $responses = $this->app['app.transports']->text($payload);
         }
 
         $i = 0;

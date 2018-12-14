@@ -25,36 +25,35 @@ class Transports implements IdInterface
             $type   = false;
         }
 
-        $routes     = $this->callStopInfo($id);
-        $elements   = [];
+        $body     = $this->callStopInfo($id);
         $responses  = [];
         $cache      = [];
 
-        $i = 0;
-        foreach ($routes as $route) {
+        $string = $body->title . "\n";
+        foreach ($body->routes as $route) {
             if (in_array($route->id, $cache)) { // removing duplicates from Eway API
                 continue;
             }
-            $elements[] = [
-                'title'     => $route->transportName . ' №' . $route->title,
-                'subtitle'  => 'В напрямку:' . $route->directionTitle,
-                'image_url' => "https://bus115.kiev.ua/images/{$route->transportKey}.jpg",
-                'buttons' => [
-                    [
-                        'type' => 'postback',
-                        'title' => 'Оновити час прибуття',
-                        'payload' => $id . '_'. $route->id
-                    ]
-                ]
-            ];
-            $i++;
-            if ($i % 10 == 0) {
-                $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
-                $elements = [];
+            if ($type && $type == $route->transportKey) {
+                continue;
             }
+
+            $string .= $route->transportName. " №" . $route->title . ", ";
+            $string .= "прибуде через " . $route->timeLeftFormatted;
+            $string .= "\n";
+
             $cache[] = $route->id;
         }
-        $responses[] = $this->app['app.messenger_response']->generateGenericResponse($elements);
+        $responses[] = [
+            'text' => $string,
+            'quick_replies' => [
+                [
+                    'content_type'  => 'text',
+                    'title'         => 'Оновити',
+                    'payload'       => ($type) ? $id . '_' . $type : $id
+                ]
+            ]
+        ];
         return $responses;
     }
 
@@ -62,7 +61,7 @@ class Transports implements IdInterface
     {
         $body = $this->app['app.eway']->handleStopInfo($id);
         if (isset($body->routes) && is_array($body->routes) && !empty($body->routes)) {
-            return $body->routes;
+            return $body;
         }
         return [];
     }
