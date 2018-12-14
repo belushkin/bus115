@@ -41,13 +41,7 @@ class Address implements MessageInterface
                 'title'     => $item->title,
                 'subtitle'  => 'Транспорт: ' . $subtitle,
                 'image_url' => $this->getStopImage($item->id, $item->lat, $item->lng),
-                'buttons' => [
-                    [
-                        'type' => 'postback',
-                        'title' => 'Вибрати цю зупинку',
-                        'payload' => $item->id
-                    ]
-                ]
+                'buttons'   => $this->app['app.stops']->getMessengerStopButtonsArray($item->id, $item->routes)
             ];
             $subtitles[] = $subtitle;
             $i++;

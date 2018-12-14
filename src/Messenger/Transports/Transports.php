@@ -14,8 +14,17 @@ class Transports implements IdInterface
         $this->app = $app;
     }
 
-    public function text($id)
+    public function text($payload)
     {
+        if (strpos($payload, '_')) {
+            $params = explode('_', $payload);
+            $id     = intval($params[0]);
+            $type   = $params[1];
+        } else {
+            $id     = intval($payload);
+            $type   = false;
+        }
+
         $routes     = $this->callStopInfo($id);
         $elements   = [];
         $responses  = [];

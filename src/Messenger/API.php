@@ -40,6 +40,7 @@ class API
 
     public function getGoogleCoordinates($string)
     {
+        $string = "м.Київ, ". $string;
         $url = "https://maps.googleapis.com/maps/api/geocode/json?address=".urlencode($string)."&key=".$this->app['eway']['maps_key'];
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_URL,$url);
