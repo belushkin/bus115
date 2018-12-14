@@ -40,13 +40,18 @@ class Messenger implements MessageInterface
                 } else {
                     $responses = $this->app['app.fallback']->text($text);
                 }
-            } else if (!empty($location)) {
-                // If wit.ai decided that this is location
-                foreach ($location as $item) {
-                    $this->app['monolog']->info("WIT MESSENGER LOCATION VALUE" . $item['value']);
-
-                    $responses = $this->app['app.location']->text($item['value']);
-                    break;
+            } else if (!empty($intents)){
+                // Walking through the intents
+                foreach ($intents as $intent) {
+                    if ($intent['value'] == 'joke' && $intent['confidence'] > self::NLP_THRESHOLD) {
+                        $responses = $this->app['app.joke']->text($text);
+                    } else if ($intent['value'] == 'location_ask' && $intent['confidence'] > self::NLP_THRESHOLD) {
+                        $responses = $this->app['app.ask_location']->text($text);
+                    } else if ($intent['value'] == 'first_hand_shake' && $intent['confidence'] > self::NLP_THRESHOLD) {
+                        $responses = $this->app['app.first_hand_shake']->text($text);
+                    } else {
+                        $responses = $this->app['app.fallback']->text($text);
+                    }
                 }
             } else if (!empty($address)) {
                 // If wit.ai decided that this is address
@@ -60,18 +65,13 @@ class Messenger implements MessageInterface
                     }
                     break;
                 }
-            } else if (!empty($intents)){
-                // Walking through the intents
-                foreach ($intents as $intent) {
-                    if ($intent['value'] == 'joke' && $intent['confidence'] > self::NLP_THRESHOLD) {
-                        $responses = $this->app['app.joke']->text($text);
-                    } else if ($intent['value'] == 'location_ask' && $intent['confidence'] > self::NLP_THRESHOLD) {
-                        $responses = $this->app['app.ask_location']->text($text);
-                    } else if ($intent['value'] == 'first_hand_shake' && $intent['confidence'] > self::NLP_THRESHOLD) {
-                        $responses = $this->app['app.first_hand_shake']->text($text);
-                    } else {
-                        $responses = $this->app['app.fallback']->text($text);
-                    }
+            } else if (!empty($location)) {
+                // If wit.ai decided that this is location
+                foreach ($location as $item) {
+                    $this->app['monolog']->info("WIT MESSENGER LOCATION VALUE" . $item['value']);
+
+                    $responses = $this->app['app.location']->text($item['value']);
+                    break;
                 }
             } else {
                 $responses = $this->app['app.fallback']->text($text);
