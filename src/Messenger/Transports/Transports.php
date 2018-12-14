@@ -25,7 +25,7 @@ class Transports implements IdInterface
             $type   = false;
         }
 
-        $this->app['monolog']->info("ROUTE: id" . $id . "type " . $type);
+        //$this->app['monolog']->info("ROUTE: id" . $id . "type " . $type);
 
         $body     = $this->callStopInfo($id);
         $responses  = [];
@@ -36,10 +36,10 @@ class Transports implements IdInterface
             if (in_array($route->id, $cache)) { // removing duplicates from Eway API
                 continue;
             }
-            if ($type == $route->transportKey) {
+            if ($type != $route->transportKey) {
                 continue;
             }
-            $this->app['monolog']->info("ROUTE: TYPE" . $type . "TRANSPORT KEY " . $route->transportKey);
+            //$this->app['monolog']->info("ROUTE: TYPE" . $type . "TRANSPORT KEY " . $route->transportKey);
 
             $string .= $route->transportName. " №" . $route->title . ", ";
             $string .= "прибуде через " . $route->timeLeftFormatted;
