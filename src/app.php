@@ -29,7 +29,6 @@ use Bus115\Messenger\API;
 use Bus115\Messenger\Response;
 use Bus115\Messenger\TrimHelper;
 use Bus115\Messenger\Messages\Image;
-use Bus115\Messenger\Messages\ArrivalMessage;
 use Bus115\Messenger\Messages\FirstHandShake;
 use Bus115\Messenger\Messages\Address;
 use Bus115\Messenger\Messages\Joke;
@@ -171,10 +170,6 @@ $app['app.telegram.webhook'] = function ($app) {
 
 $app['app.api'] = function ($app) {
     return new API($app);
-};
-
-$app['app.arrival_message'] = function ($app) {
-    return new ArrivalMessage($app);
 };
 
 $app['app.first_hand_shake'] = function ($app) {

@@ -36,13 +36,7 @@ class Stops implements AttachmentInterface
                     'title' => $stop->title,
                     'subtitle' => 'Транспорт: ' . $subtitle,
                     'image_url' => $this->app['app.address']->getStopImage($stop->id, $stop->lat, $stop->lng),
-                    'buttons' => [
-                        [
-                            'type' => 'postback',
-                            'title' => 'Вибрати цю зупинку',
-                            'payload' => $stop->id
-                        ]
-                    ]
+                    'buttons' => $this->getMessengerStopButtonsArray($stop->id, $stop->routes)
                 ];
                 $subtitles[] = $subtitle;
                 $i++;
@@ -79,6 +73,80 @@ class Stops implements AttachmentInterface
             return implode(", ", $result);
         }
         return '';
+    }
+
+    public function getMessengerStopButtonsArray($id, $routes)
+    {
+        if (isset($routes->route) && is_array($routes->route)) {
+            $list       = [];
+            $buttons    = [];
+            foreach ($routes->route as $route) {
+                $this->app['monolog']->info("ROUTE" . $route);
+                if (!isset($route->type)) {
+                    continue;
+                }
+                if ($route->type == 'bus') {
+                    $list['bus'] = true;
+                }
+                if ($route->type == 'trol') {
+                    $list['trol'] = true;
+                }
+                if ($route->type == 'tram') {
+                    $list['tram'] = true;
+                }
+                if ($route->type == 'marshrutka') {
+                    $list['marshrutka'] = true;
+                }
+                if ($route->type == 'train') {
+                    $list['train'] = true;
+                }
+                if ($route->type == 'metro') {
+                    $list['metro'] = true;
+                }
+                if ($route->type == 'light-rail') {
+                    $list['light-rail'] = true;
+                }
+            }
+            foreach (array_keys($list) as $transport) {
+                $buttons[] = [
+                    'type' => 'postback',
+                    'title' => $this->getButtonTitle($transport),
+                    'payload' => $id . '_' . $transport
+                ];
+            }
+        }
+        $buttons[] = [
+            'type' => 'postback',
+            'title' => $this->getButtonTitle(false),
+            'payload' => $id
+        ];
+        return [$buttons];
+    }
+
+    private function getButtonTitle($type)
+    {
+        if ($type == 'bus') {
+            return 'Автобуси';
+        }
+        if ($type == 'trol') {
+            return 'Тролейбуси';
+        }
+        if ($type == 'tram') {
+            return 'Трамваї';
+        }
+        if ($type == 'marshrutka') {
+            return 'Маршрутки';
+        }
+        if ($type == 'train') {
+            return 'Потяги';
+        }
+        if ($type == 'metro') {
+            return 'Метро';
+        }
+        if ($type == 'light-rail') {
+            return 'Електричкі';
+        }
+        return 'Показати всі';
     }
 
 }
