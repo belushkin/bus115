@@ -29,8 +29,8 @@ class Messenger implements MessageInterface
             $text = htmlspecialchars(addslashes(trim(mb_strtolower($receivedMessage['text']))));
 
             // Handle quick reply from the user
-            if (strpos($text, '__')) {
-                $responses = $this->app['app.transports']->text($text);
+            if (strpos($receivedMessage['payload'], '__')) {
+                $responses = $this->app['app.transports']->text($receivedMessage['payload']);
             } else if (empty($intents) && empty($address) && empty($location)) {
                 // Check wit.ai intents
                 // If nothing found from wit.ai forward it to regular text flow

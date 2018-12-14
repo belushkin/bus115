@@ -110,7 +110,7 @@ class Stops implements AttachmentInterface
                     $list['light-rail'] = true;
                 }
             }
-            $this->app['monolog']->info("ROUTE LIST:" . var_export($list, true));
+            //$this->app['monolog']->info("ROUTE LIST:" . var_export($list, true));
             foreach (array_keys($list) as $transport) {
                 $buttons[] = [
                     'type' => 'postback',

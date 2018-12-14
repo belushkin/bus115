@@ -44,8 +44,8 @@ class Transports implements IdInterface
             //$this->app['monolog']->info("ROUTE: TYPE" . $type . "TRANSPORT KEY " . $route->transportKey);
 
             // $route->transportName.
-            $string .= "№" . $route->title . ", ";
-            $string .= "прибуде через " . $route->timeLeftFormatted;
+            $string .= "№" . $route->title . " ";
+            $string .= "через " . $route->timeLeftFormatted;
             $string .= "\n";
 
             $cache[] = $route->id;
