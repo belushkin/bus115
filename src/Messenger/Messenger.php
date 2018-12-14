@@ -7,7 +7,7 @@ use Silex\Application;
 class Messenger implements MessageInterface
 {
 
-    const NLP_THRESHOLD = 0.8;
+    const NLP_THRESHOLD = 0.85;
 
     private $app;
 
