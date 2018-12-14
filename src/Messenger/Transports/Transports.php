@@ -16,13 +16,15 @@ class Transports implements IdInterface
 
     public function text($payload)
     {
-        if (strpos($payload, '_')) {
-            $params = explode('_', $payload);
+        $id     = false;
+        $type   = false;
+        if (strpos($payload, '__')) {
+            $params = explode('__', $payload);
             $id     = intval($params[0]);
-            $type   = $params[1];
-        } else {
-            $id     = intval($payload);
-            $type   = false;
+            $type   = ($params[1] == 300) ? false : $params[1];
+        }
+        if (empty($id)) {
+            return $this->app['app.fallback']->text('');
         }
 
         //$this->app['monolog']->info("ROUTE: id" . $id . "type " . $type);
@@ -41,7 +43,8 @@ class Transports implements IdInterface
             }
             //$this->app['monolog']->info("ROUTE: TYPE" . $type . "TRANSPORT KEY " . $route->transportKey);
 
-            $string .= $route->transportName. " №" . $route->title . ", ";
+            // $route->transportName.
+            $string .= "№" . $route->title . ", ";
             $string .= "прибуде через " . $route->timeLeftFormatted;
             $string .= "\n";
 

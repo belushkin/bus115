@@ -28,9 +28,12 @@ class Messenger implements MessageInterface
             // Get this text and clean it
             $text = htmlspecialchars(addslashes(trim(mb_strtolower($receivedMessage['text']))));
 
-            // Check wit.ai intents
-            // If nothing found from wit.ai forward it to regular text flow
-            if (empty($intents) && empty($address) && empty($location)) {
+            // Handle quick reply from the user
+            if (strpos($text, '__')) {
+                $responses = $this->app['app.transports']->text($text);
+            } else if (empty($intents) && empty($address) && empty($location)) {
+                // Check wit.ai intents
+                // If nothing found from wit.ai forward it to regular text flow
                 if ($text == 'help' || $text == 'допомога' || $text == 'помощь') {
                     $responses = $this->app['app.help']->text($text);
                 } else {
