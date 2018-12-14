@@ -122,7 +122,7 @@ class Stops implements AttachmentInterface
             'payload' => $id
         ];
         $this->app['monolog']->info("ROUTE 222" );
-        return [$buttons];
+        return $buttons;
     }
 
     private function getButtonTitle($type)
