@@ -107,6 +107,7 @@ class Stops implements AttachmentInterface
                     $list['light-rail'] = true;
                 }
             }
+            $this->app['monolog']->info("ROUTE 111" );
             foreach (array_keys($list) as $transport) {
                 $buttons[] = [
                     'type' => 'postback',
@@ -120,6 +121,7 @@ class Stops implements AttachmentInterface
             'title' => $this->getButtonTitle(false),
             'payload' => $id
         ];
+        $this->app['monolog']->info("ROUTE 222" );
         return [$buttons];
     }
 
