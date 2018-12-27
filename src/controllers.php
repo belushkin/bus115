@@ -61,6 +61,20 @@ $app->get('/tos', function (Request $request) use ($app) {
     ]);
 });
 
+$app->get('/timetable/{type}/{id}', function (Request $request, $type, $id) use ($app) {
+    $timetable  = $app['app.timetable'];
+    if ($timetable->setTypeWithId($type, $id)) {
+        echo $timetable->getUrl($id);
+        exit();
+    }
+    echo "type is undefined";
+    exit();
+//    return $app['twig']->render('tos.html.twig', [
+//        'verifyToken'   => $verifyToken,
+//        'token'         => $app['eway']['token']
+//    ]);
+});
+
 $app->get('/upload_transport', function (Request $request) use ($app) {
     $verifyToken    = $request->get('verifyToken');
     return $app['twig']->render('upload_transport.html.twig', array(
