@@ -67,10 +67,15 @@ $app->get('/timetable/{type}/{id}', function (Request $request, $type, $id) use 
     $dommanager  = $app['app.dommanager'];
 
     if ($timetable->setTypeWithId($type, $id)) {
-        $html = $requester->request('https://dimas.life/kpt/lite.php?a_day=rob&a_type=avt&a_route=5');//$timetable->getUrl($id)
+        $html = $requester->request($timetable->getUrl($id));
+        //$html = $requester->request('https://dimas.life/kpt/lite.php?a_day=rob&a_type=avt&a_route=5');
+        echo $timetable->getUrl($id), "\n";
 
         $dommanager->loadHTML($html);
-        $dommanager->saveEntity();
+        $dommanager->getBodyInJson();
+        exit();
+
+        $dommanager->saveEntity($id, $type, $dommanager->getHeaderInJson(), $dommanager->getBodyInJson());
 
         print_r($dommanager->getHeaderInJson());
         exit();

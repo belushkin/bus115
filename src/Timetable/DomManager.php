@@ -42,4 +42,17 @@ class DomManager
         }
         return \GuzzleHttp\json_encode($result);
     }
+
+    public function getBodyInJson()
+    {
+        $result = [];
+        $body = $this->getElementById('timetable');
+        $tds = $body->getElementsByTagName('tr');
+        foreach ($tds as $node) {
+            var_dump($node);
+            //$result[] = $node->nodeValue;
+        }
+        return \GuzzleHttp\json_encode($result);
+    }
+
 }
