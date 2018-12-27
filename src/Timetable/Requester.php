@@ -15,21 +15,11 @@ class Requester
         $this->app = $app;
     }
 
-    public function getStopsNearPoint($lat, $lng)
+    public function request($url)
     {
         $client = new Client();
-        $response = $client->request('GET', $this->app['eway']['url'], [
-            'query' => [
-                'login'     => $this->app['eway']['login'],
-                'password'  => $this->app['eway']['pass'],
-                'function'  => 'stops.GetStopsNearPointWithRoutes',
-                'city'      => $this->app['eway']['city'],
-                'lat'       => $lat,
-                'lng'       => $lng
-            ]
-        ]);
-
-        return \GuzzleHttp\json_decode($response->getBody());
+        $response = $client->request('GET', $url);
+        return (string)$response->getBody();
     }
 
 }

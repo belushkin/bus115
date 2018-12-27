@@ -4,6 +4,7 @@ namespace Bus115\Timetable;
 
 use Silex\Application;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
+use Bus115\Entity\Timetable as T;
 
 class Timetable
 {
@@ -103,6 +104,18 @@ class Timetable
             return self::HOLIDAY_DAY;
         }
         return self::WORKING_DAY;
+    }
+
+    public function saveEntity($transportNumber, $transportType, $header, $body)
+    {
+        $t = new T();
+        $t->setTransportNumber($transportNumber);
+        $t->setTransportType($transportType);
+        $t->setHeader($header);
+        $t->setTimetable($body);
+
+        $this->app['em']->persist($t);
+        $this->app['em']->flush();
     }
 
 }

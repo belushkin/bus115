@@ -20,6 +20,8 @@ use Monolog\Logger;
 
 use Bus115\Timetable\Requester;
 use Bus115\Timetable\Timetable;
+use Bus115\Timetable\DomManager;
+
 use Bus115\Upload\Manager;
 use Bus115\Upload\Lister;
 use Bus115\Security\TokenAuthenticator;
@@ -152,6 +154,10 @@ $app['app.timetable'] = function ($app) {
 
 $app['app.requester'] = function ($app) {
     return new Requester($app);
+};
+
+$app['app.dommanager'] = function ($app) {
+    return new DomManager($app);
 };
 
 $app['app.telegram.response'] = function ($app) {

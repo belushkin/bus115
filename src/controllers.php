@@ -62,9 +62,17 @@ $app->get('/tos', function (Request $request) use ($app) {
 });
 
 $app->get('/timetable/{type}/{id}', function (Request $request, $type, $id) use ($app) {
-    $timetable  = $app['app.timetable'];
+    $timetable   = $app['app.timetable'];
+    $requester   = $app['app.requester'];
+    $dommanager  = $app['app.dommanager'];
+
     if ($timetable->setTypeWithId($type, $id)) {
-        echo $timetable->getUrl($id);
+        $html = $requester->request('https://dimas.life/kpt/lite.php?a_day=rob&a_type=avt&a_route=5');//$timetable->getUrl($id)
+
+        $dommanager->loadHTML($html);
+        $dommanager->saveEntity();
+
+        print_r($dommanager->getHeaderInJson());
         exit();
     }
     echo "type is undefined";
