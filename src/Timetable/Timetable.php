@@ -14,6 +14,8 @@ class Timetable
     private $url = 'https://dimas.life/kpt/lite.php?a_day=%s&a_type=%s&a_route=%04d';
     private $type;
     private $id;
+    private $requester;
+    private $dommanager;
 
     const WORKING_DAY   = 'rob';
     const HOLIDAY_DAY   = 'vih';
@@ -41,6 +43,8 @@ class Timetable
     public function __construct(Application $app)
     {
         $this->app = $app;
+        $this->requester   = $this->app['app.requester'];
+        $this->dommanager  = $this->app['app.dommanager'];
     }
 
     public function getUrl($id)
@@ -68,6 +72,27 @@ class Timetable
             }
         }
         return false;
+    }
+
+    public function getScheduleByTypeAndId($type, $id)
+    {
+        $html = $this->requester->request($this->getUrl($id));
+        //$html = $requester->request('https://dimas.life/kpt/lite.php?a_day=rob&a_type=avt&a_route=5');
+        echo $this->getUrl($id), "\n";
+
+        $transport = $this->app['em']->getRepository('Bus115\Entity\Timetable')->findOneBy([
+            'transport_number'  => $id,
+            'transport_type'    => $type,
+        ]);
+        if (!$transport) {
+            $this->saveT($id, $type);
+        }
+
+        $this->dommanager->loadHTML($html);
+        $this->dommanager->storeSchedule();
+        exit();
+
+        $this->saveT($id, $type, $dommanager->getHeaderInJson(), $dommanager->getBodyInJson());
     }
 
     private function validateTypeWithId($type, $id)
@@ -106,13 +131,11 @@ class Timetable
         return self::WORKING_DAY;
     }
 
-    public function saveEntity($transportNumber, $transportType, $header, $body)
+    public function saveT($transportNumber, $transportType)
     {
         $t = new T();
         $t->setTransportNumber($transportNumber);
         $t->setTransportType($transportType);
-        $t->setHeader($header);
-        $t->setTimetable($body);
 
         $this->app['em']->persist($t);
         $this->app['em']->flush();

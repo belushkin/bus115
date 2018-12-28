@@ -34,16 +34,6 @@ class Timetable
     private $transport_type;
 
     /**
-     * @ORM\Column(type="json", length=2500, unique=false, nullable=true)
-     */
-    private $header;
-
-    /**
-     * @ORM\Column(type="json", length=2500, unique=false, nullable=true)
-     */
-    private $timetable;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $date_created;
@@ -51,6 +41,7 @@ class Timetable
     public function __construct()
     {
         $this->date_created = new \DateTime();
+        $this->setUuid(\Ramsey\Uuid\Uuid::uuid4()->toString());
     }
 
     public function getUuid()
@@ -91,26 +82,6 @@ class Timetable
     public function getTransportType()
     {
         return $this->transport_type;
-    }
-
-    public function setHeader($header)
-    {
-        $this->header = $header;
-    }
-
-    public function getHeader()
-    {
-        return $this->header;
-    }
-
-    public function setTimetable($timetable)
-    {
-        $this->timetable = $timetable;
-    }
-
-    public function getTimetable()
-    {
-        return $this->timetable;
     }
 
 }

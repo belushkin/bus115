@@ -43,16 +43,46 @@ class DomManager
         return \GuzzleHttp\json_encode($result);
     }
 
-    public function getBodyInJson()
+    public function storeSchedule()
     {
         $result = [];
-        $body = $this->getElementById('timetable');
-        $tds = $body->getElementsByTagName('tr');
-        foreach ($tds as $node) {
+        $body   = $this->getElementById('timetable');
+        $trs    = $body->getElementsByTagName('tr');
+        $header = true;
+        $size   = 0;
+
+        foreach ($trs as $node) {
+            // Define directions in first tr in the table
+            if ($header) {
+                $size = $this->getSize($node);
+                $header = false;
+                continue;
+            }
+
+
             var_dump($node);
+
             //$result[] = $node->nodeValue;
         }
+        exit();
         return \GuzzleHttp\json_encode($result);
+    }
+
+    private function getSize($node)
+    {
+        $tds = $node->getElementsByTagName('td');
+
+        $previousTD = null;
+        $i          = 0;
+        $size       = 0;
+        foreach ($tds as $td) {
+            if ($td->nodeValue == $previousTD) {
+                $size = $i;
+            }
+            $previousTD = $td->nodeValue;
+            $i++;
+        }
+        return $size;
     }
 
 }
