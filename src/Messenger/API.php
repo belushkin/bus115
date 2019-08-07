@@ -16,7 +16,7 @@ class API
 
     public function callSendAPI($senderPsid, $response)
     {
-        $url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' . $this->app['eway']['page_access_token'];
+        $url = 'https://graph.facebook.com/v4.0/me/messages?access_token=' . $this->app['eway']['page_access_token'];
 
         $requestBody = [
             'recipient' => [
