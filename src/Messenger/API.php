@@ -35,7 +35,8 @@ class API
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, \GuzzleHttp\json_encode($requestBody));
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        curl_exec($ch);
+        $result = curl_exec($ch);
+        $this->app['monolog']->info('FACEBOOK RESPONSE' . var_export($result, true));
     }
 
     public function getGoogleCoordinates($string)
