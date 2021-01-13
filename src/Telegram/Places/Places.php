@@ -64,6 +64,7 @@ class Places
             return Request::sendMessage($data);
         }
 
+        $this->app['monolog']->info("WIT RESPONSE: IN PROGRESS");
         // Request using WIT.AI NLP provider
         $nlp        = $this->app['app.api']->witai($term);
         $intents    = (isset($nlp['entities']['intent']))   ? $nlp['entities']['intent']    : [];
