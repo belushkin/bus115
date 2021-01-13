@@ -67,7 +67,7 @@ class Places
         // Request using WIT.AI NLP provider
         $nlp        = $this->app['app.api']->witai($term);
         $intents    = (isset($nlp['entities']['intent']))   ? $nlp['entities']['intent']    : [];
-        $address    = (isset($nlp['entities']['address']))  ? $nlp['entities']['address']   : [];
+        $address    = (isset($nlp['entities']['address:address']))  ? $nlp['entities']['address:address']   : [];
         $location   = (isset($nlp['entities']['location'])) ? $nlp['entities']['location']  : [];
 
         if (empty($intents) && empty($address) && empty($location)) {
