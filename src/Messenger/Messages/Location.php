@@ -22,6 +22,8 @@ class Location implements MessageInterface
         // Save term for the internal usage
         $this->term = $term;
 
+        $this->app['monolog']->info("ENGINE LOCAL" . $term);
+
         // First search in the database for already saved locations
         $geocode = new Geocode();
         $geo = $this->app['em']->getRepository('Bus115\Entity\Geocode')->findOneBy(
