@@ -52,7 +52,7 @@ class API
 
     public function witai($string)
     {
-        $url = "https://api.wit.ai/message?q=".urlencode($string);
+        $url = "https://api.wit.ai/message?v=20210113&q=".urlencode($string);
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_URL,$url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
