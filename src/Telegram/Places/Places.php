@@ -66,12 +66,12 @@ class Places
 
         // Request using WIT.AI NLP provider
         $nlp        = $this->app['app.api']->witai($term);
-        $this->app['monolog']->info("WIT RESPONSE: " . var_export($nlp));
         $intents    = (isset($nlp['entities']['intent']))   ? $nlp['entities']['intent']    : [];
         $address    = (isset($nlp['entities']['address']))  ? $nlp['entities']['address']   : [];
         $location   = (isset($nlp['entities']['location'])) ? $nlp['entities']['location']  : [];
 
         if (empty($intents) && empty($address) && empty($location)) {
+            $this->app['monolog']->info("WIT RESPONSE: EXIT");
             $data = [
                 'chat_id' => $this->getMessage()->getChat()->getId(),
                 'text'    => 'Надрукуйте назву вулиці, провулку площі або зупинки, або скористайтеся функцією location',
