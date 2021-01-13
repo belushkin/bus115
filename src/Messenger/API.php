@@ -59,6 +59,7 @@ class API
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer '.$this->app['eway']['wit_server_token']));
 
         $result = curl_exec($ch);
+        $this->app['monolog']->info($result);
         return \GuzzleHttp\json_decode($result, true);
     }
 
