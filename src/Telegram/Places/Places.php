@@ -66,6 +66,7 @@ class Places
 
         // Request using WIT.AI NLP provider
         $nlp        = $this->app['app.api']->witai($term);
+        $this->app['monolog']->info("WIT RESPONSE: " . var_export($nlp));
         $intents    = (isset($nlp['entities']['intent']))   ? $nlp['entities']['intent']    : [];
         $address    = (isset($nlp['entities']['address']))  ? $nlp['entities']['address']   : [];
         $location   = (isset($nlp['entities']['location'])) ? $nlp['entities']['location']  : [];
