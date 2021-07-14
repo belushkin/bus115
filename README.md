@@ -25,6 +25,7 @@ vendor/bin/doctrine orm:schema-tool:update --force --dump-sql
 ```
 ### SSL CERTIFICATE
 ```bash
+sudo certbot certonly --standalone
 ~/workspace $ sudo http-server ssl -p 80
 ~/workspace $ sudo letsencrypt certonly --webroot -w ssl/ -d bus115.kiev.ua
 ~/workspace/haproxy $ docker build -t haproxy .
