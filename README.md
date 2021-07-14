@@ -24,6 +24,7 @@ vendor/bin/doctrine orm:schema-tool:update --force --dump-sql
 ./toolbox.sh apidoc
 ```
 ### SSL CERTIFICATE
+https://certbot.eff.org/lets-encrypt/ubuntuxenial-haproxy
 ```bash
 sudo certbot certonly --standalone
 ~/workspace $ sudo http-server ssl -p 80
